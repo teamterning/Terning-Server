@@ -1,4 +1,4 @@
-# 💙 Team-Terning (TerningPoint)
+# 💙 Team-Terning (터닝포인트)
 
 > NOW SOPT 34th Appjam , 터닝포인트 팀입니다.
 <br/>
