@@ -60,6 +60,7 @@ ex) feat/#20
 
 ## 📂 Structure
 ```text
+* 폴더링 구조 확정 후 해당 사항 수정 예정입니다. *
 ├── build.gradle
 ├── 📂 src/main/java/org/terningpoint
 │       ├── 📂 domain
