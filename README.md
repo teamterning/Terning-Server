@@ -42,27 +42,45 @@ ex) feat/#20
 ### branch 종류
 | Type | 의미 |
 | --- | --- |
-| ✨ feat | 새로운 기능 추가 |
-| 🔨 fix | 버그, 오류 수정 |
-| ✅ chore | 동작에 영향 없는 코드 or 변경 없는 변경사항(주석 추가 등)  ex) .gitIgnore |
-| 📝 docs  | README나 WIKI 등의 문서 수정 |
-| ☁️ db | DATABASE 및 더미데이터 수정 |
-| ♻️ refactor | 코드 리팩토링 ex) 형식변경 |
-| ⚰️ del | 쓸모없는 코드 삭제 |
-| ✏️ rename | 파일 이름 변경시 |
-| 🔀 merge | 다른 브랜치와 병합 |
-| 💡 test | 테스트 코드, 리팩토링 테스트 코드 추가  |
-| ✒️ comment | 필요한 주석 추가 및 변경 |
-| 📂 file | 파일 또는 폴더명 수정, 이동, 삭제 등의 작업만 수행한 경우 |
-| 🔥 !hotfix | 급하게 치명적인 버그를 고쳐야 하는 경우 |
+| ✨feat | 새로운 기능 추가 |
+| 🔨fix | 버그, 오류 수정 |
+| ✅chore | 동작에 영향 없는 코드 or 변경 없는 변경사항(주석 추가 등)  ex) .gitIgnore |
+| 📝docs | README나 WIKI 등의 문서 수정 |
+| ☁️db | DATABASE 및 더미데이터 수정 |
+| ♻️refactor | 코드 리팩토링 ex) 형식변경 |
+| ⚰️del | 쓸모없는 코드 삭제 |
+| ✏️rename | 파일 이름 변경시 |
+| 🔀merge | 다른 브랜치와 병합 |
+| 💡test | 테스트 코드, 리팩토링 테스트 코드 추가  |
+| ✒️comment | 필요한 주석 추가 및 변경 |
+| 📂file | 파일 또는 폴더명 수정, 이동, 삭제 등의 작업만 수행한 경우 |
+| 🔥!hotfix | 급하게 치명적인 버그를 고쳐야 하는 경우 |
 
 <br/>
 
 ## 📂 Structure
 ```text
-* 폴더링 구조 확정 후 해당 사항 수정 예정입니다 *
 ├── build.gradle
-├── 📂 src/main/java/org/terningpoint
-│       ├── 📂 domain
+├── 📂 src/main/java/org/terning/terningserver
+│     ├── 📂 config
+│     ├── 📂 controller
+│     ├── 📂 repository
+│     ├── 📂 domain
+│     │     ├── 📂 common // ex) BaseEntity.java
+│     │     ├── 📂 enums 
+│     │     └── 📂 mapping // 매핑 테이블 구현
+│     ├── 📂 service // 인터페이스와 구현체(Impl) 구분
+│     ├── 📂 dto // 도메인 별로 dto 구분
+│     │   ├── 📂 user // 도메인(1)
+│     │   │       ├── 📂 request
+│     │   │       └── 📂 request
+│     │   │
+│     │   └── 📂 post // 도메인(2)
+│     │           ├── 📂 request
+│     │           └── 📂 request
+│     └── 📂 exception
+│                 ├── 📂 dto // ex) ErrorResponse, SuccessResponse 
+│                 ├── 📂 enums // ex) ErrorMessage, SuccessMessage
+│                 └── CustomException.java, GlobalExceptionHandler.java
 └── ServerApplication.java
 ```
