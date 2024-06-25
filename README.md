@@ -73,11 +73,11 @@ ex) feat/#20
 │     ├── 📂 dto // 도메인 별로 dto 구분
 │     │   ├── 📂 user // 도메인(1)
 │     │   │       ├── 📂 request
-│     │   │       └── 📂 request
+│     │   │       └── 📂 response
 │     │   │
 │     │   └── 📂 post // 도메인(2)
 │     │           ├── 📂 request
-│     │           └── 📂 request
+│     │           └── 📂 response
 │     └── 📂 exception
 │                 ├── 📂 dto // ex) ErrorResponse, SuccessResponse 
 │                 ├── 📂 enums // ex) ErrorMessage, SuccessMessage
