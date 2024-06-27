@@ -20,6 +20,17 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      # gradle caching - 빌드 시간 향상
+      - name: Gradle Caching (빌드 시간 향상)
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: application.yml 생성
         run: |
           mkdir -p ./src/main/resources && cd $_
