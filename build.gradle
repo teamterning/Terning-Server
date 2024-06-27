@@ -36,6 +36,8 @@ dependencies {
 	//postgresql
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
+	//swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
 tasks.named('test') {
