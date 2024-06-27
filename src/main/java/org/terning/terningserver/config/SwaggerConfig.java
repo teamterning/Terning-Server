@@ -26,6 +26,7 @@ public class SwaggerConfig {
                 .addSecurityItem(securityRequirement)
                 .components(components);
     }
+
     private Info apiInfo() {
         return new Info()
                 .title("Terning Point Swagger") // API의 제목
