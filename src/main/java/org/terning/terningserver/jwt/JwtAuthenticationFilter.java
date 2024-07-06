@@ -43,4 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromBearerString(String token) {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
     }
+
+    private long getUserId(String token) {
+        return jwtTokenProvider.getUserFromJwt(token);
+    }
 }
