@@ -2,6 +2,7 @@ package org.terning.terningserver.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
@@ -46,8 +47,24 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 256)
     private String authId; // 인증 서비스에서 제공하는 고유 ID
 
+    private String refreshToken; // 리프레시 토큰
+
     @Enumerated(STRING)
     @Column(nullable = false)
     private State state; // 사용자 상태 (예: 활성, 비활성, 정지)
+
+    @Builder
+    public User(AuthType authType, String authId) {
+        this.authType = authType;
+        this.authId = authId;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void resetRefreshToken() {
+        this.refreshToken = null;
+    }
 
 }
