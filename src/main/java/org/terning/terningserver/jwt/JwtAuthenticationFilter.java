@@ -7,13 +7,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.terning.terningserver.config.ValueConfig;
 
 import java.io.IOException;
 
+import static io.jsonwebtoken.lang.Strings.hasText;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.terning.terningserver.jwt.JwtValidationType.VALID_JWT;
 
 @Slf4j
 @Component
@@ -23,8 +27,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        try {
+            val token = getAccessTokenFromRequest(request);
+            if (hasText(token) && jwtTokenProvider.validateToken(token) == VALID_JWT) {
+                val authentication = new UserAuthentication(getUserId(token), null, null);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+        }
 
+        filterChain.doFilter(request, response);
     }
 
     private String getAccessTokenFromRequest(HttpServletRequest request) {
