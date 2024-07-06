@@ -66,7 +66,7 @@ public class JwtTokenProvider {
 
     public Long getUserFromJwt(String token) {
         val claims = getBody(token);
-        return Long.parseLong(claims.get("memberId").toString());
+        return Long.parseLong(claims.get("userId").toString());
     }
 
     private Claims getBody(final String token) {
