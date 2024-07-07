@@ -1,13 +1,13 @@
 package org.terning.terningserver.service;
 
-import org.terning.terningserver.exception.dto.auth.request.SignInRequest;
-import org.terning.terningserver.exception.dto.auth.request.TokenGetRequest;
-import org.terning.terningserver.exception.dto.auth.response.SignInResponse;
-import org.terning.terningserver.exception.dto.auth.response.TokenGetResponse;
+import org.terning.terningserver.domain.auth.request.SignInServiceRequest;
+import org.terning.terningserver.domain.auth.request.TokenGetRequest;
+import org.terning.terningserver.domain.auth.response.SignInServiceResponse;
+import org.terning.terningserver.domain.auth.response.TokenGetResponse;
 
 public interface AuthService {
 
-    SignInResponse signIn(SignInRequest request);
+    SignInServiceResponse signIn(SignInServiceRequest request);
 
     void signOut(long memberId);
 
