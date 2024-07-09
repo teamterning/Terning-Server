@@ -11,9 +11,7 @@ import java.util.List;
 @Builder
 public record ErrorResponse(
         int status,
-        String message,
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        List<ValidationError> errors
+        String message
 ) {
     public static ErrorResponse of(int status, String message){
         return ErrorResponse.builder()
@@ -26,7 +24,6 @@ public record ErrorResponse(
         return ErrorResponse.builder()
                 .status(status)
                 .message(message)
-                .errors(ValidationError.of(bindingResult))
                 .build();
     }
 

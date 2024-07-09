@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum WorkingPeriod {
-    OPTION1(1, "1개월 ~ 3개월"),
-    OPTION2(2, "4개월 ~ 6개월"),
-    OPTION3(3, "7개월 이상");
+    OPTION1(0, "1개월 ~ 3개월"),
+    OPTION2(1, "4개월 ~ 6개월"),
+    OPTION3(2, "7개월 이상");
 
     private final int key;
     private final String value;
