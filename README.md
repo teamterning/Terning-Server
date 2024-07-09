@@ -58,6 +58,26 @@ ex) feat/#20
 
 <br/>
 
+## 👥 역할
+| 분야 | 이름 | 포지션 |
+| --- | --- | --- |
+| 서버 개발 | [정정교/Junggyo1020](https://github.com/junggyo1020) | 서버 파트 리더, 팀 매니징 및 개발 인프라, 캘린더, 인턴 공고, 프로필 |
+| 서버 개발 | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | 스크랩, 공고 상세, 탐색, 필터링 |
+| 서버 개발 | [권장순/jsoonworld](https://github.com/jsoonworld) | 회원가입, 로그인, 회원관리 |
+
+<br/>
+
+## 📎 ERD
+<img width="829" alt="image" src="https://github.com/teamterning/Terning-Server/assets/150939763/572a5ad6-17c7-4394-80c3-21d3ea8da3e4">
+
+
+<br/>
+
+## 🎨 API 명세서 
+https://www.notion.so/9b5cd91c634b4a2580ea8222736fdcab?v=e8692cde216c47559d714abc4231d9a7&pvs=4
+
+<br/>
+
 ## 📂 Structure
 ```text
 ├── build.gradle
