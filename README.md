@@ -74,7 +74,7 @@ ex) feat/#20
 <br/>
 
 ## 🎨 API 명세서 
-https://www.notion.so/9b5cd91c634b4a2580ea8222736fdcab?v=e8692cde216c47559d714abc4231d9a7&pvs=4
+https://abundant-quiver-13f.notion.site/9b5cd91c634b4a2580ea8222736fdcab?v=e8692cde216c47559d714abc4231d9a7
 
 <br/>
 
