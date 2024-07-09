@@ -13,6 +13,10 @@ public enum SuccessMessage {
     SUCCESS_GET_WORDS(200, true, "단어 리스트 조회를 성공하였습니다."),
     SUCCESS_GET_WORD(200, true, "특정 단어 조회를 성공하였습니다.");
 
+    // Search - 탐색 화면
+
+
+
     private final int status;
     private final boolean success;
     private final String message;

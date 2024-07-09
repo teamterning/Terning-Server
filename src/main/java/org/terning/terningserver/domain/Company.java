@@ -5,9 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Getter;
 import org.terning.terningserver.domain.enums.CompanyCategory;
 
 @Embeddable
+@Getter
 public class Company {
 
     @Column(nullable = false, length = 64)
