@@ -1,7 +1,5 @@
 package org.terning.terningserver.exception.enums;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

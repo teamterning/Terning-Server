@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Grade {
-    FRESHMAN(1, "1학년"),
-    SOPHOMORE(2, "2학년"),
-    JUNIOR(3, "3학년"),
-    SENIOR(4, "4학년");
+    FRESHMAN(0, "1학년"),
+    SOPHOMORE(1, "2학년"),
+    JUNIOR(2, "3학년"),
+    SENIOR(3, "4학년");
 
     private final int key;
     private final String value;
