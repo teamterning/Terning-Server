@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(nullable = false, length = 64)
     private String title;  // 인턴십 제목
 
-    private Date deadline;  // 지원 마감일
+    private LocalDate deadline;  // 지원 마감일
 
     @Column(length = 16)
     private String workingPeriod;  // 근무 기간
