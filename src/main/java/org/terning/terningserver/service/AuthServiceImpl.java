@@ -13,6 +13,7 @@ import org.terning.terningserver.domain.auth.request.TokenGetServiceRequest;
 import org.terning.terningserver.domain.auth.response.SignInServiceResponse;
 import org.terning.terningserver.domain.auth.response.TokenGetServiceResponse;
 import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.UserException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
 import org.terning.terningserver.jwt.UserAuthentication;
@@ -97,12 +98,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User findUser(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserException(INVALID_USER));
+        return userRepository.findById(id).orElseThrow(() -> new CustomException(INVALID_USER));
     }
 
     private User findUser(String refreshToken) {
         return userRepository.findByRefreshToken(getTokenFromBearerString(refreshToken))
-                .orElseThrow(() -> new UserException(INVALID_USER));
+                .orElseThrow(() -> new CustomException(INVALID_USER));
     }
 
     private String getTokenFromBearerString(String token) {
