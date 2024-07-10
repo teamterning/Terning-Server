@@ -2,6 +2,7 @@ package org.terning.terningserver.repository.InternshipAnnouncement;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
@@ -10,10 +11,10 @@ import static org.terning.terningserver.domain.QInternshipAnnouncement.internshi
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
-    @Autowired
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<InternshipAnnouncement> getMostViewedInternship() {
@@ -23,7 +24,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internDeadlineGoe(),
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
-                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
                 .fetch();
     }
 
