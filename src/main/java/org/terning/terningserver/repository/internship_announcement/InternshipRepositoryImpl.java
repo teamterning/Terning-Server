@@ -26,6 +26,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
                 .fetch();
     }
 
