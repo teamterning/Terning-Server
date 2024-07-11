@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
 import org.terning.terningserver.repository.InternshipAnnouncement.InternshipRepository;
+import org.terning.terningserver.util.DateUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service

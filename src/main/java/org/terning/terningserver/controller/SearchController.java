@@ -11,6 +11,9 @@ import org.terning.terningserver.dto.search.response.PopularAnnouncementListResp
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.SearchService;
+import org.terning.terningserver.util.DateUtil;
+
+import java.time.LocalDate;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS;
 import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MOST_VIEWED_ANNOUNCEMENTS;
@@ -34,7 +37,6 @@ public class SearchController implements SearchSwagger {
 
     @GetMapping("/search/scraps")
     public ResponseEntity<SuccessResponse<PopularAnnouncementListResponse>> getMostScrappedAnnouncements() {
-
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS,
                 searchService.getMostScrappedAnnouncements()
