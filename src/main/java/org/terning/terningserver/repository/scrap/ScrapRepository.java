@@ -6,4 +6,6 @@ import org.terning.terningserver.domain.Scrap;
 import java.util.Optional;
 
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
+
+    Boolean existsByInternshipAnnouncementId(Long internshipId);
 }

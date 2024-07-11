@@ -21,14 +21,14 @@ public class InternshipDetailService {
     private final InternshipRepository internshipRepository;
     private final ScrapRepository scrapRepository;
 
-    public InternshipDetailResponse getInternshipDetailService(Long internshipAnnouncementId) {
+    public InternshipDetailResponse getInternshipDetail(Long internshipAnnouncementId) {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(INTERNSHIP_NOT_FOUND));
 
 
-
-
-
-        return InternshipDetailResponse.of(announcement, announcement.getCompany(), )
+        return InternshipDetailResponse.of(
+                announcement, announcement.getCompany(),
+                scrapRepository.existsByInternshipAnnouncementId(announcement.getId())
+        );
     }
 }

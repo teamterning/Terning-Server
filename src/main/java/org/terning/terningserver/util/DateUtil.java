@@ -23,6 +23,6 @@ public class DateUtil {
     public static String convertDeadline(LocalDate deadline) {
         return deadline.getYear() + "년 "
                 + deadline.getMonthValue() + "월 "
-                + deadline.getDayOfYear() + "일";
+                + deadline.getDayOfMonth() + "일";
     }
 }

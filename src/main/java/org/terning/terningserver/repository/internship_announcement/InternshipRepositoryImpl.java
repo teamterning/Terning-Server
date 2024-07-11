@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,13 +27,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
                 .fetch();
-    }
-
-    @Override
-    public Optional<InternshipAnnouncement> findByInternshipId() {
-        return jpaQueryFactory
-                .selectFrom(internshipAnnouncement)
-                .leftjoin(intern)
     }
 
     private BooleanExpression internDeadlineGoe() {
