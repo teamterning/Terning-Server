@@ -25,7 +25,7 @@ public class SearchService {
     }
 
     public PopularAnnouncementListResponse getMostScrappedAnnouncements() {
-        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostViewedInternship();
+        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostScrappedInternship();
         return PopularAnnouncementListResponse.of(mostViewedInternships);
     }
 
