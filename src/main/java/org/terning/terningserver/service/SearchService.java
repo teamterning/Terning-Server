@@ -22,4 +22,9 @@ public class SearchService {
         return PopularAnnouncementListResponse.of(mostViewedInternships);
     }
 
+    public PopularAnnouncementListResponse getMostScrappedAnnouncements() {
+        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostViewedInternship();
+        return PopularAnnouncementListResponse.of(mostViewedInternships);
+    }
+
 }

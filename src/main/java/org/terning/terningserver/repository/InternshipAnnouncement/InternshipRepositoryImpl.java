@@ -28,6 +28,18 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<InternshipAnnouncement> getMostScrappedInternship() {
+        return jpaQueryFactory
+                .selectFrom(internshipAnnouncement)
+                .where(
+                        internDeadlineGoe(),
+                        internCreatedAtAfter()
+                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .fetch();
+    }
+
     private BooleanExpression internDeadlineGoe() {
         return internshipAnnouncement.deadline.goe(LocalDate.now());
     }
