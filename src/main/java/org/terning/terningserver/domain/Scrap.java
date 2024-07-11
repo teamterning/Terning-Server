@@ -26,7 +26,7 @@ public class Scrap extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // 스크랩한 사용자
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "internshipAnnouncement_id", nullable = false)
     private InternshipAnnouncement internshipAnnouncement; // 스크랩한 인턴십 공고
 
