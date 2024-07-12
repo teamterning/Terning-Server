@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.SearchSwagger;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
@@ -13,6 +14,7 @@ import org.terning.terningserver.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.SearchService;
 import org.terning.terningserver.util.DateUtil;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS;
@@ -41,6 +43,13 @@ public class SearchController implements SearchSwagger {
                 SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS,
                 searchService.getMostScrappedAnnouncements()
         ));
+    }
+
+    @GetMapping("/search")
+    public void searchInternshipAnnouncement(
+            @RequestParam String keyword,
+            @RequestParam String sortBy, Pageable pageable) {
+        searchService.searchInternshipAnnouncement(keyword, sortBy, pageable);
     }
 
 }

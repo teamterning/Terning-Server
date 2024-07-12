@@ -1,13 +1,13 @@
-package org.terning.terningserver.repository.InternshipAnnouncement;
+package org.terning.terningserver.repository.internship_announcement;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
 
+import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +38,13 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
                 .fetch();
+    }
+
+    @Override
+    public List<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+        jpaQueryFactory
+                .selectFrom(InternshipAnnouncement)
+                .where
     }
 
     //지원 마감일이 지나지 않은 공고
