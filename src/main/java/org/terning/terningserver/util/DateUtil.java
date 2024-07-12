@@ -13,7 +13,7 @@ public class DateUtil {
         if (deadline.isEqual(currentDate)) {
             return "D-DAY";
         } else if (deadline.isBefore(currentDate)) {
-            return "지원마감";
+            return "지원 마감";
         } else {
             long daysUntilDeadline = currentDate.until(deadline).getDays();
             return "D-" + daysUntilDeadline;
