@@ -30,10 +30,25 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<InternshipAnnouncement> getMostScrappedInternship() {
+        return jpaQueryFactory
+                .selectFrom(internshipAnnouncement)
+                .where(
+                        internDeadlineGoe(),
+                        internCreatedAtAfter()
+                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
+                .fetch();
+    }
+
+    //지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {
         return internshipAnnouncement.deadline.goe(LocalDate.now());
     }
 
+    // 현재 시점으로부터 30일 이내의 공고
     private BooleanExpression internCreatedAtAfter() {
         return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
     }

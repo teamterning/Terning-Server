@@ -37,7 +37,8 @@ public class User extends BaseTimeEntity {
 
 //    private String email; //이메일
 
-//    private String userImage; //유저 아이콘
+    @Column(nullable = false)
+    private int profileImage;
 
     @Enumerated(STRING)
     @Column(nullable = false)

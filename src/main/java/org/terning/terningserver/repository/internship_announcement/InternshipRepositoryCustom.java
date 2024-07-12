@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface InternshipRepositoryCustom {
     List<InternshipAnnouncement> getMostViewedInternship();
+    List<InternshipAnnouncement> getMostScrappedInternship();
 }

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
-    Boolean existsByInternshipAnnouncementId(Long internshipId);
+    Boolean existsByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 }

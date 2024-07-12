@@ -28,7 +28,7 @@ public class InternshipDetailService {
 
         return InternshipDetailResponse.of(
                 announcement, announcement.getCompany(),
-                scrapRepository.existsByInternshipAnnouncementId(announcement.getId())
+                scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), 1L)
         );
     }
 }
