@@ -31,7 +31,11 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(length = 16)
     private String workingPeriod;  // 근무 기간
 
-    private YearMonth startDate;  // 시작 날짜
+    @Column(nullable = false)
+    private int startYear;
+
+    @Column(nullable = false)
+    private int startMonth;
 
     @Column(nullable = false)
     private int viewCount;  // 조회 수

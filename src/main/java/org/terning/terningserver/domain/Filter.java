@@ -26,6 +26,7 @@ public class Filter {
     @Column(nullable = false)
     private WorkingPeriod workingPeriod;
 
-    @Column(nullable = false)
-    private YearMonth startDate;
+    private int startYear;
+
+    private int startMonth;
 }
