@@ -52,8 +52,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         BooleanExpression isExpired = internshipAnnouncement.deadline.before(today);
 
         // 현재 시점보다 마감일이 지나지 않은 경우
-        BooleanExpression isNotExpired = internshipAnnouncement.deadline.after(today)
-                .or(internshipAnnouncement.deadline.eq(today));
+        BooleanExpression isNotExpired = internshipAnnouncement.deadline.goe(today);
 
         // 우선순위를 위한 Expression(지원된 공고는 정렬 우선순위 낮게 -> 밑에 깔리게)
         NumberTemplate<Integer> priority = Expressions.numberTemplate(
@@ -61,6 +60,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 "CASE WHEN {0} THEN 1 ELSE 2 END",
                 isNotExpired
         );
+
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps).fetchJoin()

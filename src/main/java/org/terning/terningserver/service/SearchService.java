@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 
@@ -29,8 +30,9 @@ public class SearchService {
         return PopularAnnouncementListResponse.of(mostViewedInternships);
     }
 
-    public void searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
-        internshipRepository.searchInternshipAnnouncement(keyword, sortBy, pageable);
+    public List<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+        List<InternshipAnnouncement> announcements = internshipRepository.searchInternshipAnnouncement(keyword, sortBy, pageable);
+        announcements.stream().map(announcement ->
     }
 
 }
