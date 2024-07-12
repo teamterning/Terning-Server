@@ -12,6 +12,7 @@ public record InternshipDetailResponse(
         String deadline,
         String workingPeriod,
         String startDate,
+        int scrapCount,
         int viewCount,
         String company,
         String companyCategory,
@@ -29,6 +30,7 @@ public record InternshipDetailResponse(
                 .deadline(DateUtil.convertDeadline(announcement.getDeadline()))
                 .workingPeriod(announcement.getWorkingPeriod())
                 .startDate(announcement.getStartYear() + "년 " + announcement.getStartMonth() + "월")
+                .scrapCount(announcement.getScrapCount())
                 .viewCount(announcement.getViewCount())
                 .company(company.getCompanyInfo())
                 .companyCategory(company.getCompanyCategory().getValue())
