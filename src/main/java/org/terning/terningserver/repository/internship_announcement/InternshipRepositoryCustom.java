@@ -1,8 +1,8 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import org.springframework.data.domain.Pageable;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface InternshipRepositoryCustom {
