@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
+import org.terning.terningserver.domain.enums.Grade;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.InternshipAnnouncement;
 
+
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +16,15 @@ import org.terning.terningserver.util.DateUtil;
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
 import static org.terning.terningserver.domain.QScrap.scrap;
 import static org.terning.terningserver.domain.QUser.user;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.terning.terningserver.domain.InternshipAnnouncement;
+
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -113,8 +123,35 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     BooleanExpression isNotExpired = internshipAnnouncement.deadline.goe(LocalDate.now());
 
     NumberTemplate<Integer> priority = Expressions.numberTemplate(
-            Integer.class,
-            "CASE WHEN {0} THEN 1 ELSE 2 END",
-            isNotExpired
-    );
+                Integer.class,
+                "CASE WHEN {0} THEN 1 ELSE 2 END",
+                isNotExpired
+                );
+
+                .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<InternshipAnnouncement> getMostScrappedInternship() {
+        return jpaQueryFactory
+                .selectFrom(internshipAnnouncement)
+                .where(
+                        internDeadlineGoe(),
+                        internCreatedAtAfter()
+                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .fetch();
+    }
+
+    //지원 마감일이 지나지 않은 공고
+    private BooleanExpression internDeadlineGoe() {
+        return internshipAnnouncement.deadline.goe(LocalDate.now());
+    }
+
+    // 현재 시점으로부터 30일 이내의 공고
+    private BooleanExpression internCreatedAtAfter() {
+        return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
+    }
+
 }
