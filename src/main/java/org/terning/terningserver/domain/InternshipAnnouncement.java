@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -23,12 +26,16 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(nullable = false, length = 64)
     private String title;  // 인턴십 제목
 
-    private Date deadline;  // 지원 마감일
+    private LocalDate deadline;  // 지원 마감일
 
     @Column(length = 16)
     private String workingPeriod;  // 근무 기간
 
-    private YearMonth startDate;  // 시작 날짜
+    @Column(nullable = false)
+    private int startYear;  // 시작 연도
+
+    @Column(nullable = false)
+    private int startMonth;  // 시작 월
 
     @Column(nullable = false)
     private int viewCount;  // 조회 수
@@ -50,4 +57,10 @@ public class InternshipAnnouncement extends BaseTimeEntity {
 
     @Column(columnDefinition = "TEXT")
     private String detail;  // 상세 내용
+
+    @Column(nullable = false)
+    private boolean isGraduating; // 졸업 예정 여부
+
+    @OneToMany(mappedBy = "internshipAnnouncement", cascade = CascadeType.ALL)
+    private List<Scrap> scrapList = new ArrayList<>(); //스크랩 리스트
 }
