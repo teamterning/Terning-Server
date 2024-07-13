@@ -8,7 +8,7 @@ import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
-import org.terning.terningserver.repository.scrap.ScrapRespository;
+import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class HomeServiceImpl implements HomeService{
 
     private final InternshipRepository internshipRepository;
     private final UserRepository userRepository;
-    private final ScrapRespository scrapRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     public List<HomeResponseDto> getAnnouncements(String token, String sortBy, int startYear, int startMonth){

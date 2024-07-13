@@ -19,4 +19,8 @@ public enum Color {
 
     private final int key;
     private final String value;
+
+    public String getColorValue() {
+        return "#" + value;
+    }
 }
