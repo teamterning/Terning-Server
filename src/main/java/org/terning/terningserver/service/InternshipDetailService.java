@@ -11,7 +11,7 @@ import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INTERNSHIP_NOT_FOUND;
+import static org.terning.terningserver.exception.enums.ErrorMessage.NOT_FOUND_INTERN_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class InternshipDetailService {
 
     public InternshipDetailResponse getInternshipDetail(Long internshipAnnouncementId) {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
-                .orElseThrow(() -> new CustomException(INTERNSHIP_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
 
 
         return InternshipDetailResponse.of(

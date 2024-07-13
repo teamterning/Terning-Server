@@ -27,6 +27,7 @@ spring:
           prometheus:
             enabled: true  # Prometheus 메트릭스 리포터 활성화 여부
             step: 60s  # 측정 간격
+
   jpa:
     show-sql: true
     hibernate:
