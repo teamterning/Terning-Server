@@ -7,7 +7,7 @@ import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
-import org.terning.terningserver.repository.InternshipAnnouncement.InternshipRepository;
+import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRespository;
 import org.terning.terningserver.repository.user.UserRepository;
 

@@ -27,6 +27,7 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(nullable = false, length = 64)
     private String title;  // 인턴십 제목
 
+    @Column(nullable = false)
     private LocalDate deadline;  // 지원 마감일
 
     @Column(length = 16)

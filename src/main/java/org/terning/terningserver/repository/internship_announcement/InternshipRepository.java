@@ -1,4 +1,4 @@
-package org.terning.terningserver.repository.InternshipAnnouncement;
+package org.terning.terningserver.repository.internship_announcement;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.terning.terningserver.domain.InternshipAnnouncement;
