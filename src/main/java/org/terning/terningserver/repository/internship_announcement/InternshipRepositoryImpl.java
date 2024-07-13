@@ -9,8 +9,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.WorkingPeriod;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QUser.user;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,9 +52,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     public List<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
         LocalDate today = LocalDate.now();
 
-        // 현재 시점보다 마감일이 지난 경우
-        BooleanExpression isExpired = internshipAnnouncement.deadline.before(today);
-
         // 현재 시점보다 마감일이 지나지 않은 경우
         BooleanExpression isNotExpired = internshipAnnouncement.deadline.goe(today);
 
@@ -71,16 +72,16 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
     private OrderSpecifier createOrderSpecifier(String sortBy) {
         return switch (sortBy) {
-            case "mostViewed" -> new OrderSpecifier<>(Order.DESC, internshipAnnouncement.viewCount);
-            case "shortestDuration" -> new OrderSpecifier<>(Order.ASC, getWorkingPeriodAsNumber());
-            case "longestDuration" -> new OrderSpecifier<>(Order.DESC, getWorkingPeriodAsNumber());
-            case "mostScrapped" -> new OrderSpecifier<>(Order.DESC, internshipAnnouncement.scrapCount);
-            default -> new OrderSpecifier<>(Order.ASC, internshipAnnouncement.deadline);
+            case "mostViewed" -> internshipAnnouncement.viewCount.desc();
+            case "shortestDuration" -> getWorkingPeriodAsNumber().asc();
+            case "longestDuration" -> getWorkingPeriodAsNumber().desc();
+            case "mostScrapped" -> internshipAnnouncement.scrapCount.desc();
+            default -> internshipAnnouncement.deadline.asc();
         };
     }
 
     /**
-     * String 타입의 workingPeriod를 숫자로 정렬하게 하기 위한 메서드
+     * String 타입의 workingPeriod를 숫자로 정렬하게 하기 위한 메서드ㅜ₩       ₩₩₩₩₩₩
      * @return
      */
     private NumberTemplate<Integer> getWorkingPeriodAsNumber() {
