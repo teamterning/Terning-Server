@@ -17,10 +17,9 @@ public record SearchResultResponse(
             String dDay,
             String companyImage,
             String title,
-            String workingPeriod,
-            Boolean isScrapped
+            String workingPeriod
     ) {
-        public static SearchAnnouncementResponse from(InternshipAnnouncement announcement, Long scrapId, Boolean isScrapped) {
+        public static SearchAnnouncementResponse from(InternshipAnnouncement announcement, Long scrapId) {
             return SearchAnnouncementResponse.builder()
                     .internshipAnnouncementId(announcement.getId())
                     .scrapId(scrapId)
@@ -28,7 +27,7 @@ public record SearchResultResponse(
                     .companyImage(announcement.getCompany().getCompanyImage())
                     .title(announcement.getTitle())
                     .workingPeriod(announcement.getWorkingPeriod())
-                    .isScrapped(isScrapped)
+//                    .isScrapped(isScrapped)
                     .build();
         }
     }

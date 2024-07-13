@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.SearchSwagger;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
+import org.terning.terningserver.dto.search.response.SearchResultResponse;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.SearchService;
@@ -48,7 +49,7 @@ public class SearchController implements SearchSwagger {
     }
 
     @GetMapping("/search")
-    public List<InternshipAnnouncement> searchInternshipAnnouncement(
+    public SearchResultResponse searchInternshipAnnouncement(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam("sortBy") String sortBy, Pageable pageable) {
         return searchService.searchInternshipAnnouncement(keyword, sortBy, pageable);
