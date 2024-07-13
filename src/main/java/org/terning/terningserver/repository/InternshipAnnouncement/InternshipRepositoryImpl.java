@@ -128,10 +128,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 isNotExpired
                 );
 
-                .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
-                .fetch();
-    }
-
     @Override
     public List<InternshipAnnouncement> getMostScrappedInternship() {
         return jpaQueryFactory
@@ -143,15 +139,4 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
                 .fetch();
     }
-
-    //지원 마감일이 지나지 않은 공고
-    private BooleanExpression internDeadlineGoe() {
-        return internshipAnnouncement.deadline.goe(LocalDate.now());
-    }
-
-    // 현재 시점으로부터 30일 이내의 공고
-    private BooleanExpression internCreatedAtAfter() {
-        return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
-    }
-
 }
