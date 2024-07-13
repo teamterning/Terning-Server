@@ -1,4 +1,4 @@
-package org.terning.terningserver.repository.InternshipAnnouncement;
+package org.terning.terningserver.repository.internship_announcement;
 
 
 import com.querydsl.core.types.OrderSpecifier;
@@ -6,28 +6,18 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.terning.terningserver.domain.InternshipAnnouncement;
-import org.terning.terningserver.domain.QInternshipAnnouncement;
-import org.terning.terningserver.domain.QUser;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
-import org.terning.terningserver.util.DateUtil;
-
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
-import static org.terning.terningserver.domain.QUser.user;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.terning.terningserver.domain.InternshipAnnouncement;
-
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
 
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
 
 @RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
@@ -36,6 +26,18 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     @Override
     public List<InternshipAnnouncement> getMostViewedInternship() {
+        return jpaQueryFactory
+                .selectFrom(internshipAnnouncement)
+                .where(
+                        internDeadlineGoe(),
+                        internCreatedAtAfter()
+                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<InternshipAnnouncement> getMostScrappedInternship() {
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
                 .where(
@@ -127,16 +129,4 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 "CASE WHEN {0} THEN 1 ELSE 2 END",
                 isNotExpired
                 );
-
-    @Override
-    public List<InternshipAnnouncement> getMostScrappedInternship() {
-        return jpaQueryFactory
-                .selectFrom(internshipAnnouncement)
-                .where(
-                        internDeadlineGoe(),
-                        internCreatedAtAfter()
-                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
-                .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
-                .fetch();
-    }
 }

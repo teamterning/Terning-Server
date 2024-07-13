@@ -3,7 +3,6 @@ package org.terning.terningserver.util;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoLocalDate;
 
 public class DateUtil {
 
@@ -19,5 +18,11 @@ public class DateUtil {
             long daysUntilDeadline = currentDate.until(deadline).getDays();
             return "D-" + daysUntilDeadline;
         }
+    }
+
+    public static String convertDeadline(LocalDate deadline) {
+        return deadline.getYear() + "년 "
+                + deadline.getMonthValue() + "월 "
+                + deadline.getDayOfMonth() + "일";
     }
 }
