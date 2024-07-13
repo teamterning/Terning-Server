@@ -1,15 +1,16 @@
-package org.terning.terningserver.repository.InternshipAnnouncement;
+package org.terning.terningserver.repository.internship_announcement;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
@@ -25,6 +26,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
                 .fetch();
     }
 
@@ -37,6 +39,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
                 .fetch();
     }
 

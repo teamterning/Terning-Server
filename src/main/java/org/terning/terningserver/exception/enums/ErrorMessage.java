@@ -7,8 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorMessage {
 
-    NOT_FOUND_INTERN_CATEGORY(404, "해당 인턴 공고는 존재하지 않습니다."),
-    WRONG_PERIOD(404, "해당 단어가 존재하지 않습니다.");
+    INTERNSHIP_NOT_FOUND(404, "해당 id에 해당하는 인턴 공고가 존재하지 않습니다");
 
     private final int status;
     private final String message;

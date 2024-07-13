@@ -3,11 +3,6 @@ package org.terning.terningserver.util;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoLocalDate;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 public class DateUtil {
 
@@ -18,11 +13,16 @@ public class DateUtil {
         if (deadline.isEqual(currentDate)) {
             return "D-DAY";
         } else if (deadline.isBefore(currentDate)) {
-            return "지원마감";
+            return "지원 마감";
         } else {
             long daysUntilDeadline = currentDate.until(deadline).getDays();
             return "D-" + daysUntilDeadline;
         }
     }
-}
 
+    public static String convertDeadline(LocalDate deadline) {
+        return deadline.getYear() + "년 "
+                + deadline.getMonthValue() + "월 "
+                + deadline.getDayOfMonth() + "일";
+    }
+}
