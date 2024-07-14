@@ -20,8 +20,7 @@ import org.terning.terningserver.util.DateUtil;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS;
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MOST_VIEWED_ANNOUNCEMENTS;
+import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 
 @RestController
@@ -49,10 +48,13 @@ public class SearchController implements SearchSwagger {
     }
 
     @GetMapping("/search")
-    public SearchResultResponse searchInternshipAnnouncement(
+    public ResponseEntity<SuccessResponse<SearchResultResponse>> searchInternshipAnnouncement(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam("sortBy") String sortBy, Pageable pageable) {
-        return searchService.searchInternshipAnnouncement(keyword, sortBy, pageable);
+        return ResponseEntity.ok(SuccessResponse.of(
+                SUCCESS_GET_SEARCH_ANNOUNCEMENTS,
+                searchService.searchInternshipAnnouncement(keyword, sortBy, pageable)
+        ));
     }
 
 }
