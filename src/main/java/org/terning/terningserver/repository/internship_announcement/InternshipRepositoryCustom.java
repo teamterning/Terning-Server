@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
@@ -10,5 +11,5 @@ public interface InternshipRepositoryCustom {
 
     List<InternshipAnnouncement> getMostScrappedInternship();
 
-    List<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
+    Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 }

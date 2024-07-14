@@ -7,6 +7,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
@@ -49,7 +51,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     @Override
-    public List<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+    public Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
         LocalDate today = LocalDate.now();
 
         // 현재 시점보다 마감일이 지나지 않은 경우
@@ -62,14 +64,32 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 isNotExpired
         );
 
-        return jpaQueryFactory
+        List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps).fetchJoin()
+                .where(contentLike(keyword))
                 .orderBy(priority.asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
+        Long count =jpaQueryFactory
+                .select(internshipAnnouncement.count())
+                .from(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scraps)
+                .where(contentLike(keyword))
+                .fetchOne();
+
+
+        return new PageImpl<>(internshipAnnouncements, pageable, count);
     }
+
+    private BooleanExpression contentLike(String keyword) {
+        return internshipAnnouncement.title.contains(keyword);
+    }
+
+
+    //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
     private OrderSpecifier createOrderSpecifier(String sortBy) {
         return switch (sortBy) {
             case "mostViewed" -> internshipAnnouncement.viewCount.desc();
@@ -81,7 +101,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     /**
-     * String 타입의 workingPeriod를 숫자로 정렬하게 하기 위한 메서드ㅜ₩       ₩₩₩₩₩₩
+     * String 타입의 workingPeriod를 숫자로 정렬하게 하기 위한 메서드
      * @return
      */
     private NumberTemplate<Integer> getWorkingPeriodAsNumber() {

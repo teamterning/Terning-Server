@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record SearchResultResponse(
+        int totalPages,
+        Boolean hasNext,
         List<SearchAnnouncementResponse> announcements
 ) {
     @Builder
@@ -32,7 +34,8 @@ public record SearchResultResponse(
         }
     }
     public static SearchResultResponse of(List<SearchAnnouncementResponse> announcements) {
-        return new SearchResultResponse(announcements);
+    public static SearchResultResponse of(int totalPages, Boolean hasNext, List<SearchAnnouncementResponse> announcements) {
+        return new SearchResultResponse(totalPages, hasNext, announcements);
     }
 
 }

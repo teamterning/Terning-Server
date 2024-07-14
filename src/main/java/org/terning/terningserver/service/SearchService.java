@@ -2,6 +2,7 @@ package org.terning.terningserver.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,44 +20,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class SearchService {
 
-    private final InternshipRepository internshipRepository;
-    private final ScrapRepository scrapRepository;
+public interface SearchService {
 
-    public PopularAnnouncementListResponse getMostViewedAnnouncements() {
-        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostViewedInternship();
-        return PopularAnnouncementListResponse.of(mostViewedInternships);
-    }
+    PopularAnnouncementListResponse getMostViewedAnnouncements();
 
-    public PopularAnnouncementListResponse getMostScrappedAnnouncements() {
-        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostScrappedInternship();
-        return PopularAnnouncementListResponse.of(mostViewedInternships);
-    }
+    PopularAnnouncementListResponse getMostScrappedAnnouncements();
 
-    public SearchResultResponse searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
-        List<InternshipAnnouncement> announcements = internshipRepository.searchInternshipAnnouncement(keyword, sortBy, pageable);
-
-        List<SearchResultResponse.SearchAnnouncementResponse> searchAnnouncementResponses = new ArrayList<>();
-
-        List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, 1L);
-
-        //스크랩 정보를 매핑 (인턴 공고 ID -> 스크랩 ID)
-        Map<Long, Long> scrapMap = scraps.stream()
-                .collect(Collectors.toMap(
-                        scrap -> scrap.getInternshipAnnouncement().getId(),
-                        Scrap::getId
-                ));
-
-
-        return new SearchResultResponse(
-                announcements.stream()
-                        .map(a -> SearchResultResponse.SearchAnnouncementResponse.from(a, scrapMap.get(a.getId())))
-                        .collect(Collectors.toList())
-        );
-    }
+    SearchResultResponse searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 
 }
