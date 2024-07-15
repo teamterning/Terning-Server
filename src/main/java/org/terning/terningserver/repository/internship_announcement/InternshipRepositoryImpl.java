@@ -78,7 +78,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count =jpaQueryFactory
+        Long count = jpaQueryFactory
                 .select(internshipAnnouncement.count())
                 .from(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps)
