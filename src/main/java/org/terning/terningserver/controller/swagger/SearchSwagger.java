@@ -14,17 +14,11 @@ import org.terning.terningserver.exception.dto.SuccessResponse;
 public interface SearchSwagger {
 
     @Operation(summary = "탐색 > 지금 조회수 많은 공고", description = "탐색 화면에서 조회수 많은 공고를 불러오는 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
-    })
     ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostViewedAnnouncements(
 
     );
 
     @Operation(summary = "탐색 > 지금 스크랩 수 많은 공고", description = "탐색 화면에서 스크랩 수 많은 공고를 불러오는 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
-    })
     ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostScrappedAnnouncements(
 
     );

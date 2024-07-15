@@ -15,10 +15,6 @@ import org.terning.terningserver.exception.dto.SuccessResponse;
 public interface InternshipDetailSwagger {
 
     @Operation(summary = "공고 상세 페이지", description = "인턴 공고의 상세 정보를 불러오는 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "공고 상세 정보 불러오기에 성공했습니다", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "404", description = "해당 id에 해당하는 인턴 공고가 존재하지 않습니다", content = @Content(mediaType = "application/json"))
-    })
     ResponseEntity<SuccessResponse<InternshipDetailResponseDto>> getInternshipDetail(
             @PathVariable("internshipAnnouncementId") Long internshipAnnouncementId
     );

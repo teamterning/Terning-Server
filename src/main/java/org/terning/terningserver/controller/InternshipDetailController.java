@@ -23,7 +23,7 @@ public class InternshipDetailController implements InternshipDetailSwagger {
 
     @GetMapping("/announcements/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse<InternshipDetailResponseDto>> getInternshipDetail(
-            @PathVariable("internshipAnnouncementId") Long internshipAnnouncementId) {
+            @PathVariable Long internshipAnnouncementId) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_INTERNSHIP_DETAIL,
                 internshipDetailService.getInternshipDetail(internshipAnnouncementId)

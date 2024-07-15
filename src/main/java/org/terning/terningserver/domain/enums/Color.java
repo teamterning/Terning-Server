@@ -1,9 +1,11 @@
 package org.terning.terningserver.domain.enums;
 
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum Color {
 
     RED(0, "ED4E54"),
