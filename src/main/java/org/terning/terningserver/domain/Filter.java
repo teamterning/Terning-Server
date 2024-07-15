@@ -1,6 +1,7 @@
 package org.terning.terningserver.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.enums.Grade;
@@ -27,5 +28,19 @@ public class Filter {
     private WorkingPeriod workingPeriod;
 
     @Column(nullable = false)
-    private YearMonth startDate;
+    private int startYear;
+
+    @Column(nullable = false)
+    private int startMonth;
+
+
+    @Builder
+    public Filter(Long id, Grade grade, WorkingPeriod workingPeriod, int startYear, int startMonth) {
+        this.id = id;
+        this.grade = grade;
+        this.workingPeriod = workingPeriod;
+        this.startYear = startYear;
+        this.startMonth = startMonth;
+    }
+
 }
