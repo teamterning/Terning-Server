@@ -9,6 +9,7 @@ import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
+import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
@@ -102,7 +103,13 @@ public class ScrapServiceImpl implements ScrapService {
                 ))
                 .toList();
     }
-
+  
+    @Override
+    public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date){
+        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, date).stream()
+                .map(DailyScrapResponseDto::of)
+                .toList();
+  
     @Override
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request) {
@@ -159,3 +166,4 @@ public class ScrapServiceImpl implements ScrapService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_SCRAP));
     }
 }
+
