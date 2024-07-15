@@ -18,7 +18,9 @@ public enum SuccessMessage {
     SUCCESS_GET_INTERNSHIP_DETAIL(200, "공고 상세 정보 불러오기에 성공했습니다"),
 
     // 스크랩
-    SUCCESS_CREATE_SCRAP(201, "스크랩 추가에 성공했습니다");
+    SUCCESS_CREATE_SCRAP(201, "스크랩 추가에 성공했습니다"),
+    SUCCESS_DELETE_SCRAP(200, "스크랩 취소에 성공했습니다"),
+    SUCCESS_UPDATE_SCRAP(200, "스크랩 수정에 성공했습니다");
 
     private final int status;
     private final String message;

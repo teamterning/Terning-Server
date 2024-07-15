@@ -49,5 +49,9 @@ public class Scrap extends BaseTimeEntity {
                 .color(color)
                 .build();
     }
+
+    public void updateColor(Color color) {
+        this.color = color;
+    }
     
 }
