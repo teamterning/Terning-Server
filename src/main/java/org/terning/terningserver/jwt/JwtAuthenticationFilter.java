@@ -24,11 +24,10 @@ import static org.terning.terningserver.jwt.JwtValidationType.VALID_JWT;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             val token = getAccessTokenFromRequest(request);
             if (hasText(token) && jwtTokenProvider.validateToken(token) == VALID_JWT) {
@@ -41,6 +40,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private long getUserId(String token) {
+        return jwtTokenProvider.getUserFromJwt(token);
     }
 
     private String getAccessTokenFromRequest(HttpServletRequest request) {
@@ -60,7 +63,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
     }
 
-    private long getUserId(String token) {
-        return jwtTokenProvider.getUserFromJwt(token);
-    }
 }
