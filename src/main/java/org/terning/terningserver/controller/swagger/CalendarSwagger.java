@@ -7,7 +7,6 @@ import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
-import java.time.Month;
 import java.util.List;
 
 @Tag(name = "Calendar", description = "캘린더 관련 API")
