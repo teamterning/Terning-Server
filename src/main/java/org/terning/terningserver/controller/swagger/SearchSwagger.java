@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
+import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
 @Tag(name = "Search", description = "탐색 관련 API")
@@ -17,7 +17,7 @@ public interface SearchSwagger {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
     })
-    ResponseEntity<SuccessResponse<PopularAnnouncementListResponse>> getMostViewedAnnouncements(
+    ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostViewedAnnouncements(
 
     );
 
@@ -25,7 +25,7 @@ public interface SearchSwagger {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
     })
-    ResponseEntity<SuccessResponse<PopularAnnouncementListResponse>> getMostScrappedAnnouncements(
+    ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostScrappedAnnouncements(
 
     );
 }

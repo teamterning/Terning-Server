@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
-import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
+import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import java.util.List;
 
@@ -16,14 +16,14 @@ public class SearchService {
 
     private final InternshipRepository internshipRepository;
 
-    public PopularAnnouncementListResponse getMostViewedAnnouncements() {
+    public PopularAnnouncementListResponseDto getMostViewedAnnouncements() {
         List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostViewedInternship();
-        return PopularAnnouncementListResponse.of(mostViewedInternships);
+        return PopularAnnouncementListResponseDto.of(mostViewedInternships);
     }
 
-    public PopularAnnouncementListResponse getMostScrappedAnnouncements() {
+    public PopularAnnouncementListResponseDto getMostScrappedAnnouncements() {
         List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostScrappedInternship();
-        return PopularAnnouncementListResponse.of(mostViewedInternships);
+        return PopularAnnouncementListResponseDto.of(mostViewedInternships);
     }
 
 }

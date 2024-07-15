@@ -6,7 +6,7 @@ import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.util.DateUtil;
 
 @Builder
-public record InternshipDetailResponse(
+public record InternshipDetailResponseDto(
         String dDay,
         String title,
         String deadline,
@@ -23,8 +23,8 @@ public record InternshipDetailResponse(
         String url,
         boolean isScrapped
 ) {
-    public static InternshipDetailResponse of(InternshipAnnouncement announcement, Company company, boolean isScrapped) {
-        return InternshipDetailResponse.builder()
+    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, boolean isScrapped) {
+        return InternshipDetailResponseDto.builder()
                 .dDay(DateUtil.convert(announcement.getDeadline()))
                 .title(announcement.getTitle())
                 .deadline(DateUtil.convertDeadline(announcement.getDeadline()))

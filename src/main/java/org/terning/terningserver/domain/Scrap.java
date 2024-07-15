@@ -34,4 +34,5 @@ public class Scrap extends BaseTimeEntity {
     @Column(nullable = false)
     private Color color; // 스크랩 색상 (사용자가 지정)
 
+    
 }

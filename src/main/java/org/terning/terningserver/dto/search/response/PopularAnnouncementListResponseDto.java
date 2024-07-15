@@ -1,14 +1,11 @@
 package org.terning.terningserver.dto.search.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public record PopularAnnouncementListResponse(
+public record PopularAnnouncementListResponseDto(
         List<MostViewedAndScrappedAnnouncement> announcements
 ) {
 
@@ -27,8 +24,8 @@ public record PopularAnnouncementListResponse(
         }
     }
 
-    public static PopularAnnouncementListResponse of(List<InternshipAnnouncement> announcements) {
-       return new PopularAnnouncementListResponse(
+    public static PopularAnnouncementListResponseDto of(List<InternshipAnnouncement> announcements) {
+       return new PopularAnnouncementListResponseDto(
                announcements.stream().map(MostViewedAndScrappedAnnouncement::from).toList()
        );
     }
