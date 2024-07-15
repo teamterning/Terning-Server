@@ -3,9 +3,9 @@ package org.terning.terningserver.controller.swagger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.terning.terningserver.domain.auth.response.SignInResponse;
-import org.terning.terningserver.domain.auth.response.SignUpFilterResponse;
-import org.terning.terningserver.domain.auth.response.TokenGetResponse;
+import org.terning.terningserver.dto.auth.response.SignInResponseDto;
+import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
+import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
@@ -13,7 +13,7 @@ import org.terning.terningserver.exception.dto.SuccessResponse;
 public interface AuthSwagger {
 
     @Operation(summary = "소셜 로그인", description = "AuthType에 맞는 소셜 로그인 API")
-    ResponseEntity<SuccessResponse<SignInResponse>> signIn(
+    ResponseEntity<SuccessResponse<SignInResponseDto>> signIn(
             String accessToken,
             String refreshToken,
             Long userId,
@@ -21,17 +21,17 @@ public interface AuthSwagger {
     );
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급 API")
-    ResponseEntity<SuccessResponse<TokenGetResponse>> reissueToken(
+    ResponseEntity<SuccessResponse<TokenGetResponseDto>> reissueToken(
             String accessToken
     );
 
     @Operation(summary = "사용자 필터링 정보 생성", description = "사용자 필터링 정보 생성 API")
-    ResponseEntity<SuccessResponse<SignUpFilterResponse>> filter(
+    ResponseEntity<SuccessResponse<SignUpFilterResponseDto>> filter(
 
     );
 
     @Operation(summary = "회원가입", description = "회원가입 API")
-    ResponseEntity<SuccessResponse<SignInResponse>> signUp(
+    ResponseEntity<SuccessResponse<SignInResponseDto>> signUp(
     );
 
     @Operation(summary = "로그아웃", description = "로그아웃 API")

@@ -1,4 +1,4 @@
-package org.terning.terningserver.domain.auth.request;
+package org.terning.terningserver.dto.auth.request;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -6,7 +6,7 @@ import lombok.NonNull;
 import static lombok.AccessLevel.PRIVATE;
 
 @Builder(access = PRIVATE)
-public record SignUpFilterRequest(
+public record SignUpFilterRequestDto(
         @NonNull int grade,
         @NonNull int workingPeriod,
         @NonNull int startYear,

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.domain.auth.request.SignUpFilterRequest;
+import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.exception.CustomException;
@@ -20,7 +20,7 @@ public class SignUpFilterService {
     private final FilterRepository filterRepository;
     private final UserRepository userRepository;
 
-    public void signUpFilter(Long userId, SignUpFilterRequest request) {
+    public void signUpFilter(Long userId, SignUpFilterRequestDto request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(SIGN_UP_FILTER_FAILED));
 
         int gradeKey = request.grade();

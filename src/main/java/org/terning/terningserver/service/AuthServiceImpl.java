@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.terning.terningserver.config.ValueConfig;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.domain.auth.request.SignInRequest;
-import org.terning.terningserver.domain.auth.response.SignInResponse;
-import org.terning.terningserver.domain.auth.response.TokenGetResponse;
+import org.terning.terningserver.dto.auth.request.SignInRequestDto;
+import org.terning.terningserver.dto.auth.response.SignInResponseDto;
+import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
@@ -37,14 +37,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public SignInResponse signIn(User user, SignInRequest request) {
+    public SignInResponseDto signIn(User user, SignInRequestDto request) {
         User authenticatedUser = getUser(user.getAuthAccessToken(), request.authType());
         val token = getToken(authenticatedUser);
-        return SignInResponse.of(token, authenticatedUser.getId(), authenticatedUser.getAuthType());
+        return SignInResponseDto.of(token, authenticatedUser.getId(), authenticatedUser.getAuthType());
     }
 
     @Transactional
-    public User saveUser(String authAccessToken, SignInRequest request) {
+    public User saveUser(String authAccessToken, SignInRequestDto request) {
         User user = User.builder()
                 .authAccessToken(authAccessToken)
                 .authType(request.authType())
@@ -67,11 +67,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenGetResponse reissueToken(String refreshToken) {
+    public TokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
         val token = Optional.ofNullable(generateAccessToken(user.getId()))
                 .orElseThrow(() -> new CustomException(TOKEN_REISSUE_FAILED));
-        return TokenGetResponse.of(token);
+        return TokenGetResponseDto.of(token);
     }
 
     private User getUser(String authAccessToken, AuthType authType) {

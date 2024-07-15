@@ -1,4 +1,4 @@
-package org.terning.terningserver.domain.auth.request;
+package org.terning.terningserver.dto.auth.request;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -6,12 +6,12 @@ import lombok.NonNull;
 import static lombok.AccessLevel.*;
 
 @Builder(access = PRIVATE)
-public record TokenGetRequest(
+public record TokenGetRequestDto(
         @NonNull String refreshToken
 ) {
 
-    public static TokenGetRequest of(String refreshToken) {
-        return TokenGetRequest.builder()
+    public static TokenGetRequestDto of(String refreshToken) {
+        return TokenGetRequestDto.builder()
                 .refreshToken(refreshToken)
                 .build();
     }
