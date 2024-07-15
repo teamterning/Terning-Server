@@ -20,6 +20,6 @@ public class ScrapServiceImpl implements ScrapService {
         LocalDate today = LocalDate.now();
         return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, today).stream()
                 .map(TodayScrapResponseDto::of)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
