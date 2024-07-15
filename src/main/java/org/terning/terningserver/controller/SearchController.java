@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.SearchSwagger;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
-import org.terning.terningserver.dto.search.response.SearchResultResponse;
+import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.SearchService;
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
@@ -40,7 +40,7 @@ public class SearchController implements SearchSwagger {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<SuccessResponse<SearchResultResponse>> searchInternshipAnnouncement(
+    public ResponseEntity<SuccessResponse<SearchResultResponseDto>> searchInternshipAnnouncement(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "sortBy", required = false) String sortBy, Pageable pageable) {
         return ResponseEntity.ok(SuccessResponse.of(

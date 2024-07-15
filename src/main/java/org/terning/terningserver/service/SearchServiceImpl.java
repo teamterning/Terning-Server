@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
-import org.terning.terningserver.dto.search.response.SearchResultResponse;
+import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 
@@ -38,12 +38,12 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchResultResponse searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+    public SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
         Page<InternshipAnnouncement> pageAnnouncements = internshipRepository.searchInternshipAnnouncement(keyword, sortBy, pageable);
 
         List<InternshipAnnouncement> announcements = pageAnnouncements.getContent();
 
-        List<SearchResultResponse.SearchAnnouncementResponse> searchAnnouncementResponses = new ArrayList<>();
+        List<SearchResultResponseDto.SearchAnnouncementResponse> searchAnnouncementResponses = new ArrayList<>();
 
         List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, 1L);
 
@@ -54,9 +54,9 @@ public class SearchServiceImpl implements SearchService {
                         Scrap::getId
                 ));
 
-        return new SearchResultResponse(
+        return new SearchResultResponseDto(
                 pageAnnouncements.getTotalPages(), pageAnnouncements.hasNext(), announcements.stream()
-                .map(a -> SearchResultResponse.SearchAnnouncementResponse.from(a, scrapMap.get(a.getId())))
+                .map(a -> SearchResultResponseDto.SearchAnnouncementResponse.from(a, scrapMap.get(a.getId())))
                 .toList());
     }
 }
