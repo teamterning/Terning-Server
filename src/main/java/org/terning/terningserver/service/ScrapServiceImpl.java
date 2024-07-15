@@ -3,6 +3,7 @@ package org.terning.terningserver.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.domain.Scrap;
+import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
@@ -87,4 +88,12 @@ public class ScrapServiceImpl implements ScrapService {
                 ))
                 .toList();
     }
+
+    @Override
+    public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date){
+        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, date).stream()
+                .map(DailyScrapResponseDto::of)
+                .toList();
+    }
 }
+

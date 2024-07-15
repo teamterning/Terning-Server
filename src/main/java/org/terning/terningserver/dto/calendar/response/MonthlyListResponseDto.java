@@ -21,9 +21,9 @@ public record MonthlyListResponseDto(
             int startYear,
             int startMonth
     ){
-        public static ScrapDetail of(Long scrapId, Long internshipAnnouncementId, String title,
-                                     String dDay, String workingPeriod, String color,
-                                     String companyImage, int startYear, int startMonth){
+        public static ScrapDetail of(final Long scrapId, final Long internshipAnnouncementId, final String title,
+                                     final String dDay, final String workingPeriod, final String color,
+                                     final String companyImage, final int startYear, final int startMonth){
             return ScrapDetail.builder()
                     .scrapId(scrapId)
                     .internshipAnnouncementId(internshipAnnouncementId)
