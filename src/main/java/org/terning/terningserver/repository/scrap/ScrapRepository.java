@@ -10,4 +10,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long>, ScrapReposi
     Boolean existsByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 
     List<Scrap> findByUserIdAndInternshipAnnouncement_Deadline(Long userId, LocalDate deadline);
+
+    List<Scrap> findByUserIdAndInternshipAnnouncement_DeadlineBetween(Long userId, LocalDate start, LocalDate end);
 }
+
