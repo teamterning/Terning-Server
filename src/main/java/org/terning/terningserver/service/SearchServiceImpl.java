@@ -10,7 +10,7 @@ import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
 import org.terning.terningserver.dto.search.response.SearchResultResponse;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
-import org.terning.terningserver.repository.scarp.ScrapRepository;
+import org.terning.terningserver.repository.scrap.ScrapRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +59,4 @@ public class SearchServiceImpl implements SearchService {
                 .map(a -> SearchResultResponse.SearchAnnouncementResponse.from(a, scrapMap.get(a.getId())))
                 .toList());
     }
-
 }

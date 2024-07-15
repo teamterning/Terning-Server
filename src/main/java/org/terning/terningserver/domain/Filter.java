@@ -26,7 +26,7 @@ public class Filter {
     @Column(nullable = false)
     private WorkingPeriod workingPeriod;
 
-    private int startYear;
+    private int startYear; // 근무 시작 연도
 
-    private int startMonth;
+    private int startMonth; // 근무 시작 월
 }

@@ -16,10 +16,25 @@ import org.terning.terningserver.domain.enums.WorkingPeriod;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
 import static org.terning.terningserver.domain.QUser.user;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.*;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.WorkingPeriod;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 
 
 import java.time.LocalDate;
 import java.util.List;
+
+
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
+
 
 @RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
@@ -50,25 +65,15 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .fetch();
     }
 
+
     @Override
     public Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
-        LocalDate today = LocalDate.now();
-
-        // 현재 시점보다 마감일이 지나지 않은 경우
-        BooleanExpression isNotExpired = internshipAnnouncement.deadline.goe(today);
-
-        // 우선순위를 위한 Expression(지원된 공고는 정렬 우선순위 낮게 -> 밑에 깔리게)
-        NumberTemplate<Integer> priority = Expressions.numberTemplate(
-                Integer.class,
-                "CASE WHEN {0} THEN 1 ELSE 2 END",
-                isNotExpired
-        );
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps).fetchJoin()
                 .where(contentLike(keyword))
-                .orderBy(priority.asc(), createOrderSpecifier(sortBy))
+                .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -100,11 +105,64 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         };
     }
 
-    /**
-     * String 타입의 workingPeriod를 숫자로 정렬하게 하기 위한 메서드
-     * @return
-     */
-    private NumberTemplate<Integer> getWorkingPeriodAsNumber() {
+
+    @Override
+    public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
+        return jpaQueryFactory
+                .selectFrom(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scrapList, scrap).on(scrap.user.eq(user))
+                .where(
+                        getGraduatingFilter(user),
+                        getWorkingPeriodFilter(user),
+                        getStartDateFilter(startYear, startMonth)
+                )
+                .orderBy(
+                        sortAnnouncementsByDeadline().asc(),
+                        getSortOrder(sortBy)
+                )
+                .fetch();
+    }
+
+    private BooleanExpression getGraduatingFilter(User user){
+        if(user.getFilter().getGrade() != Grade.SENIOR){
+            return internshipAnnouncement.isGraduating.isFalse();
+        }
+        return null;
+    }
+
+    private BooleanExpression getWorkingPeriodFilter(User user){
+        if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION1){
+            return getWorkingPeriodAsNumber().between(1,3);
+        } else if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION2){
+            return getWorkingPeriodAsNumber().between(4,6);
+        } else {
+            return getWorkingPeriodAsNumber().goe(7);
+        }
+    }
+
+    private BooleanExpression getStartDateFilter(int startYear, int startMonth){
+        return internshipAnnouncement.startYear.eq(startYear)
+                .and(internshipAnnouncement.startMonth.eq(startMonth));
+    }
+
+    // 정렬 옵션 (5가지)
+    private OrderSpecifier getSortOrder(String sortBy) {
+        return switch (sortBy) {
+            case "shortestDuration" // 짧은 근무 기간 순
+                 -> getWorkingPeriodAsNumber().asc();
+            case "longestDuration" // 긴 근무 기간 순
+                 -> getWorkingPeriodAsNumber().desc();
+            case "mostScrapped" // 스크랩 많은 순
+                 -> internshipAnnouncement.scrapCount.desc();
+            case "mostViewed" // 조회 수 많은 순
+                 -> internshipAnnouncement.viewCount.desc();
+            default // 채용 마감 이른 순
+                 -> internshipAnnouncement.deadline.asc();
+        };
+    }
+
+    // String 타입의 workingPeriod를 숫자로 변환하기 위한 메서드(ex. "2개월" => 2)
+    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
         return Expressions.numberTemplate(
                 Integer.class,
                 "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
@@ -112,7 +170,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         );
     }
 
-    //지원 마감일이 지나지 않은 공고
+    // 지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {
         return internshipAnnouncement.deadline.goe(LocalDate.now());
     }
@@ -120,5 +178,18 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     // 현재 시점으로부터 30일 이내의 공고
     private BooleanExpression internCreatedAtAfter() {
         return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
+    }
+
+    // 서류 마감일이 지난 공고는 가장 아래로 보여주는 로직
+    private NumberTemplate<Integer> sortAnnouncementsByDeadline() {
+        // 현재 시점보다 마감일이 지나지 않은 경우
+        BooleanExpression isNotExpired = internshipAnnouncement.deadline.goe(LocalDate.now());
+
+        // 우선순위를 위한 Expression(지원된 공고는 정렬 우선순위 낮게 -> 밑에 깔리게)
+        return Expressions.numberTemplate(
+                Integer.class,
+                "CASE WHEN {0} THEN 1 ELSE 2 END",
+                isNotExpired
+        );
     }
 }

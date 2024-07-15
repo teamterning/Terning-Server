@@ -1,8 +1,10 @@
 package org.terning.terningserver.domain.enums;
 
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum WorkingPeriod {
     OPTION1(0, "1개월 ~ 3개월"),

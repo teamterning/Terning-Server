@@ -1,4 +1,4 @@
-package org.terning.terningserver.repository.scarp;
+package org.terning.terningserver.repository.scrap;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
