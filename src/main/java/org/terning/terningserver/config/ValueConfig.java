@@ -43,6 +43,8 @@ public class ValueConfig {
     public static final String RSA = "RSA";
     public static final String KEY = "keys";
     public static final String ID = "sub";
+    public static final int QUOTES = 1;
+    public static final int POSITIVE_NUMBER = 1;
 
     @PostConstruct
     protected void init() {
