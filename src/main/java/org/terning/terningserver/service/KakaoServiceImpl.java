@@ -10,12 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.terning.terningserver.config.ValueConfig;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.dto.ErrorResponse;
-import org.terning.terningserver.exception.enums.ErrorMessage;
 
 import java.util.Map;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_TOKEN;
+import static org.terning.terningserver.exception.enums.ErrorMessage.SOCIAL_LOGIN_FAILED;
 
 
 @Service
@@ -32,12 +30,10 @@ public class KakaoServiceImpl implements KakaoService {
             val headers = new HttpHeaders();
             headers.add("Authorization", authAccessToken);
             val httpEntity = new HttpEntity<JsonArray>(headers);
-            val responseData = restTemplate.
-                    postForEntity(valueConfig.getKakaoUri(), httpEntity, Object.class);
+            val responseData = restTemplate.postForEntity(valueConfig.getKakaoUri(), httpEntity, Object.class);
             return objectMapper.convertValue(responseData.getBody(), Map.class).get("id").toString();
         } catch (Exception exception) {
-            throw new CustomException(INVALID_TOKEN);
-
+            throw new CustomException(SOCIAL_LOGIN_FAILED);
         }
     }
 }
