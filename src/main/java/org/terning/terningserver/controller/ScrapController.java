@@ -3,6 +3,7 @@ package org.terning.terningserver.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.controller.swagger.ScrapSwagger;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.exception.enums.SuccessMessage;
@@ -13,7 +14,7 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_C
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class ScrapController {
+public class ScrapController implements ScrapSwagger {
     private final ScrapService scrapService;
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
