@@ -29,7 +29,7 @@ public class ScrapServiceImpl implements ScrapService {
     @Override
     public List<MonthlyDefaultResponseDto> getMonthlyScraps(Long userId, int year, int month){
 
-        //모든 월의 시작일은 1, 마지막일은 해당 다음월의 하루
+        //모든 월의 시작일은 1, 마지막일은 해당 다음월의 하루 전
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = start.plusMonths(1).minusDays(1);
 
