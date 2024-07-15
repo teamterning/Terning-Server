@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
 import org.terning.terningserver.dto.search.response.SearchResultResponse;
 import org.terning.terningserver.exception.dto.SuccessResponse;
@@ -26,6 +28,7 @@ public interface SearchSwagger {
 
     @Operation(summary = "탐색 > 검색 결과 화면", description = "탐색 화면에서 인턴 공고를 검색하는 API")
     ResponseEntity<SuccessResponse<SearchResultResponse>> searchInternshipAnnouncement(
-
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam("sortBy") String sortBy, Pageable pageable
     );
 }
