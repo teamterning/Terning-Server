@@ -1,17 +1,19 @@
 package org.terning.terningserver.service;
 
-import org.terning.terningserver.domain.auth.request.SignInServiceRequest;
-import org.terning.terningserver.domain.auth.request.TokenGetServiceRequest;
-import org.terning.terningserver.domain.auth.response.SignInServiceResponse;
-import org.terning.terningserver.domain.auth.response.TokenGetServiceResponse;
+import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.auth.request.SignInRequest;
+import org.terning.terningserver.domain.auth.response.SignInResponse;
+import org.terning.terningserver.domain.auth.response.TokenGetResponse;
 
 public interface AuthService {
 
-    SignInServiceResponse signIn(SignInServiceRequest request);
+    SignInResponse signIn(User user, SignInRequest request);
+
+    User saveUser(String authAccessToken, SignInRequest request);
 
     void signOut(long userId);
 
     void withdraw(long userId);
 
-    TokenGetServiceResponse reissueToken(TokenGetServiceRequest request);
+    TokenGetResponse reissueToken(String refreshToken);
 }
