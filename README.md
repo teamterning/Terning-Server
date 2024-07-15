@@ -67,6 +67,12 @@ ex) feat/#20
 
 <br/>
 
+## 🌱 Architecture Diagram
+![터닝 AD](https://github.com/user-attachments/assets/df2d0440-6525-46f4-8fc3-064e0f486bf2)
+
+
+<br/>
+
 ## 📎 ERD
 <img width="829" alt="image" src="https://github.com/teamterning/Terning-Server/assets/150939763/572a5ad6-17c7-4394-80c3-21d3ea8da3e4">
 
