@@ -37,7 +37,6 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authAccessToken,
             @RequestBody SignInRequestDto request
     ) {
-        System.out.println(authAccessToken + " " + request.authType());
         User user = authService.saveUser(authAccessToken, request);
         val signInResponse = authService.signIn(user, request);
 
