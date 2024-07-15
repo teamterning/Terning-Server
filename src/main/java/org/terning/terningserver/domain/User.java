@@ -32,21 +32,20 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Scrap> scrapList = new ArrayList<>(); // 스크랩 공고
 
-    @Column(nullable = false, length = 12)
+    @Column(length = 12)
     private String name; // 사용자 이름
 
-    @Column(nullable = false)
-    private int profileImage; //유저 아이콘
+//    private String email; //이메일
+
+    private int profileImage;
 
     @Enumerated(STRING)
-    @Column(nullable = false)
     private AuthType authType; // 인증 유형 (예: 카카오, 애플)
 
-    @Column(nullable = false, length = 256)
+    @Column(length = 256)
     private String authId; // 인증 서비스에서 제공하는 고유 ID
 
     @Enumerated(STRING)
-    @Column(nullable = false)
     private State state; // 사용자 상태 (예: 활성, 비활성, 정지)
 
 }

@@ -48,6 +48,9 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(nullable = false, length = 256)
     private String url;  // 인턴십 공고 URL
 
+    @OneToMany(mappedBy = "internshipAnnouncement")
+    private List<Scrap> scraps;
+
     @Embedded
     private Company company;
 
