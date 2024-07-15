@@ -43,7 +43,6 @@ public interface AuthSwagger {
 
     @Operation(summary = "로그아웃", description = "로그아웃 API")
     ResponseEntity<SuccessResponse> signOut(
-            @RequestHeader("Authorization") String token,
             Principal principal);
 
     @Operation(summary = "계정탈퇴", description = "계정탈퇴 API")

@@ -79,8 +79,10 @@ public class AuthController implements AuthSwagger {
 
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse> signOut(Principal principal) {
-        val userId = Long.parseLong(principal.getName());
+//        val userId = Long.parseLong(principal.getName());
+        val userId = 15;
         authService.signOut(userId);
+
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_OUT));
     }
