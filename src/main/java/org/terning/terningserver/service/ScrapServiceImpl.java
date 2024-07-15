@@ -22,4 +22,13 @@ public class ScrapServiceImpl implements ScrapService {
                 .map(TodayScrapResponseDto::of)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void createPost(CreateScrapRequest request) {
+
+    }
+
+    private void getInternshipAnnouncement() {
+        internshipRepository.findById()
+    }
 }
