@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.config.ValueConfig;

@@ -16,7 +16,7 @@ import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
 import org.terning.terningserver.jwt.UserAuthentication;
-import org.terning.terningserver.repository.UserRepository;
+import org.terning.terningserver.repository.user.UserRepository;
 import java.util.Optional;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_USER;

@@ -12,7 +12,7 @@ import java.util.Base64;
 @Getter
 public class ValueConfig {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.SECRET_KEY}")
     private String secretKey;
 
     @Value("${jwt.KAKAO_URL}")

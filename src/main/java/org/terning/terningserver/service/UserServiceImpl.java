@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.repository.UserRepository;
+import org.terning.terningserver.repository.user.UserRepository;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.WITHDRAW_FAILED;
 

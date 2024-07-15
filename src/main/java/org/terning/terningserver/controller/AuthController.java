@@ -20,7 +20,6 @@ import java.security.Principal;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_SIGN_IN;
 
 @RestController
 @RequiredArgsConstructor

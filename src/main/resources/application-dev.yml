@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/terning
+    username: ${USER_ID}
+    password: ${USER_PW}
+
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 10
+      connection-timeout: 5000 # 5 seconds
+      validation-timeout: 2000 # 2 seconds
+      idle-timeout: 600000 # 10 minutes
+      max-lifetime: 1800000 # 30 minutes
+
+      # 로그 관련 설정
+      data-source-properties:
+        dataSource.logWriter: # 로그 작성 구현체 지정
+        dataSource.logUnclosedConnections: false  # 사용하지 않은 커넥션의 로깅 여부 지정
+
+      # 모니터링 관련 설정
+      metrics:
+        enabled: true  # HikariCP 메트릭스 활성화
+        export:
+          reporter:
+            - prometheus  # 사용할 메트릭스 리포터 설정
+          prometheus:
+            enabled: true  # Prometheus 메트릭스 리포터 활성화 여부
+            step: 60s  # 측정 간격
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+logging:
+  level:
+    com.zaxxer.hikari: INFO

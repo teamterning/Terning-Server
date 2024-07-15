@@ -8,8 +8,8 @@ import org.terning.terningserver.domain.auth.request.SignUpFilterRequest;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.repository.FilterRepository;
-import org.terning.terningserver.repository.UserRepository;
+import org.terning.terningserver.repository.filter.FilterRepository;
+import org.terning.terningserver.repository.user.UserRepository;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.SIGN_UP_FILTER_FAILED;
 

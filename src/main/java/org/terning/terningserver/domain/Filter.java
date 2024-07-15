@@ -8,7 +8,6 @@ import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import static lombok.AccessLevel.PROTECTED;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import java.time.YearMonth;
 
 @Entity
 @Getter
@@ -42,5 +41,5 @@ public class Filter {
         this.startYear = startYear;
         this.startMonth = startMonth;
     }
-
+    
 }

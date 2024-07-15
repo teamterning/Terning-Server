@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.repository.UserRepository;
+import org.terning.terningserver.repository.user.UserRepository;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.SIGN_UP_FAILED;
 

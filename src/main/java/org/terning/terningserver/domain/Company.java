@@ -5,9 +5,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.terning.terningserver.domain.enums.CompanyCategory;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Embeddable
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Company {
 
     @Column(nullable = false, length = 64)

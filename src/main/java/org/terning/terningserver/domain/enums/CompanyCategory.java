@@ -1,8 +1,10 @@
 package org.terning.terningserver.domain.enums;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum CompanyCategory {
 
     LARGE_AND_MEDIUM_COMPANIES(0, "대기업/중견기업"),

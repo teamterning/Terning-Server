@@ -29,11 +29,13 @@ public class QInternshipAnnouncement extends EntityPathBase<InternshipAnnounceme
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final DateTimePath<java.util.Date> deadline = createDateTime("deadline", java.util.Date.class);
+    public final DatePath<java.time.LocalDate> deadline = createDate("deadline", java.time.LocalDate.class);
 
     public final StringPath detail = createString("detail");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final BooleanPath isGraduating = createBoolean("isGraduating");
 
     public final StringPath jobType = createString("jobType");
 
@@ -44,7 +46,11 @@ public class QInternshipAnnouncement extends EntityPathBase<InternshipAnnounceme
 
     public final NumberPath<Integer> scrapCount = createNumber("scrapCount", Integer.class);
 
-    public final ComparablePath<java.time.YearMonth> startDate = createComparable("startDate", java.time.YearMonth.class);
+    public final ListPath<Scrap, QScrap> scrapList = this.<Scrap, QScrap>createList("scrapList", Scrap.class, QScrap.class, PathInits.DIRECT2);
+
+    public final NumberPath<Integer> startMonth = createNumber("startMonth", Integer.class);
+
+    public final NumberPath<Integer> startYear = createNumber("startYear", Integer.class);
 
     public final StringPath title = createString("title");
 

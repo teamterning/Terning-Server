@@ -39,8 +39,8 @@ public class User extends BaseTimeEntity {
     // TODO: 특수문자, 첫글자 , 12자리 이내
     @Column(length = 12)
     private String name; // 사용자 이름
-
-    private Integer profileImage; //유저 아이콘
+    
+    private int profileImage; //유저 아이콘
 
     @Enumerated(STRING)
     private AuthType authType; // 인증 유형 (예: 카카오, 애플)
