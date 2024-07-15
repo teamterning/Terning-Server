@@ -33,7 +33,6 @@ public record SearchResultResponse(
                     .build();
         }
     }
-    public static SearchResultResponse of(List<SearchAnnouncementResponse> announcements) {
     public static SearchResultResponse of(int totalPages, Boolean hasNext, List<SearchAnnouncementResponse> announcements) {
         return new SearchResultResponse(totalPages, hasNext, announcements);
     }
