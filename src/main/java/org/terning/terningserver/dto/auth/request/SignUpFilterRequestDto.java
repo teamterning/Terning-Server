@@ -13,4 +13,12 @@ public record SignUpFilterRequestDto(
         @NonNull int startMonth
 
 ) {
+    public static SignUpFilterRequestDto of(int grade, int workingPeriod, int startYear, int startMonth) {
+        return SignUpFilterRequestDto.builder()
+                .grade(grade)
+                .workingPeriod(workingPeriod)
+                .startYear(startYear)
+                .startMonth(startMonth)
+                .build();
+    }
 }

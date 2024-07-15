@@ -5,6 +5,7 @@ import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.AuthSwagger;
+import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
@@ -68,9 +69,13 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("User-Id") Long userId,
             @RequestBody SignUpFilterRequestDto request
     ) {
-        signUpFilterService.signUpFilter(userId, request);
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP_FILTER));
+        // 필터 생성 및 저장
+        Filter newFilter = signUpFilterService.createAndSaveFilter(request);
 
+        // 사용자에게 필터 연결
+        signUpFilterService.connectFilterToUser(userId, newFilter.getId());
+
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP_FILTER));
     }
 
     @PostMapping("/logout")

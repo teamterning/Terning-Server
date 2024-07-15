@@ -80,13 +80,7 @@ public class User extends BaseTimeEntity {
         }
     }
 
-    @Builder
-    public void updateFilter(Grade grade, WorkingPeriod workingPeriod, int startYear, int startMonth) {
-        this.filter = Filter.builder()
-                .grade(grade)
-                .workingPeriod(workingPeriod)
-                .startYear(startYear)
-                .startMonth(startMonth)
-                .build();
+    public void assignFilter(Filter filter) {
+        this.filter = filter;
     }
 }
