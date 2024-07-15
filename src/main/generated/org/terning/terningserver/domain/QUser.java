@@ -24,6 +24,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final org.terning.terningserver.domain.common.QBaseTimeEntity _super = new org.terning.terningserver.domain.common.QBaseTimeEntity(this);
 
+    public final StringPath authAccessToken = createString("authAccessToken");
+
     public final StringPath authId = createString("authId");
 
     public final EnumPath<org.terning.terningserver.domain.enums.AuthType> authType = createEnum("authType", org.terning.terningserver.domain.enums.AuthType.class);
@@ -39,6 +41,8 @@ public class QUser extends EntityPathBase<User> {
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final StringPath name = createString("name");
+
+    public final NumberPath<Integer> profileImage = createNumber("profileImage", Integer.class);
 
     public final StringPath refreshToken = createString("refreshToken");
 

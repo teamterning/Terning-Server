@@ -23,7 +23,9 @@ public class QFilter extends EntityPathBase<Filter> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ComparablePath<java.time.YearMonth> startDate = createComparable("startDate", java.time.YearMonth.class);
+    public final NumberPath<Integer> startMonth = createNumber("startMonth", Integer.class);
+
+    public final NumberPath<Integer> startYear = createNumber("startYear", Integer.class);
 
     public final EnumPath<org.terning.terningserver.domain.enums.WorkingPeriod> workingPeriod = createEnum("workingPeriod", org.terning.terningserver.domain.enums.WorkingPeriod.class);
 
