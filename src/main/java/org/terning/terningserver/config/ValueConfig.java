@@ -12,19 +12,19 @@ import java.util.Base64;
 @Getter
 public class ValueConfig {
 
-    @Value("${jwt.SECRET_KEY}")
+    @Value("${SECRET_KEY}")
     private String secretKey;
 
-    @Value("${jwt.KAKAO_URL}")
+    @Value("${KAKAO_URL}")
     private String kakaoUri;
 
-    @Value("${jwt.APPLE_URL}")
+    @Value("${APPLE_URL}")
     private String appleUri;
 
-    @Value("${jwt.ACCESS_TOKEN_EXPIRED}")
+    @Value("${ACCESS_TOKEN_EXPIRED}")
     private Long accessTokenExpired;
 
-    @Value("${jwt.REFRESH_TOKEN_EXPIRED}")
+    @Value("${REFRESH_TOKEN_EXPIRED}")
     private Long refreshTokenExpired;
 
     public static final String IOS_FORCE_UPDATE_VERSION = "0.0.9";
