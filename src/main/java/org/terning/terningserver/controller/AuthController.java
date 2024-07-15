@@ -38,6 +38,7 @@ public class AuthController implements AuthSwagger {
             @RequestBody SignInRequestDto request
     ) {
         User user = authService.saveUser(authAccessToken, request);
+
         val signInResponse = authService.signIn(user, request);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
@@ -50,6 +51,7 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String refreshToken
     ) {
         val response = authService.reissueToken(refreshToken);
+
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_REISSUE_TOKEN, response));
     }
 
@@ -79,20 +81,18 @@ public class AuthController implements AuthSwagger {
 
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse> signOut(Principal principal) {
-//        val userId = Long.parseLong(principal.getName());
-        val userId = 15;
-        authService.signOut(userId);
+        val userId = Long.parseLong(principal.getName());
 
+        authService.signOut(userId);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_OUT));
     }
-
     @DeleteMapping("/withdraw")
     public ResponseEntity<SuccessResponse> withdraw(Principal principal) {
         val userId = Long.parseLong(principal.getName());
+
         authService.withdraw(userId);
+
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_WITHDRAW));
-
     }
-
 }
