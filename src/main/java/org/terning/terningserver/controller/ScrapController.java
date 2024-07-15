@@ -7,11 +7,9 @@ import org.terning.terningserver.controller.swagger.ScrapSwagger;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.ScrapService;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_CREATE_SCRAP;
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_UPDATE_SCRAP;
+import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class ScrapController implements ScrapSwagger {
     @DeleteMapping("/scraps/{scrapId}")
     public ResponseEntity<SuccessResponse> deleteScrap(@PathVariable Long scrapId) {
         scrapService.deleteScrap(scrapId);
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
     @PatchMapping("/scraps/{scrapId}")

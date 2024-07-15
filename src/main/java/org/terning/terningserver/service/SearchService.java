@@ -1,29 +1,15 @@
 package org.terning.terningserver.service;
 
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
-import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.terning.terningserver.dto.search.response.SearchResultResponse;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class SearchService {
+public interface SearchService {
 
-    private final InternshipRepository internshipRepository;
+    PopularAnnouncementListResponseDto getMostViewedAnnouncements();
 
-    public PopularAnnouncementListResponseDto getMostViewedAnnouncements() {
-        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostViewedInternship();
-        return PopularAnnouncementListResponseDto.of(mostViewedInternships);
-    }
+    PopularAnnouncementListResponseDto getMostScrappedAnnouncements();
 
-    public PopularAnnouncementListResponseDto getMostScrappedAnnouncements() {
-        List<InternshipAnnouncement> mostViewedInternships = internshipRepository.getMostScrappedInternship();
-        return PopularAnnouncementListResponseDto.of(mostViewedInternships);
-    }
+    SearchResultResponse searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 
 }

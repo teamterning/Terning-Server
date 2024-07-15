@@ -3,7 +3,6 @@ package org.terning.terningserver.domain.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @Getter
 @RequiredArgsConstructor
 public enum Grade {
