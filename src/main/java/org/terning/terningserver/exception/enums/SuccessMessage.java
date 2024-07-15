@@ -19,7 +19,8 @@ public enum SuccessMessage {
 
     // Calendar (캘린더 화면)
     SUCCESS_GET_MONTHLY_SCRAPS(200, "캘린더 > (월간) 스크랩 된 공고 정보 불러오기를 성공했습니다"),
-    SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST(200, "캘린더 > (월간) 스크랩 된 공고 정보 (리스트) 불러오기를 성공했습니다");
+    SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST(200, "캘린더 > (월간) 스크랩 된 공고 정보 (리스트) 불러오기를 성공했습니다"),
+    SUCCESS_GET_DAILY_SCRAPS(200, "캘린더 > (일간) 스크랩 된 공고 정보 불러오기를 성공했습니다"),
     ;
 
     private final int status;
