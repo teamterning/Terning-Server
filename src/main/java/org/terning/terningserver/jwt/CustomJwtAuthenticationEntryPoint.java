@@ -1,14 +1,13 @@
 package org.terning.terningserver.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.terning.terningserver.exception.dto.ErrorResponse;
+import org.terning.terningserver.exception.CustomException;
 
 import java.io.IOException;
 
@@ -35,6 +34,6 @@ public class CustomJwtAuthenticationEntryPoint implements AuthenticationEntryPoi
         response.setCharacterEncoding("UTF-8");
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setStatus(SC_UNAUTHORIZED);
-        response.getWriter().println(objectMapper.writeValueAsString(ErrorResponse.of(INVALID_TOKEN.getStatus(), INVALID_TOKEN.getMessage())));
+        response.getWriter().println(objectMapper.writeValueAsString(new CustomException(INVALID_TOKEN)));
     }
 }
