@@ -37,6 +37,13 @@ spring:
         format_sql: true
         show_sql: true
 
+jwt:
+  secret-key: ${SECRET_KEY}
+  apple-url: ${APPLE_URL}
+  kakao-url: ${KAKAO_URL}
+  access-token-expired: ${ACCESS_TOKEN_EXPIRED}
+  refresh-token-expired: ${REFRESH_TOKEN_EXPIRED}
+
 logging:
   level:
     com.zaxxer.hikari: INFO

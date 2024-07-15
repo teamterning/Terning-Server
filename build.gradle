@@ -46,6 +46,20 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+	//validation
+	implementation 'ort.springframework.boot:spring-boot-starter-validation'
+
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// gson
+	implementation 'com.google.code.gson:gson:2.8.6'
+
 }
 
 //QueryDSL 초기 설정
@@ -78,4 +92,3 @@ configurations {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-

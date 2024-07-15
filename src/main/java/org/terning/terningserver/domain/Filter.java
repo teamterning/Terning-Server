@@ -1,17 +1,22 @@
 package org.terning.terningserver.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
+import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
+
 import static lombok.AccessLevel.PROTECTED;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import java.time.YearMonth;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Filter {
 
     @Id
@@ -26,7 +31,10 @@ public class Filter {
     @Column(nullable = false)
     private WorkingPeriod workingPeriod;
 
-    private int startYear; // 근무 시작 연도
+    @Column(nullable = false)
+    private int startYear;
 
-    private int startMonth; // 근무 시작 월
+    @Column(nullable = false)
+    private int startMonth;
+
 }
