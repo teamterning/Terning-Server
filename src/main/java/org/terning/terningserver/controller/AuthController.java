@@ -36,6 +36,7 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authAccessToken,
             @RequestBody SignInRequestDto request
     ) {
+        System.out.println(authAccessToken + " " + request.authType());
         User user = authService.saveUser(authAccessToken, request);
         val signInResponse = authService.signIn(user, request);
 
@@ -62,7 +63,7 @@ public class AuthController implements AuthSwagger {
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP));
     }
 
-    @PostMapping("/sign-up/fileter")
+    @PostMapping("/sign-up/filter")
     public ResponseEntity<SuccessResponse<SignUpFilterResponseDto>> filter(
             @RequestHeader("User-Id") Long userId,
             @RequestBody SignUpFilterRequestDto request
@@ -73,9 +74,8 @@ public class AuthController implements AuthSwagger {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<SuccessResponse> signOut(Principal principal) {
-//        val userId = Long.parseLong(principal.getName());
-        val userId = 1;
+    public ResponseEntity<SuccessResponse> signOut(@RequestHeader("Authorization") String token, Principal principal) {
+        val userId = Long.parseLong(principal.getName());
         authService.signOut(userId);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_OUT));
@@ -83,8 +83,7 @@ public class AuthController implements AuthSwagger {
 
     @DeleteMapping("/withdraw")
     public ResponseEntity<SuccessResponse> withdraw(Principal principal) {
-//        val userId = Long.parseLong(principal.getName());
-        val userId = 2;
+        val userId = Long.parseLong(principal.getName());
         authService.withdraw(userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_WITHDRAW));
 

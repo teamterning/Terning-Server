@@ -1,5 +1,6 @@
 package org.terning.terningserver.service;
 
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.Authentication;
@@ -39,6 +40,9 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public SignInResponseDto signIn(User user, SignInRequestDto request) {
         User authenticatedUser = getUser(user.getAuthAccessToken(), request.authType());
+//        System.out.println(
+//                "AccessToken : " + user.getAuthAccessToken() + "AuthType : " + request.authType()
+//        );
         val token = getToken(authenticatedUser);
         return SignInResponseDto.of(token, authenticatedUser.getId(), authenticatedUser.getAuthType());
     }

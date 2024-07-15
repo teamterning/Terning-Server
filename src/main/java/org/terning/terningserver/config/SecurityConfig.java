@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -20,6 +21,14 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/index.html#/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/api/v1/auth/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -31,11 +40,10 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(customJwtAuthenticationEntryPoint))
-                .authorizeHttpRequests(authorizeHttpRequests ->
-                        authorizeHttpRequests
-                                .requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
-                                .anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> {
+                            auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                            auth.anyRequest().authenticated();
+                        })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
