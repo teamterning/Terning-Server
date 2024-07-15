@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.controller.swagger.AuthSwagger;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
@@ -24,9 +25,11 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthSwagger {
 
     private final AuthService authService;
+    private final SignUpService signUpService;
+    private final SignUpFilterService signUpFilterService;
 
     @PostMapping("/sign-in")
     public ResponseEntity<SuccessResponse<SignInResponseDto>> signIn(
@@ -39,8 +42,6 @@ public class AuthController {
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
     }
 
-    private final SignUpService signUpService;
-    private final SignUpFilterService signUpFilterService;
 
     // TODO: 에러 메시지 위치
     @PostMapping("/token-reissue")
@@ -74,7 +75,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<SuccessResponse> signOut(Principal principal) {
 //        val userId = Long.parseLong(principal.getName());
-        val userId = 6;
+        val userId = 1;
         authService.signOut(userId);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_OUT));
@@ -83,7 +84,7 @@ public class AuthController {
     @DeleteMapping("/withdraw")
     public ResponseEntity<SuccessResponse> withdraw(Principal principal) {
 //        val userId = Long.parseLong(principal.getName());
-        val userId = 7;
+        val userId = 2;
         authService.withdraw(userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_WITHDRAW));
 
