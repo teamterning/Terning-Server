@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.config.ValueConfig;
@@ -59,11 +60,6 @@ public class JwtTokenProvider {
         return claims;
     }
 
-    private SecretKey getSigningKey() {
-        val encodedKey = getEncoder().encodeToString(valueConfig.getSecretKey().getBytes());
-        return hmacShaKeyFor(encodedKey.getBytes());
-    }
-
     public Long getUserFromJwt(String token) {
         val claims = getBody(token);
         return Long.parseLong(claims.get("userId").toString());
@@ -76,4 +72,10 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    private SecretKey getSigningKey() {
+        val encodedKey = getEncoder().encodeToString(valueConfig.getSecretKey().getBytes());
+        return hmacShaKeyFor(encodedKey.getBytes());
+    }
+
 }
