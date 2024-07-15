@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
+import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
 import java.time.Month;
@@ -14,6 +15,13 @@ public interface CalendarSwagger {
 
     @Operation(summary = "캘린더 > 월간 스크랩 공고 조회", description = "월간 스크랩 공고를 조회하는 API")
     ResponseEntity<SuccessResponse<List<MonthlyDefaultResponseDto>>> getMonthlyScraps(
+            String token,
+            int year,
+            int month
+    );
+
+    @Operation(summary = "캘린더 > 월간 스크랩 공고 조회 (리스트)", description = "월간 스크랩 공고를 리스트로 조회하는 API")
+    ResponseEntity<SuccessResponse<List<MonthlyListResponseDto>>> getMonthlyScrapsAsList(
             String token,
             int year,
             int month
