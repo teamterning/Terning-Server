@@ -4,15 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.CalendarSwagger;
+import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.ScrapService;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS;
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST;
+import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +44,16 @@ public class CalendarController implements CalendarSwagger {
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST, monthlyScraps));
     }
 
+    @GetMapping("/calendar/daily")
+    public ResponseEntity<SuccessResponse<List<DailyScrapResponseDto>>> getDailyScraps(
+            @RequestHeader("Authorization") String token,
+            @RequestParam("date") String date
+    ){
+        Long userId = getUserIdFromToken(token);
+        LocalDate localDate = LocalDate.parse(date);
+        List<DailyScrapResponseDto> dailyScraps = scrapService.getDailyScraps(userId, localDate);
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_DAILY_SCRAPS, dailyScraps));
+    }
     private Long getUserIdFromToken(String token){
         //실제 토큰에서 userId를 받아오는 로직 구현
         return 1L;  //임시로 사용자 ID 1로 반환

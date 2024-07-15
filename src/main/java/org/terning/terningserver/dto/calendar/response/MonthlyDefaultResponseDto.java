@@ -16,7 +16,7 @@ public record MonthlyDefaultResponseDto(
             String title,
             String color
     ){
-        public static ScrapDetail of(Long scrapId, String title, String color){
+        public static ScrapDetail of(final Long scrapId, final String title, final String color){
             return ScrapDetail.builder()
                     .scrapId(scrapId)
                     .title(title)
