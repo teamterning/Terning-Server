@@ -5,9 +5,8 @@ import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.util.DateUtil;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public record SearchResultResponse(
+public record SearchResultResponseDto(
         int totalPages,
         Boolean hasNext,
         List<SearchAnnouncementResponse> announcements
@@ -33,8 +32,8 @@ public record SearchResultResponse(
                     .build();
         }
     }
-    public static SearchResultResponse of(int totalPages, Boolean hasNext, List<SearchAnnouncementResponse> announcements) {
-        return new SearchResultResponse(totalPages, hasNext, announcements);
+    public static SearchResultResponseDto of(int totalPages, Boolean hasNext, List<SearchAnnouncementResponse> announcements) {
+        return new SearchResultResponseDto(totalPages, hasNext, announcements);
     }
 
 }

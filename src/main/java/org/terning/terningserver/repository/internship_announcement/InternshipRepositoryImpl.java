@@ -1,6 +1,5 @@
 package org.terning.terningserver.repository.internship_announcement;
 
-import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -15,25 +14,12 @@ import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 
 import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QUser.user;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.*;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.terning.terningserver.domain.InternshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
+
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.domain.enums.Grade;
-import org.terning.terningserver.domain.enums.WorkingPeriod;
-
-import com.querydsl.core.types.dsl.BooleanExpression;
-
 
 import java.time.LocalDate;
 import java.util.List;
-
-
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
 
 
 @RequiredArgsConstructor
@@ -101,7 +87,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
             case "shortestDuration" -> getWorkingPeriodAsNumber().asc();
             case "longestDuration" -> getWorkingPeriodAsNumber().desc();
             case "mostScrapped" -> internshipAnnouncement.scrapCount.desc();
-            default -> internshipAnnouncement.deadline.asc();
+            case null, default -> internshipAnnouncement.deadline.asc();
         };
     }
 
@@ -147,6 +133,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     // 정렬 옵션 (5가지)
     private OrderSpecifier getSortOrder(String sortBy) {
+        System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
             case "shortestDuration" // 짧은 근무 기간 순
                  -> getWorkingPeriodAsNumber().asc();
@@ -162,13 +149,21 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     // String 타입의 workingPeriod를 숫자로 변환하기 위한 메서드(ex. "2개월" => 2)
-    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
+    private NumberTemplate<Integer> getWorkingPeriodAsNumber() {
         return Expressions.numberTemplate(
                 Integer.class,
-                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
+                "CAST(NULLIF(regexp_replace({0}, '\\D', '', 'g'), '') AS INTEGER)",
                 internshipAnnouncement.workingPeriod
         );
     }
+
+//    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
+//        return Expressions.numberTemplate(
+//                Integer.class,
+//                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
+//                internshipAnnouncement.workingPeriod
+//        );
+//    }
 
     // 지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {

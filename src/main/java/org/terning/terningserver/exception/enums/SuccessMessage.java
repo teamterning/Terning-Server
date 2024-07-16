@@ -43,14 +43,23 @@ public enum SuccessMessage {
     // 인턴 공고
     SUCCESS_GET_INTERNSHIP_DETAIL(200, "공고 상세 정보 불러오기에 성공했습니다"),
 
+    // 스크랩
+    SUCCESS_CREATE_SCRAP(201, "스크랩 추가에 성공했습니다"),
+    SUCCESS_DELETE_SCRAP(200, "스크랩 취소에 성공했습니다"),
+    SUCCESS_UPDATE_SCRAP(200, "스크랩 수정에 성공했습니다"),
+
     // Calendar (캘린더 화면)
     SUCCESS_GET_MONTHLY_SCRAPS(200, "캘린더 > (월간) 스크랩 된 공고 정보 불러오기를 성공했습니다"),
     SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST(200, "캘린더 > (월간) 스크랩 된 공고 정보 (리스트) 불러오기를 성공했습니다"),
     SUCCESS_GET_DAILY_SCRAPS(200, "캘린더 > (일간) 스크랩 된 공고 정보 불러오기를 성공했습니다"),
-  
+
+    // Filter(필터링)
+    SUCCESS_GET_USER_FILTER(200, "사용자의 필터링 정보를 불러오는데 성공했습니다"),
+    SUCCESS_UPDATE_USER_FILTER(200, "필터링 재설정에 성공했습니다"),
+
     // Mypage (마이페이지 화면)
-    SUCCESS_GET_PROFILE(200, "마이페이지 > 프로필 정보 불러오기를 성공했습니다"),
-    ;
+    SUCCESS_GET_PROFILE(200, "마이페이지 > 프로필 정보 불러오기를 성공했습니다");
+
 
     private final int status;
     private final String message;
