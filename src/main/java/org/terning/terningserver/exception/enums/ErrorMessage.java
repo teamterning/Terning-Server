@@ -8,11 +8,12 @@ import lombok.Getter;
 public enum ErrorMessage {
 
     // 소셜 로그인
-    INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
-    INVALID_KEY(401, "유효하지 않은 키입니다."),
+    INVALID_TOKEN(401, "유효하지 않은 토큰입니다"),
+    INVALID_KEY(401, "유효하지 않은 키입니다"),
     FAILED_SOCIAL_LOGIN(404, "소셜 로그인애 실패하였습니다"),
-    INVALID_USER(404, "유효하지 않은 유저입니다."),
-    FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다."),
+    INVALID_USER(404, "유효하지 않은 유저입니다"),
+    FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다"),
+    UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
 
     // 회원가입
     FAILED_SIGN_UP(401, "회원가입에 실패하였습니다"),
