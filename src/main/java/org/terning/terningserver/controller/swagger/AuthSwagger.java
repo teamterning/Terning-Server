@@ -10,6 +10,7 @@ import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
+import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
@@ -36,8 +37,8 @@ public interface AuthSwagger {
     );
 
     @Operation(summary = "회원가입", description = "회원가입 API")
-    ResponseEntity<SuccessResponse<SignInResponseDto>> signUp(
-            @RequestHeader("User-Id") Long userId,
+    ResponseEntity<SuccessResponse<SignUpResponseDto>> signUp(
+            @RequestHeader("authId") String authId,
             @RequestBody SignUpRequestDto request
     );
 

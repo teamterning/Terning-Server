@@ -1,9 +1,7 @@
 package org.terning.terningserver.service;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpMethod;
@@ -40,7 +38,14 @@ public class AppleServiceImpl implements AppleService{
         val publicKeyList = getApplePublicKeys();
         val publicKey = makePublicKey(authAccessToken, publicKeyList);
 
-        return "";
+        val userInfo = Jwts.parserBuilder()
+                .setSigningKey(publicKey)
+                .build()
+                .parseClaimsJws(getTokenFromBearerString(authAccessToken))
+                .getBody();
+
+        val userInfoObject = (JsonObject)JsonParser.parseString(new Gson().toJson(userInfo));
+        return userInfoObject.get(ValueConfig.ID).getAsString();
     }
 
     private JsonArray getApplePublicKeys() {

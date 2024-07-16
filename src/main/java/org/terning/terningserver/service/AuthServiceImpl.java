@@ -38,16 +38,29 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public SignInResponseDto signIn(User user, SignInRequestDto request) {
-        User authenticatedUser = getUser(user.getAuthAccessToken(), request.authType());
-        val token = getToken(authenticatedUser);
-        return SignInResponseDto.of(token, authenticatedUser.getId(), authenticatedUser.getAuthType());
+    public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
+        String authId = getAuthId(request.authType(), authAccessToken);
+
+        Optional<User> userOptional = userRepository.findByAuthIdAndAuthType(authId, request.authType());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return SignInResponseDto.of(
+                    getToken(user),
+                    authId,
+                    request.authType(),
+                    user.getId()
+            );
+        }
+        else {
+            return SignInResponseDto.of(null, authId, request.authType(), null);
+        }
     }
 
+
     @Transactional
-    public User saveUser(String authAccessToken, SignInRequestDto request) {
+    public User saveUser(SignInRequestDto request) {
         User user = User.builder()
-                .authAccessToken(authAccessToken)
                 .authType(request.authType())
                 .build();
         return userRepository.save(user);
@@ -70,17 +83,23 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
-        val token = Optional.ofNullable(generateAccessToken(user.getId()))
+        val token = Optional.ofNullable(generateRefreshToken(user.getId()))
                 .orElseThrow(() -> new CustomException(FAILED_TOKEN_REISSUE));
         return TokenGetResponseDto.of(token);
     }
-
     private User getUser(String refreshToken, AuthType authType) {
         User user = userRepository.findByAuthTypeAndRefreshToken(authType, refreshToken)
                 .orElseThrow(() -> new CustomException(INVALID_USER));
         String authId = getAuthId(user.getAuthType(), refreshToken);
         return signUp(authType, authId, user);
     }
+
+//    private User getUser(String authAccessToken, AuthType authType) {
+////        User user = userRepository.findByAuthTypeAndAuthAccessToken(authType, authAccessToken)
+////                .orElseThrow(() -> new CustomException(INVALID_USER));
+//        String authId = getAuthId(authType, authAccessToken);
+//        return signUp(authType, authId);
+//    }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
@@ -96,7 +115,13 @@ public class AuthServiceImpl implements AuthService {
 
     private Token getToken(User user) {
         val token = generateToken(new UserAuthentication(user.getId(), null, null));
-        user.updateRefreshToken(token.getRefreshToken(), token.getAccessToken());
+        user.updateRefreshToken(token.getRefreshToken());
+        return token;
+    }
+
+    public Token getTokenByAuthId(String AuthId) {
+        long id = Long.parseLong(AuthId);
+        val token = generateToken(new UserAuthentication(id, null, null));
         return token;
     }
 
@@ -120,9 +145,9 @@ public class AuthServiceImpl implements AuthService {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
     }
 
-    private String generateAccessToken(long userId) {
+    private String generateRefreshToken(long userId) {
         val authentication = new UserAuthentication(userId, null, null);
-        return jwtTokenProvider.generateToken(authentication, valueConfig.getAccessTokenExpired());
+        return jwtTokenProvider.generateToken(authentication, valueConfig.getRefreshTokenExpired());
     }
 
     private void deleteUser(User user) {

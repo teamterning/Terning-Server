@@ -11,12 +11,14 @@ public record SignInResponseDto(
         String accessToken,
         String refreshToken,
         Long userId,
+        String authId,
         AuthType authType
 ) {
-    public static SignInResponseDto of(Token token, Long userId, AuthType authType) {
+    public static SignInResponseDto of(Token token, String authId, AuthType authType, Long userId) {
         return SignInResponseDto.builder()
-                .accessToken(token.getAccessToken())
-                .refreshToken(token.getRefreshToken())
+                .accessToken(token == null ? null : token.getAccessToken())
+                .refreshToken(token == null ? null : token.getRefreshToken())
+                .authId(authId)
                 .userId(userId)
                 .authType(authType)
                 .build();

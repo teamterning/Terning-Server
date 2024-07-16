@@ -7,9 +7,9 @@ import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 
 public interface AuthService {
 
-    SignInResponseDto signIn(User user, SignInRequestDto request);
+    SignInResponseDto signIn(String authAccessToken, SignInRequestDto request);
 
-    User saveUser(String authAccessToken, SignInRequestDto request);
+    User saveUser(SignInRequestDto request);
 
     void signOut(long userId);
 

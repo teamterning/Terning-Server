@@ -12,6 +12,7 @@ import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
+import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.AuthService;
@@ -37,14 +38,12 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authAccessToken,
             @RequestBody SignInRequestDto request
     ) {
-        User user = authService.saveUser(authAccessToken, request);
+//        User user = authService.saveUser(authAccessToken, request);
 
-        val signInResponse = authService.signIn(user, request);
+        val signInResponse = authService.signIn(authAccessToken, request);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
     }
-
-
 
     // TODO: 에러 메시지 위치
     @PostMapping("/token-reissue")
@@ -57,13 +56,13 @@ public class AuthController implements AuthSwagger {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<SuccessResponse<SignInResponseDto>> signUp(
-            @RequestHeader("User-Id") Long userId,
+    public ResponseEntity<SuccessResponse<SignUpResponseDto>> signUp(
+            @RequestHeader("authId") String authId,
             @RequestBody SignUpRequestDto request
     ) {
-        signUpService.signUp(userId, request.name(), request.profileImage());
+        SignUpResponseDto signUpResponseDto = signUpService.signUp(authId, request.name(), request.profileImage(), request.authType());
 
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP));
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
     @PostMapping("/sign-up/filter")

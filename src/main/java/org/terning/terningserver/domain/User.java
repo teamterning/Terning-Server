@@ -47,19 +47,14 @@ public class User extends BaseTimeEntity {
     private String authId; // 인증 서비스에서 제공하는 고유 ID
 
     @Column(length = 256)
-    private String authAccessToken; // 엑세스 토큰
-
-    @Column(length = 256)
     private String refreshToken; // 리프레시 토큰
 
     // TODO: User가 생기면 active default로 바꾸기
     @Enumerated(STRING)
     private State state; // 사용자 상태 (예: 활성, 비활성, 정지)
 
-
-    public void updateRefreshToken(String authAccessToken, String refreshToken) {
+    public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-        this.authAccessToken = authAccessToken;
     }
 
     public void resetRefreshToken() {
@@ -86,7 +81,6 @@ public class User extends BaseTimeEntity {
     public void updateUser(AuthType authType, String authId, User user) {
         this.authType = authType;
         this.authId = authId;
-        this.authAccessToken = user.getAuthAccessToken();
         this.refreshToken = user.getRefreshToken();
     }
 }
