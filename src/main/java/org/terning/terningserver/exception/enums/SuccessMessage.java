@@ -25,7 +25,11 @@ public enum SuccessMessage {
 
     // Calendar (캘린더 화면)
     SUCCESS_GET_MONTHLY_SCRAPS(200, "캘린더 > (월간) 스크랩 된 공고 정보 불러오기를 성공했습니다"),
-    SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST(200, "캘린더 > (월간) 스크랩 된 공고 정보 (리스트) 불러오기를 성공했습니다");
+    SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST(200, "캘린더 > (월간) 스크랩 된 공고 정보 (리스트) 불러오기를 성공했습니다"),
+
+    // Filter(필터링)
+    SUCCESS_GET_USER_FILTER(200, "사용자의 필터링 정보를 불러오는데 성공했습니다"),
+    SUCCESS_UPDATE_USER_FILTER(200, "필터링 재설정에 성공했습니다");
 
 
     private final int status;
