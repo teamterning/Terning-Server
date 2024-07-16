@@ -6,6 +6,7 @@ import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.Scrap;
 
 import java.util.List;
+
 import static org.terning.terningserver.domain.QScrap.scrap;
 
 

@@ -13,13 +13,14 @@ import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
 
 import org.terning.terningserver.domain.User;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
 
 
 @RequiredArgsConstructor

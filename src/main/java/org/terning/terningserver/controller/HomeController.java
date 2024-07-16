@@ -34,6 +34,7 @@ public class HomeController implements HomeSwagger {
             @RequestParam("startMonth") int startMonth
     ){
         List<HomeResponseDto> announcements = homeService.getAnnouncements(token, sortBy, startYear, startMonth);
+
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_ANNOUNCEMENTS, announcements));
     }
 
@@ -42,7 +43,9 @@ public class HomeController implements HomeSwagger {
             @RequestHeader("Authorization") String token
     ){
         Long userId = getUserIdFromToken(token);
+
         List<TodayScrapResponseDto> scrapList = scrapService.getTodayScrap(userId);
+
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_TODAY_ANNOUNCEMENTS, scrapList));
     }
 
