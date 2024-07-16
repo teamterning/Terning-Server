@@ -105,11 +105,12 @@ public class ScrapServiceImpl implements ScrapService {
     }
   
     @Override
-    public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date){
+    public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
         return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, date).stream()
                 .map(DailyScrapResponseDto::of)
                 .toList();
-  
+    }
+
     @Override
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request) {
