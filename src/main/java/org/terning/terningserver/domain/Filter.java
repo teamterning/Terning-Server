@@ -24,17 +24,13 @@ public class Filter {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Grade grade;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private WorkingPeriod workingPeriod;
 
-    @Column(nullable = false)
     private int startYear;
 
-    @Column(nullable = false)
     private int startMonth;
 
 }
