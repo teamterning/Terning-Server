@@ -40,7 +40,7 @@ public class User extends BaseTimeEntity {
     @Column(length = 12)
     private String name; // 사용자 이름
     
-    private int profileImage; //유저 아이콘
+    private Integer profileImage; //유저 아이콘
 
     @Enumerated(STRING)
     private AuthType authType; // 인증 유형 (예: 카카오, 애플)
@@ -59,8 +59,9 @@ public class User extends BaseTimeEntity {
     private State state; // 사용자 상태 (예: 활성, 비활성, 정지)
 
 
-    public void updateRefreshToken(String refreshToken) {
+    public void updateRefreshToken(String authAccessToken, String refreshToken) {
         this.refreshToken = refreshToken;
+        this.authAccessToken = authAccessToken;
     }
 
     public void resetRefreshToken() {
@@ -82,5 +83,12 @@ public class User extends BaseTimeEntity {
 
     public void assignFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    public void updateUser(AuthType authType, String authId, User user) {
+        this.authType = authType;
+        this.authId = authId;
+        this.authAccessToken = user.getAuthAccessToken();
+        this.refreshToken = user.getRefreshToken();
     }
 }
