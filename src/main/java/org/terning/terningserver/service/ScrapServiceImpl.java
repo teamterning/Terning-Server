@@ -118,7 +118,7 @@ public class ScrapServiceImpl implements ScrapService {
         getInternshipAnnouncement(internshipAnnouncementId);
 
         scrapRepository.save(Scrap.create(
-                findUser(PrincipalHandler.getUserIdFromPrincipal()),
+                findUser(userId),
                 getInternshipAnnouncement(internshipAnnouncementId),
                 findColor(request.color())
         ));

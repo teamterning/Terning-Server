@@ -24,13 +24,13 @@ public class FilterServiceImpl implements FilterService {
 
     @Override
     public UserFilterResponseDto getUserFilter() {
-       return UserFilterResponseDto.of(findUser(1L).getFilter());
+       return UserFilterResponseDto.of(findUser(6L).getFilter());
     }
 
     @Override
     @Transactional
     public void updateUserFilter(UserFilterRequestDto responseDto) {
-        User user = findUser(1L);
+        User user = findUser(6L);
         Filter filter = user.getFilter();
 
         filter.updateFilter(

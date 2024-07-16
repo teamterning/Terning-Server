@@ -3,6 +3,7 @@ package org.terning.terningserver.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.AuthSwagger;
 import org.terning.terningserver.domain.Filter;
@@ -80,16 +81,14 @@ public class AuthController implements AuthSwagger {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<SuccessResponse> signOut(Principal principal) {
-        val userId = Long.parseLong(principal.getName());
+    public ResponseEntity<SuccessResponse> signOut(@AuthenticationPrincipal Long userId) {
 
         authService.signOut(userId);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_OUT));
     }
     @DeleteMapping("/withdraw")
-    public ResponseEntity<SuccessResponse> withdraw(Principal principal) {
-        val userId = Long.parseLong(principal.getName());
+    public ResponseEntity<SuccessResponse> withdraw(@AuthenticationPrincipal Long userId) {
 
         authService.withdraw(userId);
 

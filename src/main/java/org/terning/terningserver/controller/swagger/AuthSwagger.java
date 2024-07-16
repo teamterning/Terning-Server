@@ -3,6 +3,7 @@ package org.terning.terningserver.controller.swagger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
@@ -44,11 +45,11 @@ public interface AuthSwagger {
 
     @Operation(summary = "로그아웃", description = "로그아웃 API")
     ResponseEntity<SuccessResponse> signOut(
-            Principal principal);
+            @AuthenticationPrincipal Long userId);
 
     @Operation(summary = "계정탈퇴", description = "계정탈퇴 API")
     ResponseEntity<SuccessResponse> withdraw(
-            Principal principal);
+            @AuthenticationPrincipal Long userId);
 
 
 }

@@ -11,6 +11,6 @@ public interface UserSwagger {
 
     @Operation(summary = "마이페이지 > 프로필 정보 불러오기", description = "마이페이지에서 프로필 정보를 불러오는 API")
     ResponseEntity<SuccessResponse<ProfileResponseDto>> getProfile(
-        String token
+        Long userId
     );
 }
