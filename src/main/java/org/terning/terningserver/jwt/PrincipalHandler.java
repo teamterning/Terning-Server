@@ -10,13 +10,13 @@ import static org.terning.terningserver.exception.enums.ErrorMessage.UNAUTHORIZE
 public class PrincipalHandler {
     private static final String ANONYMOUS_USER = "anonymousUser";
 
-    public Long getUserIdFromPrincipal() {
+    public static Long getUserIdFromPrincipal() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         isPrincipalNull(principal);
         return Long.valueOf(principal.toString());
     }
 
-    public void isPrincipalNull(
+    public static void isPrincipalNull(
             final Object principal
     ) {
         if (principal.toString().equals(ANONYMOUS_USER)) {

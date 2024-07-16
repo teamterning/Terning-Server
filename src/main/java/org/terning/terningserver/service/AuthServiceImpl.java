@@ -75,11 +75,10 @@ public class AuthServiceImpl implements AuthService {
         return TokenGetResponseDto.of(token);
     }
 
-    private User
-    getUser(String authAccessToken, AuthType authType) {
-        User user = userRepository.findByAuthTypeAndAuthAccessToken(authType, authAccessToken)
+    private User getUser(String refreshToken, AuthType authType) {
+        User user = userRepository.findByAuthTypeAndRefreshToken(authType, refreshToken)
                 .orElseThrow(() -> new CustomException(INVALID_USER));
-        String authId = getAuthId(user.getAuthType(), authAccessToken);
+        String authId = getAuthId(user.getAuthType(), refreshToken);
         return signUp(authType, authId, user);
     }
 
@@ -92,15 +91,6 @@ public class AuthServiceImpl implements AuthService {
 
     private User signUp(AuthType authType, String authId, User user) {
         user.updateUser(authType, authId, user);
-        return userRepository.save(user);
-    }
-
-    private User saveUser(AuthType authType, String authId) {
-        User user = User.builder()
-                .authType(authType)
-                .authId(authId)
-                .build();
-
         return userRepository.save(user);
     }
 
