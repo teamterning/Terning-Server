@@ -9,17 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.SearchSwagger;
-import org.terning.terningserver.domain.InternshipAnnouncement;
-import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
-import org.terning.terningserver.dto.search.response.SearchResultResponse;
+import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
+import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.SearchService;
-import org.terning.terningserver.util.DateUtil;
-
-import java.time.LocalDate;
-import java.util.List;
-
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 
@@ -31,8 +24,7 @@ public class SearchController implements SearchSwagger {
     private final SearchService searchService;
 
     @GetMapping("/search/views")
-    public ResponseEntity<SuccessResponse<PopularAnnouncementListResponse>> getMostViewedAnnouncements() {
-
+    public ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostViewedAnnouncements() {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_MOST_VIEWED_ANNOUNCEMENTS,
                 searchService.getMostViewedAnnouncements()
@@ -40,7 +32,7 @@ public class SearchController implements SearchSwagger {
     }
 
     @GetMapping("/search/scraps")
-    public ResponseEntity<SuccessResponse<PopularAnnouncementListResponse>> getMostScrappedAnnouncements() {
+    public ResponseEntity<SuccessResponse<PopularAnnouncementListResponseDto>> getMostScrappedAnnouncements() {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS,
                 searchService.getMostScrappedAnnouncements()
@@ -48,9 +40,9 @@ public class SearchController implements SearchSwagger {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<SuccessResponse<SearchResultResponse>> searchInternshipAnnouncement(
+    public ResponseEntity<SuccessResponse<SearchResultResponseDto>> searchInternshipAnnouncement(
             @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam("sortBy") String sortBy, Pageable pageable) {
+            @RequestParam(value = "sortBy", required = false) String sortBy, Pageable pageable) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_SEARCH_ANNOUNCEMENTS,
                 searchService.searchInternshipAnnouncement(keyword, sortBy, pageable)

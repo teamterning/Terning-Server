@@ -1,16 +1,15 @@
 package org.terning.terningserver.service;
 
-
+import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
 import org.springframework.data.domain.Pageable;
-import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponse;
-import org.terning.terningserver.dto.search.response.SearchResultResponse;
+import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
 
 public interface SearchService {
 
-    PopularAnnouncementListResponse getMostViewedAnnouncements();
+    PopularAnnouncementListResponseDto getMostViewedAnnouncements();
 
-    PopularAnnouncementListResponse getMostScrappedAnnouncements();
+    PopularAnnouncementListResponseDto getMostScrappedAnnouncements();
 
-    SearchResultResponse searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
+    SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 
 }

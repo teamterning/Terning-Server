@@ -1,6 +1,7 @@
 package org.terning.terningserver.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
@@ -34,4 +35,23 @@ public class Scrap extends BaseTimeEntity {
     @Column(nullable = false)
     private Color color; // 스크랩 색상 (사용자가 지정)
 
+    @Builder
+    private Scrap(User user, InternshipAnnouncement internshipAnnouncement, Color color) {
+        this.user = user;
+        this.internshipAnnouncement = internshipAnnouncement;
+        this.color = color;
+    }
+
+    public static Scrap create(User user, InternshipAnnouncement internshipAnnouncement, Color color) {
+        return Scrap.builder()
+                .user(user)
+                .internshipAnnouncement(internshipAnnouncement)
+                .color(color)
+                .build();
+    }
+
+    public void updateColor(Color color) {
+        this.color = color;
+    }
+    
 }
