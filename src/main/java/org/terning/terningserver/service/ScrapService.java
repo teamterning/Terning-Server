@@ -22,5 +22,6 @@ public interface ScrapService {
     List<MonthlyDefaultResponseDto> getMonthlyScraps(Long userId, int year, int month);
 
     List<MonthlyListResponseDto> getMonthlyScrapsAsList(Long userId, int year, int month);
+
     List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date);
 }
