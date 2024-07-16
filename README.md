@@ -1,6 +1,6 @@
-# 💙 Team-Terning (터닝포인트)
+# 💚 Team-Terning (터닝)
 
-> NOW SOPT 34th Appjam , 터닝포인트 팀입니다.
+> ‘terning(이하 터닝)’은 학교를 벗어나, 새로운 사회를 경험할 수 있는 인턴 생활을 꿈꾸는 대학생들을 위한 ‘대학생 인턴 공고 추천 서비스’입니다.
 <br/>
 
 
@@ -55,6 +55,32 @@ ex) feat/#20
 | ✒️comment | 필요한 주석 추가 및 변경 |
 | 📂file | 파일 또는 폴더명 수정, 이동, 삭제 등의 작업만 수행한 경우 |
 | 🔥!hotfix | 급하게 치명적인 버그를 고쳐야 하는 경우 |
+
+<br/>
+
+## 👥 역할
+| 분야 | 이름 | 포지션 |
+| --- | --- | --- |
+| 서버 개발 | [정정교/Junggyo1020](https://github.com/junggyo1020) | 서버 파트 리더, 팀 매니징 및 개발 인프라, 캘린더, 인턴 공고, 프로필 |
+| 서버 개발 | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | 스크랩, 공고 상세, 탐색, 필터링 |
+| 서버 개발 | [권장순/jsoonworld](https://github.com/jsoonworld) | 회원가입, 로그인, 회원관리 |
+
+<br/>
+
+## 🌱 Architecture Diagram
+![터닝 AD](https://github.com/user-attachments/assets/df2d0440-6525-46f4-8fc3-064e0f486bf2)
+
+
+<br/>
+
+## 📎 ERD
+<img width="829" alt="image" src="https://github.com/teamterning/Terning-Server/assets/150939763/572a5ad6-17c7-4394-80c3-21d3ea8da3e4">
+
+
+<br/>
+
+## 🎨 API 명세서 
+https://abundant-quiver-13f.notion.site/9b5cd91c634b4a2580ea8222736fdcab?v=e8692cde216c47559d714abc4231d9a7
 
 <br/>
 
