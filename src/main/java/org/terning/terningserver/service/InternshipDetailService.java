@@ -11,22 +11,8 @@ import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class InternshipDetailService {
 
-    private final InternshipRepository internshipRepository;
-    private final ScrapRepository scrapRepository;
+public interface InternshipDetailService {
 
-    public InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId) {
-        InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
-                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
-
-
-        return InternshipDetailResponseDto.of(
-                announcement, announcement.getCompany(),
-                scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), 1L)
-        );
-    }
+    InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId);
 }
