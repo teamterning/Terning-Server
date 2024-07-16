@@ -2,6 +2,7 @@ package org.terning.terningserver.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +23,9 @@ public class UserProfileController implements UserSwagger {
 
     @GetMapping("/mypage/profile")
     public ResponseEntity<SuccessResponse<ProfileResponseDto>> getProfile(
-            @RequestHeader("Authorization") String token
+            @AuthenticationPrincipal Long userId
     ){
-        Long userId = getUserIdFromToken(token);
         ProfileResponseDto profile = userService.getProfile(userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_PROFILE, profile));
-    }
-
-    private Long getUserIdFromToken(String token){
-        //실제 토큰에서 userId를 가져오는 로직 구현
-        return 1L; //임시로 사용자 ID 1로 반환
     }
 }

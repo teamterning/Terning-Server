@@ -14,6 +14,7 @@ import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.jwt.PrincipalHandler;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -113,11 +114,11 @@ public class ScrapServiceImpl implements ScrapService {
 
     @Override
     @Transactional
-    public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request) {
+    public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
         getInternshipAnnouncement(internshipAnnouncementId);
 
         scrapRepository.save(Scrap.create(
-                findUser(1L),
+                findUser(userId),
                 getInternshipAnnouncement(internshipAnnouncementId),
                 findColor(request.color())
         ));

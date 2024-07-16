@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface HomeService {
 
-    List<HomeResponseDto> getAnnouncements(String token, String sortBy, int startYear, int startMonth);
+    List<HomeResponseDto> getAnnouncements(Long userId, String sortBy, int startYear, int startMonth);
 }

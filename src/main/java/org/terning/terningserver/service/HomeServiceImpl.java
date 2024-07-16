@@ -23,8 +23,7 @@ public class HomeServiceImpl implements HomeService{
     private final ScrapRepository scrapRepository;
 
     @Override
-    public List<HomeResponseDto> getAnnouncements(String token, String sortBy, int startYear, int startMonth){
-        Long userId = getUserIdFromToken(token);
+    public List<HomeResponseDto> getAnnouncements(Long userId, String sortBy, int startYear, int startMonth){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
@@ -36,10 +35,5 @@ public class HomeServiceImpl implements HomeService{
                     return HomeResponseDto.of(announcement, isScrapped);
                 })
                 .collect(Collectors.toList());
-    }
-
-    private Long getUserIdFromToken(String token){
-        //실제 토큰에서 userId를 가져오는 로직 구현
-        return 1L; //임시로 사용자 ID 1로 반환
     }
 }
