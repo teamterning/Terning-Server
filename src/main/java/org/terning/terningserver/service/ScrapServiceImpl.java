@@ -114,7 +114,7 @@ public class ScrapServiceImpl implements ScrapService {
 
     @Override
     @Transactional
-    public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request) {
+    public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
         getInternshipAnnouncement(internshipAnnouncementId);
 
         scrapRepository.save(Scrap.create(

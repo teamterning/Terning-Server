@@ -13,7 +13,7 @@ import java.util.List;
 public interface ScrapService {
     List<TodayScrapResponseDto> getTodayScrap(Long userId);
 
-    void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request);
+    void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId);
 
     void deleteScrap(Long scrapId);
 

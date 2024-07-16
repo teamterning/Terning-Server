@@ -7,6 +7,7 @@ import org.terning.terningserver.controller.swagger.ScrapSwagger;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.jwt.PrincipalHandler;
 import org.terning.terningserver.service.ScrapService;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
@@ -19,7 +20,7 @@ public class ScrapController implements ScrapSwagger {
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> createScrap(@PathVariable Long internshipAnnouncementId, @RequestBody CreateScrapRequestDto request) {
-        scrapService.createScrap(internshipAnnouncementId, request);
+        scrapService.createScrap(internshipAnnouncementId, request, PrincipalHandler.getUserIdFromPrincipal());
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
     }
 
