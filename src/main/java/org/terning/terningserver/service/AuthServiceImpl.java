@@ -75,11 +75,12 @@ public class AuthServiceImpl implements AuthService {
         return TokenGetResponseDto.of(token);
     }
 
-    private User getUser(String authAccessToken, AuthType authType) {
+    private User
+    getUser(String authAccessToken, AuthType authType) {
         User user = userRepository.findByAuthTypeAndAuthAccessToken(authType, authAccessToken)
                 .orElseThrow(() -> new CustomException(INVALID_USER));
-        val authId = getAuthId(user.getAuthType(), authAccessToken);
-        return signUp(authType, authId);
+        String authId = getAuthId(user.getAuthType(), authAccessToken);
+        return signUp(authType, authId, user);
     }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
@@ -89,9 +90,9 @@ public class AuthServiceImpl implements AuthService {
         };
     }
 
-    private User signUp(AuthType authType, String authId) {
-        return userRepository.findByAuthTypeAndAuthAccessToken(authType, authId)
-                .orElseGet(() -> saveUser(authType, authId));
+    private User signUp(AuthType authType, String authId, User user) {
+        user.updateUser(authType, authId, user);
+        return userRepository.save(user);
     }
 
     private User saveUser(AuthType authType, String authId) {
@@ -105,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
 
     private Token getToken(User user) {
         val token = generateToken(new UserAuthentication(user.getId(), null, null));
-        user.updateRefreshToken(token.getRefreshToken());
+        user.updateRefreshToken(token.getRefreshToken(), token.getAccessToken());
         return token;
     }
 
