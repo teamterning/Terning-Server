@@ -149,13 +149,21 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     // String 타입의 workingPeriod를 숫자로 변환하기 위한 메서드(ex. "2개월" => 2)
-    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
+    private NumberTemplate<Integer> getWorkingPeriodAsNumber() {
         return Expressions.numberTemplate(
                 Integer.class,
-                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
+                "CAST(NULLIF(regexp_replace({0}, '\\D', '', 'g'), '') AS INTEGER)",
                 internshipAnnouncement.workingPeriod
         );
     }
+
+//    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
+//        return Expressions.numberTemplate(
+//                Integer.class,
+//                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
+//                internshipAnnouncement.workingPeriod
+//        );
+//    }
 
     // 지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {
