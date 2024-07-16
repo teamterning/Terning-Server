@@ -3,6 +3,7 @@ package org.terning.terningserver.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.controller.swagger.FilterSwagger;
 import org.terning.terningserver.dto.filter.request.UserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
@@ -13,7 +14,7 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class FilterController {
+public class FilterController implements FilterSwagger {
 
     private final FilterService filterService;
 
@@ -26,7 +27,9 @@ public class FilterController {
     }
 
     @PutMapping("/filters")
-    public ResponseEntity<SuccessResponse> updateUserFilter(@RequestBody UserFilterRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse> updateUserFilter(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UserFilterRequestDto requestDto) {
         filterService.updateUserFilter(requestDto);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
