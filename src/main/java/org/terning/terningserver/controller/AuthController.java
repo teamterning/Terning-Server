@@ -28,6 +28,7 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "http://terning-official.p-e.kr")
 public class AuthController implements AuthSwagger {
 
     private final AuthService authService;
