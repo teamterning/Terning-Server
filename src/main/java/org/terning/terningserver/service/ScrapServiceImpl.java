@@ -52,13 +52,14 @@ public class ScrapServiceImpl implements ScrapService {
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = start.plusMonths(1).minusDays(1);
 
-        List<Scrap> scraps = scrapRepository.findByUserIdAndInternshipAnnouncement_DeadlineBetween(userId, start, end);
+        List<Scrap> scraps = scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, start, end);
 
         //deadline 별로 그룹화
         Map<LocalDate, List<Scrap>> scrapsByDeadline = scraps.stream()
                 .collect(Collectors.groupingBy(s -> s.getInternshipAnnouncement().getDeadline()));
 
         return scrapsByDeadline.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
                 .map(entry -> MonthlyDefaultResponseDto.of(
                         entry.getKey().toString(),
                         entry.getValue().stream()
@@ -79,13 +80,14 @@ public class ScrapServiceImpl implements ScrapService {
         LocalDate start = LocalDate.of(year, month, 1);
         LocalDate end = start.plusMonths(1).minusDays(1);
 
-        List<Scrap> scraps = scrapRepository.findByUserIdAndInternshipAnnouncement_DeadlineBetween(userId, start, end);
+        List<Scrap> scraps = scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, start, end);
 
         //deadline 별로 그룹화
         Map<LocalDate, List<Scrap>> scrapsByDeadline = scraps.stream()
                 .collect(Collectors.groupingBy(s -> s.getInternshipAnnouncement().getDeadline()));
 
         return scrapsByDeadline.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
                 .map(entry -> MonthlyListResponseDto.of(
                         entry.getKey().toString(),
                         entry.getValue().stream()
@@ -107,7 +109,7 @@ public class ScrapServiceImpl implements ScrapService {
   
     @Override
     public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
-        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, date).stream()
+        return scrapRepository.findScrapsByUserIdAndDeadlineOrderByDeadline(userId, date).stream()
                 .map(DailyScrapResponseDto::of)
                 .toList();
     }

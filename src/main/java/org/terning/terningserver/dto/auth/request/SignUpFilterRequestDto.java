@@ -7,10 +7,10 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Builder(access = PRIVATE)
 public record SignUpFilterRequestDto(
-        @NonNull int grade,
-        @NonNull int workingPeriod,
-        @NonNull int startYear,
-        @NonNull int startMonth
+        int grade,
+        int workingPeriod,
+        int startYear,
+        int startMonth
 
 ) {
     public static SignUpFilterRequestDto of(int grade, int workingPeriod, int startYear, int startMonth) {

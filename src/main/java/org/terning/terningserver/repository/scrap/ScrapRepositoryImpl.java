@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.Scrap;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.terning.terningserver.domain.QScrap.scrap;
@@ -20,6 +21,36 @@ public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
         return jpaQueryFactory
                 .selectFrom(scrap)
                 .where(scrap.internshipAnnouncement.in(internshipAnnouncements), scrap.user.id.eq(userId))
+                .fetch();
+    }
+
+    @Override
+    public Long findScrapIdByInternshipAnnouncementIdAndUserId(Long internshipAnnouncementId, Long userId) {
+        return jpaQueryFactory
+                .select(scrap.id)
+                .from(scrap)
+                .where(scrap.internshipAnnouncement.id.eq(internshipAnnouncementId)
+                        .and(scrap.user.id.eq(userId)))
+                .fetchOne();
+    }
+
+    @Override
+    public List<Scrap> findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(Long userId, LocalDate start, LocalDate end){
+        return jpaQueryFactory
+                .selectFrom(scrap)
+                .where(scrap.user.id.eq(userId)
+                        .and(scrap.internshipAnnouncement.deadline.between(start, end)))
+                .orderBy(scrap.internshipAnnouncement.deadline.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Scrap> findScrapsByUserIdAndDeadlineOrderByDeadline(Long userId, LocalDate deadline){
+        return jpaQueryFactory
+                .selectFrom(scrap)
+                .where(scrap.user.id.eq(userId)
+                        .and(scrap.internshipAnnouncement.deadline.eq(deadline)))
+                .orderBy(scrap.internshipAnnouncement.deadline.asc())
                 .fetch();
     }
 }
