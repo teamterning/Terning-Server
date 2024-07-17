@@ -23,6 +23,7 @@ public class InternshipDetailServiceImpl implements InternshipDetailService {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
 
+        announcement.updateViewCount();
 
         return InternshipDetailResponseDto.of(
                 announcement, announcement.getCompany(),
