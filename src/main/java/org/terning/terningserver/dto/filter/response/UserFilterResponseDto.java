@@ -5,17 +5,17 @@ import org.terning.terningserver.domain.Filter;
 
 @Builder
 public record UserFilterResponseDto(
-        int grade,
-        int workingPeriod,
-        int startYear,
-        int startMonth
+        Integer grade,
+        Integer workingPeriod,
+        Integer startYear,
+        Integer startMonth
 ) {
     public static UserFilterResponseDto of(Filter userFilter) {
         return UserFilterResponseDto.builder()
-                .grade(userFilter.getGrade().getKey())
-                .workingPeriod(userFilter.getWorkingPeriod().getKey())
-                .startYear(userFilter.getStartYear())
-                .startMonth(userFilter.getStartMonth())
+                .grade(userFilter == null ? null : userFilter.getGrade().getKey())
+                .workingPeriod(userFilter == null ? null : userFilter.getWorkingPeriod().getKey())
+                .startYear(userFilter == null ? null : userFilter.getStartYear())
+                .startMonth(userFilter == null ? null : userFilter.getStartMonth())
                 .build();
     }
 }

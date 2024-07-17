@@ -15,9 +15,9 @@ public interface ScrapService {
 
     void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId);
 
-    void deleteScrap(Long scrapId);
+    void deleteScrap(Long scrapId, Long userId);
 
-    void updateScrapColor(Long scrapId, UpdateScrapRequestDto request);
+    void updateScrapColor(Long scrapId, UpdateScrapRequestDto request, Long userId);
 
     List<MonthlyDefaultResponseDto> getMonthlyScraps(Long userId, int year, int month);
 
