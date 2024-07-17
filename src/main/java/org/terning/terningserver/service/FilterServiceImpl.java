@@ -23,14 +23,14 @@ public class FilterServiceImpl implements FilterService {
     private final UserRepository userRepository;
 
     @Override
-    public UserFilterResponseDto getUserFilter() {
-       return UserFilterResponseDto.of(findUser(6L).getFilter());
+    public UserFilterResponseDto getUserFilter(Long userId) {
+       return UserFilterResponseDto.of(findUser(userId).getFilter());
     }
 
     @Override
     @Transactional
-    public void updateUserFilter(UserFilterRequestDto responseDto) {
-        User user = findUser(6L);
+    public void updateUserFilter(UserFilterRequestDto responseDto, Long userId) {
+        User user = findUser(userId);
         Filter filter = user.getFilter();
 
         filter.updateFilter(

@@ -115,6 +115,7 @@ public class ScrapServiceImpl implements ScrapService {
     @Override
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
+
         getInternshipAnnouncement(internshipAnnouncementId);
 
         scrapRepository.save(Scrap.create(
@@ -126,23 +127,23 @@ public class ScrapServiceImpl implements ScrapService {
 
     @Override
     @Transactional
-    public void deleteScrap(Long scrapId) {
+    public void deleteScrap(Long scrapId, Long userId) {
         Scrap scrap = findScrap(scrapId);
-        verifyScrapOwner(scrap);
+        verifyScrapOwner(scrap, userId);
         scrapRepository.deleteById(scrapId);
     }
 
     @Override
     @Transactional
-    public void updateScrapColor(Long scrapId, UpdateScrapRequestDto request) {
+    public void updateScrapColor(Long scrapId, UpdateScrapRequestDto request, Long userId) {
         Scrap scrap = findScrap(scrapId);
-        verifyScrapOwner(scrap);
+        verifyScrapOwner(scrap, userId);
         scrap.updateColor(findColor(request.color()));
     }
 
     //토큰으로 찾은(요청한) User와 스크랩한 User가 일치한지 여부 검증하는 메서드
-    private void verifyScrapOwner(Scrap scrap) {
-        if(!scrap.getUser().equals(findUser(1L))) {
+    private void verifyScrapOwner(Scrap scrap, Long userId) {
+        if(!scrap.getUser().equals(findUser(userId))) {
             throw new CustomException(FORBIDDEN_DELETE_SCRAP);
         }
     }
