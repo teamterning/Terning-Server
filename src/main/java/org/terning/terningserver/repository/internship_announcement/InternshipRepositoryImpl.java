@@ -136,7 +136,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     // 정렬 옵션 (5가지)
     private OrderSpecifier getSortOrder(String sortBy) {
-        System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
             case "shortestDuration" // 짧은 근무 기간 순
                  -> getWorkingPeriodAsNumber().asc();

@@ -72,4 +72,8 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     public void updateViewCount() {
         this.viewCount += 1;
     }
+
+    public void updateScrapCount(int plusOrMinus) {
+        this.scrapCount = scrapCount + plusOrMinus;
+    }
 }

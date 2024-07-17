@@ -13,12 +13,12 @@ import org.terning.terningserver.repository.scrap.ScrapRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class InternshipDetailServiceImpl implements InternshipDetailService {
     private final InternshipRepository internshipRepository;
     private final ScrapRepository scrapRepository;
 
     @Override
+    @Transactional
     public InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId) {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));

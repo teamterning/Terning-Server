@@ -116,7 +116,10 @@ public class ScrapServiceImpl implements ScrapService {
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
 
-        getInternshipAnnouncement(internshipAnnouncementId);
+        InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
+
+        //스크랩 수 +1
+        announcement.updateScrapCount(1);
 
         scrapRepository.save(Scrap.create(
                 findUser(userId),
@@ -129,6 +132,10 @@ public class ScrapServiceImpl implements ScrapService {
     @Transactional
     public void deleteScrap(Long scrapId, Long userId) {
         Scrap scrap = findScrap(scrapId);
+
+        //스크랩 수 -1
+        scrap.getInternshipAnnouncement().updateScrapCount(-1);
+
         verifyScrapOwner(scrap, userId);
         scrapRepository.deleteById(scrapId);
     }
