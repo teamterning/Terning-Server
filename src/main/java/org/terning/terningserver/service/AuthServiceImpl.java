@@ -81,10 +81,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
-        val token = Optional.ofNullable(generateRefreshToken(user.getId()))
-                .orElseThrow(() -> new CustomException(FAILED_TOKEN_REISSUE));
+        Token token = getToken(user);
+        user.updateRefreshToken(token.getRefreshToken());
+
         return TokenGetResponseDto.of(token);
     }
 
@@ -94,13 +96,6 @@ public class AuthServiceImpl implements AuthService {
         String authId = getAuthId(user.getAuthType(), refreshToken);
         return signUp(authType, authId, user);
     }
-
-//    private User getUser(String authAccessToken, AuthType authType) {
-////        User user = userRepository.findByAuthTypeAndAuthAccessToken(authType, authAccessToken)
-////                .orElseThrow(() -> new CustomException(INVALID_USER));
-//        String authId = getAuthId(authType, authAccessToken);
-//        return signUp(authType, authId);
-//    }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
