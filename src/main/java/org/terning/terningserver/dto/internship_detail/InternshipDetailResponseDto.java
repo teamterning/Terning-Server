@@ -3,6 +3,7 @@ package org.terning.terningserver.dto.internship_detail;
 import lombok.Builder;
 import org.terning.terningserver.domain.Company;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.util.DateUtil;
 
 @Builder
@@ -21,9 +22,9 @@ public record InternshipDetailResponseDto(
         String jobType,
         String detail,
         String url,
-        boolean isScrapped
+        Long scrapId
 ) {
-    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, boolean isScrapped) {
+    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, Long scrapId) {
         return InternshipDetailResponseDto.builder()
                 .dDay(DateUtil.convert(announcement.getDeadline()))
                 .title(announcement.getTitle())
@@ -39,7 +40,7 @@ public record InternshipDetailResponseDto(
                 .jobType(announcement.getJobType())
                 .detail(announcement.getDetail())
                 .url(announcement.getUrl())
-                .isScrapped(isScrapped)
+                .scrapId(scrapId)
                 .build();
     }
 }

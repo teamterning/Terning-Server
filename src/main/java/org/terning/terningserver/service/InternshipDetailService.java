@@ -14,5 +14,5 @@ import org.terning.terningserver.repository.scrap.ScrapRepository;
 
 public interface InternshipDetailService {
 
-    InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId);
+    InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId, Long userId);
 }
