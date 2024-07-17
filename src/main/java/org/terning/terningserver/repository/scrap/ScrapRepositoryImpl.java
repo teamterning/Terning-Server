@@ -22,4 +22,14 @@ public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
                 .where(scrap.internshipAnnouncement.in(internshipAnnouncements), scrap.user.id.eq(userId))
                 .fetch();
     }
+
+    @Override
+    public Long findScrapIdByInternshipAnnouncementIdAndUserId(Long internshipAnnouncementId, Long userId) {
+        return jpaQueryFactory
+                .select(scrap.id)
+                .from(scrap)
+                .where(scrap.internshipAnnouncement.id.eq(internshipAnnouncementId)
+                        .and(scrap.user.id.eq(userId)))
+                .fetchOne();
+    }
 }

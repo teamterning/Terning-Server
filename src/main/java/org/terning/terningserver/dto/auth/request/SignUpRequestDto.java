@@ -9,7 +9,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder(access = PRIVATE)
 public record SignUpRequestDto(
         @NonNull String name,
-        @NonNull int profileImage,
+        int profileImage,
         @NonNull AuthType authType
 ) {
 
