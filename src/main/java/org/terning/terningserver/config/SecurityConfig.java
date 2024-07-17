@@ -22,6 +22,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
     private static final String[] AUTH_WHITELIST = {
+            "/**",
             "/v3/api-docs/**",
             "/swagger-ui.html",
             "/api/v1/swagger-ui/index.html#/**",
