@@ -87,6 +87,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new CustomException(FAILED_TOKEN_REISSUE));
         return TokenGetResponseDto.of(token);
     }
+
     private User getUser(String refreshToken, AuthType authType) {
         User user = userRepository.findByAuthTypeAndRefreshToken(authType, refreshToken)
                 .orElseThrow(() -> new CustomException(INVALID_USER));
