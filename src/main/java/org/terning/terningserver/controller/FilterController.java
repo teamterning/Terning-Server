@@ -23,7 +23,6 @@ public class FilterController implements FilterSwagger {
 
     @GetMapping("/filters")
     public ResponseEntity<SuccessResponse<UserFilterResponseDto>> getUserFilter(
-            @AuthenticationPrincipal Long userId
     ) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_USER_FILTER,
@@ -32,9 +31,7 @@ public class FilterController implements FilterSwagger {
     }
 
     @PutMapping("/filters")
-    public ResponseEntity<SuccessResponse> updateUserFilter(
-            @AuthenticationPrincipal Long userId,
-            @RequestBody UserFilterRequestDto requestDto) {
+    public ResponseEntity<SuccessResponse> updateUserFilter(@RequestBody UserFilterRequestDto requestDto) {
         filterService.updateUserFilter(requestDto, principalHandler.getUserFromPrincipal());
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
