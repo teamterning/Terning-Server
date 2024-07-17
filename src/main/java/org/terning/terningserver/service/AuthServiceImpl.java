@@ -113,44 +113,13 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
-    private Token getToken(User user) {
-        String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
-        String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
-
-        user.updateRefreshToken(refreshToken);
-
-        return Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
             case APPLE -> appleService.getAppleData(authAccessToken);
             case KAKAO -> kakaoService.getKakaoData(authAccessToken);
         };
     }
-  
-    private SignUpWithAuthIdRequestDto createSignUpRequestDto(String authId, SignUpRequestDto request) {
-        return SignUpWithAuthIdRequestDto.of(
-                authId,
-                request.name(),
-                request.profileImage(),
-                request.authType()
-        );
-    }
 
-    private User createUser(SignUpWithAuthIdRequestDto requestDto) {
-        User user = User.builder()
-                .authId(requestDto.authId())
-                .name(requestDto.name())
-                .authType(requestDto.authType())
-                .profileImage(requestDto.profileImage())
-                .build();
-        return userRepository.save(user);
-    }
-  
     private Token getToken(User user) {
         String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
         String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
