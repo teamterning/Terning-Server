@@ -7,12 +7,12 @@ import static lombok.AccessLevel.*;
 
 @Builder(access = PRIVATE)
 public record TokenGetResponseDto(
-        String accessToken
+        String refreshToken
 ) {
 
-    public static TokenGetResponseDto of(String accessToken) {
+    public static TokenGetResponseDto of(String refreshToken) {
         return TokenGetResponseDto.builder()
-                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
