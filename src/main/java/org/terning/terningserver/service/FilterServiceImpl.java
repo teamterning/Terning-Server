@@ -11,6 +11,7 @@ import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.filter.request.UserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
 import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
@@ -21,6 +22,7 @@ import static org.terning.terningserver.exception.enums.ErrorMessage.NOT_FOUND_U
 public class FilterServiceImpl implements FilterService {
 
     private final UserRepository userRepository;
+    private final FilterRepository filterRepository;
 
     @Override
     public UserFilterResponseDto getUserFilter(Long userId) {
@@ -32,7 +34,6 @@ public class FilterServiceImpl implements FilterService {
     public void updateUserFilter(UserFilterRequestDto responseDto, Long userId) {
         User user = findUser(userId);
         Filter filter = user.getFilter();
-        System.out.println("filter = " + filter);
         if(filter != null){
             filter.updateFilter(
                     Grade.fromKey(responseDto.grade()),
@@ -40,6 +41,16 @@ public class FilterServiceImpl implements FilterService {
                     responseDto.startYear(),
                     responseDto.startMonth()
             );
+        } else {
+            Filter savedFilter = filterRepository.save(
+                    Filter.builder()
+                            .grade(Grade.fromKey(responseDto.grade()))
+                            .workingPeriod(WorkingPeriod.fromKey(responseDto.workingPeriod()))
+                            .startYear(responseDto.startYear())
+                            .startMonth(responseDto.startMonth())
+                            .build()
+            );
+            user.assignFilter(savedFilter);
         }
     }
 
