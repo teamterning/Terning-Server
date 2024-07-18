@@ -28,6 +28,12 @@ public class HomeServiceImpl implements HomeService{
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
+
+        // 필터링 상태가 없을 경우 NULL 리턴
+        if(user.getFilter() == null){
+            return null;
+        }
+
         List<InternshipAnnouncement> announcements = internshipRepository.findFilteredInternships(user, sortBy, startYear, startMonth);
 
         return announcements.stream()
