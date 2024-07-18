@@ -21,9 +21,9 @@ public record InternshipDetailResponseDto(
         String jobType,
         String detail,
         String url,
-        boolean isScrapped
+        Long scrapId
 ) {
-    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, boolean isScrapped) {
+    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, Long scrapId) {
         return InternshipDetailResponseDto.builder()
                 .dDay(DateUtil.convert(announcement.getDeadline()))
                 .title(announcement.getTitle())
@@ -39,7 +39,7 @@ public record InternshipDetailResponseDto(
                 .jobType(announcement.getJobType())
                 .detail(announcement.getDetail())
                 .url(announcement.getUrl())
-                .isScrapped(isScrapped)
+                .scrapId(scrapId)
                 .build();
     }
 }

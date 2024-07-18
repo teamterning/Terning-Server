@@ -25,7 +25,7 @@ public class FilterController implements FilterSwagger {
     ) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_USER_FILTER,
-                filterService.getUserFilter()
+                filterService.getUserFilter(userId)
         ));
     }
 
@@ -33,7 +33,7 @@ public class FilterController implements FilterSwagger {
     public ResponseEntity<SuccessResponse> updateUserFilter(
             @AuthenticationPrincipal Long userId,
             @RequestBody UserFilterRequestDto requestDto) {
-        filterService.updateUserFilter(requestDto);
+        filterService.updateUserFilter(requestDto, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
 
