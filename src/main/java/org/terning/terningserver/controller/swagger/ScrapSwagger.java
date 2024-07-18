@@ -15,6 +15,7 @@ public interface ScrapSwagger {
 
     @Operation(summary = "스크랩 추가", description = "사용자가 스크랩을 추가하는 API")
     ResponseEntity<SuccessResponse> createScrap(
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long internshipAnnouncementId, @RequestBody CreateScrapRequestDto request
     );
 
