@@ -10,7 +10,7 @@ public enum Color {
 
     RED(0, "ED4E54"),
     ORANGE1(1, "EE7647"),
-    ORANGE2(2, "5397F3"),
+    ORANGE2(2, "F3A649"),
     YELLOW(3, "F5E660"),
     GREEN1(4, "C4E953"),
     GREEN2(5, "84D558"),
