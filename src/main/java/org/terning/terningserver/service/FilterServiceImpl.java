@@ -32,13 +32,15 @@ public class FilterServiceImpl implements FilterService {
     public void updateUserFilter(UserFilterRequestDto responseDto, Long userId) {
         User user = findUser(userId);
         Filter filter = user.getFilter();
-
-        filter.updateFilter(
-                Grade.fromKey(responseDto.grade()),
-                WorkingPeriod.fromKey(responseDto.workingPeriod()),
-                responseDto.startYear(),
-                responseDto.startMonth()
-        );
+        System.out.println("filter = " + filter);
+        if(filter != null){
+            filter.updateFilter(
+                    Grade.fromKey(responseDto.grade()),
+                    WorkingPeriod.fromKey(responseDto.workingPeriod()),
+                    responseDto.startYear(),
+                    responseDto.startMonth()
+            );
+        }
     }
 
     private User findUser(Long userId) {
