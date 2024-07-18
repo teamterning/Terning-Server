@@ -20,7 +20,6 @@ import org.terning.terningserver.repository.user.UserRepository;
 import java.util.Optional;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_USER;
-import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_TOKEN_REISSUE;
 
 @Slf4j
 @Service
@@ -39,13 +38,14 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
         String authId = getAuthId(request.authType(), authAccessToken);
-
         Optional<User> userOptional = userRepository.findByAuthIdAndAuthType(authId, request.authType());
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            Token token = getToken(user);
+            user.updateRefreshToken(token.getRefreshToken());
             return SignInResponseDto.of(
-                    getToken(user),
+                    token,
                     authId,
                     request.authType(),
                     user.getId()
@@ -85,12 +85,6 @@ public class AuthServiceImpl implements AuthService {
         user.updateRefreshToken(token.getRefreshToken());
         return TokenGetResponseDto.of(token);
     }
-    private User getUser(String refreshToken, AuthType authType) {
-        User user = userRepository.findByAuthTypeAndRefreshToken(authType, refreshToken)
-                .orElseThrow(() -> new CustomException(INVALID_USER));
-        String authId = getAuthId(user.getAuthType(), refreshToken);
-        return signUp(authType, authId, user);
-    }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
@@ -99,20 +93,9 @@ public class AuthServiceImpl implements AuthService {
         };
     }
 
-    private User signUp(AuthType authType, String authId, User user) {
-        user.updateUser(authType, authId, user);
-        return userRepository.save(user);
-    }
-
     public Token getToken(User user) {
         val token = generateToken(new UserAuthentication(user.getId(), null, null));
         user.updateRefreshToken(token.getRefreshToken());
-        return token;
-    }
-
-    public Token getTokenByAuthId(String AuthId) {
-        Long id = Long.parseLong(AuthId);
-        val token = generateToken(new UserAuthentication(id, null, null));
         return token;
     }
 
@@ -134,11 +117,6 @@ public class AuthServiceImpl implements AuthService {
 
     private String getTokenFromBearerString(String token) {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
-    }
-
-    private String generateRefreshToken(long userId) {
-        val authentication = new UserAuthentication(userId, null, null);
-        return jwtTokenProvider.generateToken(authentication, valueConfig.getRefreshTokenExpired());
     }
 
     private void deleteUser(User user) {
