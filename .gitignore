@@ -187,6 +187,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+
 # application.yml
 src/main/resources/application.yml
 src/main/resources/application-dev.yml
