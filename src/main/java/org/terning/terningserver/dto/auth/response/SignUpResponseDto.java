@@ -12,3 +12,5 @@ public record SignUpResponseDto(
         return new SignUpResponseDto(accessToken, refreshToken, userId, authType);
     }
 }
+
+

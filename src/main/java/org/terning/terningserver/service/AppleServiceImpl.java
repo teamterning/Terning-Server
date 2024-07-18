@@ -1,15 +1,5 @@
 package org.terning.terningserver.service;
 
-import com.google.gson.*;
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.terning.terningserver.config.ValueConfig;
-import org.terning.terningserver.exception.CustomException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +13,22 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Objects;
+
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.terning.terningserver.config.ValueConfig;
+import org.terning.terningserver.exception.CustomException;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_KEY;
 
@@ -94,15 +100,13 @@ public class AppleServiceImpl implements AppleService{
     private PublicKey makePublicKey(String accessToken, JsonArray publicKeyList) {
         val decodeArray = accessToken.split(ValueConfig.TOKEN_VALUE_DELIMITER);
         val header = new String(Base64.getDecoder().decode(getTokenFromBearerString(decodeArray[0])));
+        val kid = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.KID_HEADER_KEY);
+        val alg = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.ALG_HEADER_KEY);
 
-        val kid = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.ALG_HEADER_KEY);
-        val alg = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.KID_HEADER_KEY);
         val matchingPublicKey = findMatchingPublicKey(publicKeyList, kid, alg);
-
         if (Objects.isNull(matchingPublicKey)) {
             throw new CustomException(INVALID_KEY);
         }
-
         return getPublicKey(matchingPublicKey);
     }
 

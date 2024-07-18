@@ -19,25 +19,30 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 public class ScrapController implements ScrapSwagger {
 
     private final ScrapService scrapService;
-    private final PrincipalHandler principalHandler;
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> createScrap(
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long internshipAnnouncementId,
             @RequestBody CreateScrapRequestDto request) {
-        scrapService.createScrap(internshipAnnouncementId, request, principalHandler.getUserFromPrincipal());
+        scrapService.createScrap(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
     }
 
     @DeleteMapping("/scraps/{scrapId}")
-    public ResponseEntity<SuccessResponse> deleteScrap(@PathVariable Long scrapId) {
-        scrapService.deleteScrap(scrapId, principalHandler.getUserFromPrincipal());
+    public ResponseEntity<SuccessResponse> deleteScrap(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long scrapId) {
+        scrapService.deleteScrap(scrapId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
     @PatchMapping("/scraps/{scrapId}")
-    public ResponseEntity<SuccessResponse> updateScrapColor(@PathVariable Long scrapId, @RequestBody UpdateScrapRequestDto request) {
-        scrapService.updateScrapColor(scrapId, request, principalHandler.getUserFromPrincipal());
+    public ResponseEntity<SuccessResponse> updateScrapColor(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long scrapId,
+            @RequestBody UpdateScrapRequestDto request) {
+        scrapService.updateScrapColor(scrapId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
 }

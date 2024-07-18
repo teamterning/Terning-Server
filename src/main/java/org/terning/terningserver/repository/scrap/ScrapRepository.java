@@ -15,5 +15,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long>, ScrapReposi
     List<Scrap> findByUserIdAndInternshipAnnouncement_Deadline(Long userId, LocalDate deadline);
 
     List<Scrap> findByUserIdAndInternshipAnnouncement_DeadlineBetween(Long userId, LocalDate start, LocalDate end);
+
+    Optional<Scrap> findByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 }
 

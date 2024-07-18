@@ -10,6 +10,6 @@ public interface SearchService {
 
     PopularAnnouncementListResponseDto getMostScrappedAnnouncements();
 
-    SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
+    SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable, Long userId);
 
 }

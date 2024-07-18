@@ -1,6 +1,5 @@
 package org.terning.terningserver.service;
 
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.security.core.Authentication;
@@ -57,7 +56,6 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-
     @Transactional
     public User saveUser(SignInRequestDto request) {
         User user = User.builder()
@@ -81,15 +79,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public TokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
         Token token = getToken(user);
         user.updateRefreshToken(token.getRefreshToken());
-
         return TokenGetResponseDto.of(token);
     }
-
     private User getUser(String refreshToken, AuthType authType) {
         User user = userRepository.findByAuthTypeAndRefreshToken(authType, refreshToken)
                 .orElseThrow(() -> new CustomException(INVALID_USER));
@@ -109,14 +104,14 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.save(user);
     }
 
-    private Token getToken(User user) {
+    public Token getToken(User user) {
         val token = generateToken(new UserAuthentication(user.getId(), null, null));
         user.updateRefreshToken(token.getRefreshToken());
         return token;
     }
 
     public Token getTokenByAuthId(String AuthId) {
-        long id = Long.parseLong(AuthId);
+        Long id = Long.parseLong(AuthId);
         val token = generateToken(new UserAuthentication(id, null, null));
         return token;
     }

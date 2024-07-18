@@ -8,9 +8,8 @@ import static lombok.AccessLevel.*;
 
 @Builder(access = PRIVATE)
 public record TokenGetResponseDto(
-        String accessToken,
-        String refreshToken
-
+        @NonNull String accessToken,
+        @NonNull String refreshToken
 ) {
 
     public static TokenGetResponseDto of(Token token) {

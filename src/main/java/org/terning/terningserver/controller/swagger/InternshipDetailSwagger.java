@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.terning.terningserver.dto.internship_detail.InternshipDetailResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
@@ -16,6 +17,7 @@ public interface InternshipDetailSwagger {
 
     @Operation(summary = "공고 상세 페이지", description = "인턴 공고의 상세 정보를 불러오는 API")
     ResponseEntity<SuccessResponse<InternshipDetailResponseDto>> getInternshipDetail(
+            @AuthenticationPrincipal Long userId,
             @PathVariable("internshipAnnouncementId") Long internshipAnnouncementId
     );
 }

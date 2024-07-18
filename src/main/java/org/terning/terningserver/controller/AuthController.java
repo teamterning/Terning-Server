@@ -39,8 +39,6 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authAccessToken,
             @RequestBody SignInRequestDto request
     ) {
-//        User user = authService.saveUser(authAccessToken, request);
-
         val signInResponse = authService.signIn(authAccessToken, request);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
@@ -61,8 +59,8 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("authId") String authId,
             @RequestBody SignUpRequestDto request
     ) {
-        SignUpResponseDto signUpResponseDto = signUpService.signUp(authId, request.name(), request.profileImage(), request.authType());
 
+        SignUpResponseDto signUpResponseDto = signUpService.signUp(authId, request.name(), request.profileImage(), request.authType());
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
