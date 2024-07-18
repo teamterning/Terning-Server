@@ -33,10 +33,12 @@ public class Filter {
 
     private int startMonth; // 근무 시작 월
 
+
     public void updateFilter(Grade grade, WorkingPeriod workingPeriod, int startYear, int startMonth) {
         this.grade = grade;
         this.workingPeriod = workingPeriod;
         this.startYear = startYear;
         this.startMonth = startMonth;
     }
+
 }

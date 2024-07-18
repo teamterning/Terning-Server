@@ -83,4 +83,5 @@ public class User extends BaseTimeEntity {
         this.authId = authId;
         this.refreshToken = user.getRefreshToken();
     }
+
 }
