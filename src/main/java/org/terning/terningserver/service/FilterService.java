@@ -5,7 +5,7 @@ import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
 
 public interface FilterService {
 
-    UserFilterResponseDto getUserFilter();
+    UserFilterResponseDto getUserFilter(Long userId);
 
-    void updateUserFilter(UserFilterRequestDto responseDto);
+    void updateUserFilter(UserFilterRequestDto responseDto, Long userId);
 }

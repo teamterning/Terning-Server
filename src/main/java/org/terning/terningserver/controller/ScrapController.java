@@ -17,6 +17,7 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class ScrapController implements ScrapSwagger {
+
     private final ScrapService scrapService;
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
@@ -29,14 +30,19 @@ public class ScrapController implements ScrapSwagger {
     }
 
     @DeleteMapping("/scraps/{scrapId}")
-    public ResponseEntity<SuccessResponse> deleteScrap(@PathVariable Long scrapId) {
-        scrapService.deleteScrap(scrapId);
+    public ResponseEntity<SuccessResponse> deleteScrap(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long scrapId) {
+        scrapService.deleteScrap(scrapId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
     @PatchMapping("/scraps/{scrapId}")
-    public ResponseEntity<SuccessResponse> updateScrapColor(@PathVariable Long scrapId, @RequestBody UpdateScrapRequestDto request) {
-        scrapService.updateScrapColor(scrapId, request);
+    public ResponseEntity<SuccessResponse> updateScrapColor(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long scrapId,
+            @RequestBody UpdateScrapRequestDto request) {
+        scrapService.updateScrapColor(scrapId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
 }

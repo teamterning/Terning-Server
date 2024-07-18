@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.dto.internship_detail.InternshipDetailResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
+
+import java.util.Optional;
 
 
 @Service
@@ -19,14 +22,25 @@ public class InternshipDetailServiceImpl implements InternshipDetailService {
     private final ScrapRepository scrapRepository;
 
     @Override
-    public InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId) {
+    @Transactional
+    public InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId, Long userId) {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
 
 
-        return InternshipDetailResponseDto.of(
-                announcement, announcement.getCompany(),
-                scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), 1L)
-        );
+        announcement.updateViewCount();
+        Optional<Scrap> scrap = scrapRepository.findByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
+
+        if (scrap.isPresent()) {
+            return InternshipDetailResponseDto.of(
+                    announcement, announcement.getCompany(),
+                    scrapRepository.findByInternshipAnnouncementIdAndUserId(announcement.getId(), userId).get().getId()
+            );
+        } else {
+            return InternshipDetailResponseDto.of(
+                    announcement, announcement.getCompany(),
+                    null
+            );
+        }
     }
 }

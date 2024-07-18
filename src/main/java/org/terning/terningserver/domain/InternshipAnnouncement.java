@@ -68,4 +68,12 @@ public class InternshipAnnouncement extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "internshipAnnouncement", cascade = CascadeType.ALL)
     private List<Scrap> scrapList = new ArrayList<>(); //스크랩 리스트
+
+    public void updateViewCount(){
+        this.viewCount += 1;
+    }
+
+    public void updateScrapCount(int plusOrMinus){
+        this.scrapCount = scrapCount + plusOrMinus;
+    }
 }

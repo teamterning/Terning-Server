@@ -38,14 +38,14 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+    public SearchResultResponseDto searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable, Long userId) {
         Page<InternshipAnnouncement> pageAnnouncements = internshipRepository.searchInternshipAnnouncement(keyword, sortBy, pageable);
 
         List<InternshipAnnouncement> announcements = pageAnnouncements.getContent();
 
         List<SearchResultResponseDto.SearchAnnouncementResponse> searchAnnouncementResponses = new ArrayList<>();
 
-        List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, 1L);
+        List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, userId);
 
         //스크랩 정보를 매핑 (인턴 공고 ID -> 스크랩 ID)
         Map<Long, Long> scrapMap = scraps.stream()

@@ -20,12 +20,15 @@ public interface ScrapSwagger {
 
     @Operation(summary = "스크랩 취소", description = "사용자가 스크랩을 취소하는 API")
     ResponseEntity<SuccessResponse> deleteScrap(
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long internshipAnnouncementId
     );
 
     @Operation(summary = "스크랩 수정", description = "사용자가 스크랩 색상을 수정하는 API")
     public ResponseEntity<SuccessResponse> updateScrapColor(
-            @PathVariable Long scrapId, @RequestBody UpdateScrapRequestDto request
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long scrapId,
+            @RequestBody UpdateScrapRequestDto request
     );
 
 }

@@ -5,6 +5,7 @@ import org.terning.terningserver.domain.Scrap;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ScrapRepository extends JpaRepository<Scrap, Long>, ScrapRepositoryCustom {
     Boolean existsByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
@@ -12,5 +13,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long>, ScrapReposi
     List<Scrap> findByUserIdAndInternshipAnnouncement_Deadline(Long userId, LocalDate deadline);
 
     List<Scrap> findByUserIdAndInternshipAnnouncement_DeadlineBetween(Long userId, LocalDate start, LocalDate end);
+
+    Optional<Scrap> findByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 }
 

@@ -3,6 +3,7 @@ package org.terning.terningserver.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,11 @@ public class InternshipDetailController implements InternshipDetailSwagger {
 
     @GetMapping("/announcements/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse<InternshipDetailResponseDto>> getInternshipDetail(
+            @AuthenticationPrincipal Long userId,
             @PathVariable Long internshipAnnouncementId) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_INTERNSHIP_DETAIL,
-                internshipDetailService.getInternshipDetail(internshipAnnouncementId)
+                internshipDetailService.getInternshipDetail(internshipAnnouncementId, userId)
         ));
     }
 
