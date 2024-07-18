@@ -81,8 +81,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
-        val token = Optional.ofNullable(generateRefreshToken(user.getId()))
-                .orElseThrow(() -> new CustomException(FAILED_TOKEN_REISSUE));
+        Token token = getToken(user);
+        user.updateRefreshToken(token.getRefreshToken());
         return TokenGetResponseDto.of(token);
     }
     private User getUser(String refreshToken, AuthType authType) {
