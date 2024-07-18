@@ -37,6 +37,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
                 .fetch();
     }
 
@@ -49,6 +50,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         internCreatedAtAfter()
                 ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
+                .limit(5)
                 .fetch();
     }
 
@@ -134,7 +136,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     // 정렬 옵션 (5가지)
     private OrderSpecifier getSortOrder(String sortBy) {
-        System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
             case "shortestDuration" // 짧은 근무 기간 순
                  -> getWorkingPeriodAsNumber().asc();

@@ -3,6 +3,7 @@ package org.terning.terningserver.dto.internship_detail;
 import lombok.Builder;
 import org.terning.terningserver.domain.Company;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.util.DateUtil;
 
 @Builder

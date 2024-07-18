@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class InternshipDetailServiceImpl implements InternshipDetailService {
     private final InternshipRepository internshipRepository;
     private final ScrapRepository scrapRepository;

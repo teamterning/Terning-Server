@@ -15,12 +15,10 @@ public interface FilterSwagger {
 
     @Operation(summary = "사용자 필터링 정보 조회 API", description = "사용자가 설정한 필터링 정보를 조회하는 API")
     ResponseEntity<SuccessResponse<UserFilterResponseDto>> getUserFilter(
-            Long userId
     );
 
     @Operation(summary = "사용자 필터링 정보 수정 API", description = "사용자 필터링을 수정하는 API")
     ResponseEntity<SuccessResponse> updateUserFilter(
-            Long userId,
             @RequestBody UserFilterRequestDto requestDto
     );
 }

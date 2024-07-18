@@ -3,6 +3,7 @@ package org.terning.terningserver.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.domain.InternshipAnnouncement;
+import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
@@ -32,8 +33,9 @@ public class HomeServiceImpl implements HomeService{
         return announcements.stream()
                 .map(announcement -> {
                     boolean isScrapped = scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
-                    return HomeResponseDto.of(announcement, isScrapped);
+                    Long scrapId = isScrapped ? scrapRepository.findScrapIdByInternshipAnnouncementIdAndUserId(announcement.getId(), userId) : null;
+                    return HomeResponseDto.of(scrapId, announcement, isScrapped);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 }
