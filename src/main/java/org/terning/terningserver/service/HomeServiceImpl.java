@@ -31,7 +31,7 @@ public class HomeServiceImpl implements HomeService{
 
         // 필터링 상태가 없을 경우 NULL 리턴
         if(user.getFilter() == null){
-            return null;
+            return List.of();
         }
 
         List<InternshipAnnouncement> announcements = internshipRepository.findFilteredInternships(user, sortBy, startYear, startMonth);
