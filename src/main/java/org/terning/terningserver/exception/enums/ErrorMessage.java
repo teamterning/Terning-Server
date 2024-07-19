@@ -22,6 +22,9 @@ public enum ErrorMessage {
     // 사용자 필터링 정보 생성
     FAILED_SIGN_UP_FILTER(404, "회원가입 필터링 정보 생성에 실패하였습니다"),
 
+    //스크랩
+    EXISTS_SCRAP_ALREADY(400, "이미 스크랩했습니다."),
+
     // 로그 아웃
     FAILED_SIGN_OUT(404, "로그아웃에 실패하였습니다"),
     FAILED_REFRESH_TOKEN_RESET(400, "리프레쉬 토큰 초기화에 실패하였습니다"),

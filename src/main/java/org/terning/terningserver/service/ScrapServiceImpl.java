@@ -14,7 +14,6 @@ import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.jwt.PrincipalHandler;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -117,6 +116,12 @@ public class ScrapServiceImpl implements ScrapService {
     @Override
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
+
+        //이미 스크랩 했을 경우 예외처리
+        if(scrapRepository.existsByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId)) {
+            throw new CustomException(EXISTS_SCRAP_ALREADY);
+        }
+
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
 
         announcement.updateScrapCount(1);
