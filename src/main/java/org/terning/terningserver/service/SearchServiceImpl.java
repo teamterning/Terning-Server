@@ -47,16 +47,24 @@ public class SearchServiceImpl implements SearchService {
 
         List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, userId);
 
-        //스크랩 정보를 매핑 (인턴 공고 ID -> 스크랩 ID)
-        Map<Long, Long> scrapMap = scraps.stream()
+        // 스크랩 정보를 매핑 (인턴 공고 ID -> 스크랩)
+        Map<Long, Scrap> scrapMap = scraps.stream()
                 .collect(Collectors.toMap(
                         scrap -> scrap.getInternshipAnnouncement().getId(),
-                        Scrap::getId
+                        scrap -> scrap
                 ));
 
+        searchAnnouncementResponses = announcements.stream()
+                .map(a -> {
+                    Scrap scrap = scrapMap.get(a.getId());
+                    return SearchResultResponseDto.SearchAnnouncementResponse.from(a, scrap != null ? scrap.getId() : null, scrap != null ? scrap.getColor().getColorValue() : null);
+                })
+                .toList();
+
         return new SearchResultResponseDto(
-                pageAnnouncements.getTotalPages(), pageAnnouncements.hasNext(), announcements.stream()
-                .map(a -> SearchResultResponseDto.SearchAnnouncementResponse.from(a, scrapMap.get(a.getId())))
-                .toList());
+                pageAnnouncements.getTotalPages(),
+                pageAnnouncements.hasNext(),
+                searchAnnouncementResponses
+        );
     }
 }
