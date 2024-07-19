@@ -34,6 +34,15 @@
 
 <br/>
 
+## 🪴 역할
+| 분야 | 이름 | 포지션 |
+| --- | --- | --- |
+| 서버 개발 | [정정교/Junggyo1020](https://github.com/junggyo1020) | 서버 파트 리더, 팀 매니징 및 개발 인프라, 캘린더, 인턴 공고, 프로필 |
+| 서버 개발 | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | 스크랩, 공고 상세, 탐색, 필터링 |
+| 서버 개발 | [권장순/jsoonworld](https://github.com/jsoonworld) | 회원가입, 로그인, 회원관리 |
+
+<br/>
+
 ## 💡 Git Convention
 > **Git Flow**
 > 
@@ -81,15 +90,6 @@ ex) feat/#20
 
 <br/>
 
-## 👥 역할
-| 분야 | 이름 | 포지션 |
-| --- | --- | --- |
-| 서버 개발 | [정정교/Junggyo1020](https://github.com/junggyo1020) | 서버 파트 리더, 팀 매니징 및 개발 인프라, 캘린더, 인턴 공고, 프로필 |
-| 서버 개발 | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | 스크랩, 공고 상세, 탐색, 필터링 |
-| 서버 개발 | [권장순/jsoonworld](https://github.com/jsoonworld) | 회원가입, 로그인, 회원관리 |
-
-<br/>
-
 ## 🌱 Architecture Diagram
 ![터닝 AD](https://github.com/user-attachments/assets/df2d0440-6525-46f4-8fc3-064e0f486bf2)
 
@@ -97,7 +97,7 @@ ex) feat/#20
 <br/>
 
 ## 📎 ERD
-<img width="829" alt="image" src="https://github.com/teamterning/Terning-Server/assets/150939763/572a5ad6-17c7-4394-80c3-21d3ea8da3e4">
+![image](https://github.com/user-attachments/assets/d4ef76d7-d1fb-41e2-9a53-10012fe797ea)
 
 
 <br/><br/>
