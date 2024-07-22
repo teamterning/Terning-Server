@@ -28,7 +28,8 @@
 
 
 ##  Back-end (Spring 🌱)
-| <img src="https://avatars.githubusercontent.com/u/150939763?v=4" width=300px alt="서버/정정교"/>  | <img src="https://avatars.githubusercontent.com/u/63058347?v=4" width=300px alt="서버/신정윤"/>  | <img src="https://avatars.githubusercontent.com/u/89952042?v=4" width=300px alt="서버/권장순"/>
+
+| <img src="https://github.com/user-attachments/assets/8e71a4f2-70e7-4a80-b658-de0eea90b0e0" width=300px alt="서버/정정교"/>  | <img src="https://github.com/user-attachments/assets/7cdc140f-5281-45b5-88ac-a952cc327247" width=300px alt="서버/신정윤"/>  | <img src="https://github.com/user-attachments/assets/54c89379-08b8-4737-8da0-5bfad27e49fe" width=300px alt="서버/권장순"/>
 | :-----: | :-----: | :-----: |
 | [정정교/Junggyo1020](https://github.com/junggyo1020) | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | [권장순/jsoonworld](https://github.com/jsoonworld) |
 
@@ -91,7 +92,7 @@ ex) feat/#20
 <br/>
 
 ## 🌱 Architecture Diagram
-![터닝 AD](https://github.com/user-attachments/assets/df2d0440-6525-46f4-8fc3-064e0f486bf2)
+![터닝 AD](https://github.com/user-attachments/assets/966b11f8-f8d9-4a1e-b9db-19bf20c2fa82)
 
 
 <br/>
