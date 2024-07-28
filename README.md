@@ -1,4 +1,4 @@
-# 💚 Team-Terning (터닝)
+# 💚 Team-Terning (터닝) 
 
 ![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581)
 
