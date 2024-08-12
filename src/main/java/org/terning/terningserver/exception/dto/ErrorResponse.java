@@ -1,6 +1,5 @@
 package org.terning.terningserver.exception.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
@@ -11,9 +10,7 @@ import java.util.List;
 @Builder
 public record ErrorResponse(
         int status,
-        String message,
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        List<ValidationError> errors
+        String message
 ) {
     public static ErrorResponse of(int status, String message){
         return ErrorResponse.builder()
@@ -26,7 +23,6 @@ public record ErrorResponse(
         return ErrorResponse.builder()
                 .status(status)
                 .message(message)
-                .errors(ValidationError.of(bindingResult))
                 .build();
     }
 
