@@ -7,20 +7,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.AuthSwagger;
 import org.terning.terningserver.domain.Filter;
-import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
+import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
-import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.AuthService;
 import org.terning.terningserver.service.SignUpFilterService;
 import org.terning.terningserver.service.SignUpService;
-
-import java.security.Principal;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
@@ -44,9 +41,8 @@ public class AuthController implements AuthSwagger {
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
     }
 
-    // TODO: 에러 메시지 위치
     @PostMapping("/token-reissue")
-    public ResponseEntity<SuccessResponse<TokenGetResponseDto>> reissueToken(
+    public ResponseEntity<SuccessResponse<AccessTokenGetResponseDto>> reissueToken(
             @RequestHeader("Authorization") String refreshToken
     ) {
         val response = authService.reissueToken(refreshToken);
