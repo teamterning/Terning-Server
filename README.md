@@ -1,6 +1,6 @@
 # 💚 Team-Terning (터닝) 
 
-![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581)
+![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581) 
 
 
 ### 내 계획에 딱 맞는 대학생 인턴의 시작, 터닝 (terning) 
