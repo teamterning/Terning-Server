@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.HomeSwagger;
+import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
@@ -28,13 +29,13 @@ public class HomeController implements HomeSwagger {
     private final ScrapService scrapService;
 
     @GetMapping("/home")
-    public ResponseEntity<SuccessResponse<List<HomeResponseDto>>> getAnnouncements(
+    public ResponseEntity<SuccessResponse<HomeAnnouncementsResponseDto>> getAnnouncements(
             @AuthenticationPrincipal Long userId,
             @RequestParam(value = "sortBy", required = false, defaultValue = "deadlineSoon") String sortBy,
             @RequestParam("startYear") int startYear,
             @RequestParam("startMonth") int startMonth
     ){
-        List<HomeResponseDto> announcements = homeService.getAnnouncements(userId, sortBy, startYear, startMonth);
+        HomeAnnouncementsResponseDto announcements = homeService.getAnnouncements(userId, sortBy, startYear, startMonth);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_ANNOUNCEMENTS, announcements));
     }

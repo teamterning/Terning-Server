@@ -15,4 +15,6 @@ public interface ScrapRepositoryCustom {
 
     List<Scrap> findScrapsByUserIdAndDeadlineOrderByDeadline(Long userId, LocalDate deadline);
 
+    String findColorByInternshipAnnouncementIdAndUserId(Long internshipAnnouncementId, Long userId);
+
 }
