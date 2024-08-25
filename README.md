@@ -1,4 +1,5 @@
 # 💚 Team-Terning (터닝) 
+> NOW SOPT 34 APPJAM DEMODAY 최우수상 수상작
 
 ![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581) 
 
