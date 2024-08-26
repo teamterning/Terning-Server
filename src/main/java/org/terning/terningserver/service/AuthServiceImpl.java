@@ -13,6 +13,7 @@ import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
 import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
 import org.terning.terningserver.jwt.UserAuthentication;
@@ -57,11 +58,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public User saveUser(SignInRequestDto request) {
-        User user = User.builder()
-                .authType(request.authType())
-                .build();
-        return userRepository.save(user);
+    public SignUpResponseDto signUp(String authId, String name, Integer profileImage, AuthType authType) {
+
+        User user = userRepository.save(User.builder()
+                .authId(authId)
+                .name(name)
+                .authType(authType)
+                .profileImage(profileImage)
+                .build());
+
+        Token token = getToken(user);
+        userRepository.save(user);
+
+        return SignUpResponseDto.of(token.getAccessToken(), token.getRefreshToken(), user.getId(), authType);
     }
 
     @Override
