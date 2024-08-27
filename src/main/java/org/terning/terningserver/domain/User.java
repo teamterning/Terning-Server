@@ -65,23 +65,7 @@ public class User extends BaseTimeEntity {
         }
     }
 
-    public void updateProfile(String name, Integer profileImage) {
-        if (name != null && !name.isEmpty()) {
-            this.name = name;
-        }
-        if (profileImage != null) {
-            this.profileImage = profileImage;
-        }
-    }
-
     public void assignFilter(Filter filter) {
         this.filter = filter;
     }
-
-    public void updateUser(AuthType authType, String authId, User user) {
-        this.authType = authType;
-        this.authId = authId;
-        this.refreshToken = user.getRefreshToken();
-    }
-
 }
