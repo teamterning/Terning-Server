@@ -17,7 +17,6 @@ import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.AuthService;
 import org.terning.terningserver.service.SignUpFilterService;
-import org.terning.terningserver.service.SignUpService;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
@@ -28,7 +27,6 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 public class AuthController implements AuthSwagger {
 
     private final AuthService authService;
-    private final SignUpService signUpService;
     private final SignUpFilterService signUpFilterService;
 
     @PostMapping("/sign-in")
@@ -56,7 +54,7 @@ public class AuthController implements AuthSwagger {
             @RequestBody SignUpRequestDto request
     ) {
 
-        SignUpResponseDto signUpResponseDto = signUpService.signUp(authId, request.name(), request.profileImage(), request.authType());
+        SignUpResponseDto signUpResponseDto = authService.signUp(authId, request.name(), request.profileImage(), request.authType());
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
