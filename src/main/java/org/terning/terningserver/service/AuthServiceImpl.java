@@ -10,9 +10,10 @@ import org.terning.terningserver.config.ValueConfig;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
+import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
 import org.terning.terningserver.jwt.UserAuthentication;
@@ -57,11 +58,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public User saveUser(SignInRequestDto request) {
-        User user = User.builder()
-                .authType(request.authType())
-                .build();
-        return userRepository.save(user);
+    public SignUpResponseDto signUp(String authId, String name, Integer profileImage, AuthType authType) {
+
+        User user = userRepository.save(User.builder()
+                .authId(authId)
+                .name(name)
+                .authType(authType)
+                .profileImage(profileImage)
+                .build());
+
+        Token token = getToken(user);
+        userRepository.save(user);
+
+        return SignUpResponseDto.of(token.getAccessToken(), token.getRefreshToken(), user.getId(), authType);
     }
 
     @Override
@@ -79,11 +88,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenGetResponseDto reissueToken(String refreshToken) {
+    public AccessTokenGetResponseDto reissueToken(String refreshToken) {
         val user = findUser(refreshToken);
-        Token token = getToken(user);
-        user.updateRefreshToken(token.getRefreshToken());
-        return TokenGetResponseDto.of(token);
+        Token accessToken = getAccessToken(user);
+        return AccessTokenGetResponseDto.of(accessToken);
     }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
@@ -99,10 +107,21 @@ public class AuthServiceImpl implements AuthService {
         return token;
     }
 
+    public Token getAccessToken(User user) {
+        val accessToken = generateAccessToken(new UserAuthentication(user.getId(), null, null));
+        return accessToken;
+    }
+
     private Token generateToken(Authentication authentication) {
         return Token.builder()
                 .accessToken(jwtTokenProvider.generateToken(authentication, valueConfig.getAccessTokenExpired()))
                 .refreshToken(jwtTokenProvider.generateToken(authentication, valueConfig.getRefreshTokenExpired()))
+                .build();
+    }
+
+    private Token generateAccessToken(Authentication authentication) {
+        return Token.builder()
+                .accessToken(jwtTokenProvider.generateToken(authentication, valueConfig.getAccessTokenExpired()))
                 .build();
     }
 

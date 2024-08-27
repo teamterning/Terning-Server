@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
+import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
-import org.terning.terningserver.dto.auth.response.TokenGetResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
 import java.security.Principal;
@@ -27,7 +27,7 @@ public interface AuthSwagger {
     );
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급 API")
-    ResponseEntity<SuccessResponse<TokenGetResponseDto>> reissueToken(
+    ResponseEntity<SuccessResponse<AccessTokenGetResponseDto>> reissueToken(
             @RequestHeader("Authorization") String refreshToken
     );
 
