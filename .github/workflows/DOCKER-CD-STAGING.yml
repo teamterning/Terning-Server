@@ -79,6 +79,9 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Debugging - Echo Host
+        run: echo "${{ secrets.STAGING_SERVER_IP }}"
+
       - name: docker 컨테이너 실행
         uses: appleboy/ssh-action@master
         with:
