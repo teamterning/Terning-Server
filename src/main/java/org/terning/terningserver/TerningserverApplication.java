@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class TerningserverApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { //run
 		SpringApplication.run(TerningserverApplication.class, args);
 	}
 
