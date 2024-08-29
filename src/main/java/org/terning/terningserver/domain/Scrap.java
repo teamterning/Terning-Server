@@ -53,5 +53,8 @@ public class Scrap extends BaseTimeEntity {
     public void updateColor(Color color) {
         this.color = color;
     }
-    
+
+    public String getColorToHexValue(){
+        return this.color.getColorValue();
+    }
 }

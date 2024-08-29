@@ -6,32 +6,31 @@ import org.terning.terningserver.util.DateUtil;
 
 @Builder
 public record HomeResponseDto(
-        Long scrapId,
         Long intershipAnnouncementId,
-        String title,
-        String dDay,
-        String deadline,
-        String workingPeriod,
-        String startYearMonth,
         String companyImage,
-        boolean isScrapped
+        String dDay,
+        String title,
+        String workingPeriod,
+        boolean isScrapped,
+        String color,
+        String deadline,
+        String startYearMonth
 ) {
-    public static HomeResponseDto of(final Long scrapId, final InternshipAnnouncement internshipAnnouncement, final boolean isScrapped){
+    public static HomeResponseDto of(final InternshipAnnouncement internshipAnnouncement, final boolean isScrapped, final String color){
         String dDay = DateUtil.convert(internshipAnnouncement.getDeadline()); // dDay 계산 로직 추가
         String startYearMonth = internshipAnnouncement.getStartYear() + "년 " + internshipAnnouncement.getStartMonth() + "월";
         String deadline = DateUtil.convertDeadline(internshipAnnouncement.getDeadline());
 
         return HomeResponseDto.builder()
-                .scrapId(scrapId)
                 .intershipAnnouncementId(internshipAnnouncement.getId())
-                .title(internshipAnnouncement.getTitle())
-                .dDay(dDay)
-                .deadline(deadline)
-                .workingPeriod(internshipAnnouncement.getWorkingPeriod())
-                .startYearMonth(startYearMonth)
                 .companyImage(internshipAnnouncement.getCompany().getCompanyImage())
+                .dDay(dDay)
+                .title(internshipAnnouncement.getTitle())
+                .workingPeriod(internshipAnnouncement.getWorkingPeriod())
                 .isScrapped(isScrapped)
+                .color(color)
+                .deadline(deadline)
+                .startYearMonth(startYearMonth)
                 .build();
     }
-
 }
