@@ -2,6 +2,7 @@ package org.terning.terningserver.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class HomeServiceImpl implements HomeService{
 
     private final InternshipRepository internshipRepository;
