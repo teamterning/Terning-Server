@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         servers = {
-                @Server(url = "/", description = "Default Server url")
+                @Server(url = "https://www.terning-official.p-e.kr", description = "Default Server url"),
+                @Server(url = "http://15.165.242.132", description = "Staging Server URL")
         }
 )
 public class SwaggerConfig {
