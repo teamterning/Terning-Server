@@ -1,0 +1,24 @@
+package org.terning.terningserver.dto.auth.request;
+
+import lombok.Builder;
+import lombok.NonNull;
+import org.terning.terningserver.domain.enums.AuthType;
+
+import static lombok.AccessLevel.*;
+
+@Builder(access = PRIVATE)
+public record SignUpWithAuthIdRequestDto(
+        @NonNull String authId,
+        @NonNull String name,
+        int profileImage,
+        @NonNull AuthType authType
+) {
+    public static SignUpWithAuthIdRequestDto of(String authId, String name, int profileImage, AuthType authType){
+        return SignUpWithAuthIdRequestDto.builder()
+                .authId(authId)
+                .name(name)
+                .profileImage(profileImage)
+                .authType(authType)
+                .build();
+    }
+}
