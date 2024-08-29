@@ -7,41 +7,41 @@ import java.util.List;
 @Builder
 public record MonthlyListResponseDto(
         String deadline,
-        List<ScrapDetail> scraps
+        List<ScrapDetail> announcements
 ) {
     @Builder
     public static record ScrapDetail(
-            Long scrapId,
             Long internshipAnnouncementId,
-            String title,
-            String dDay,
-            String workingPeriod,
-            String color,
             String companyImage,
-            int startYear,
-            int startMonth
+            String dDay,
+            String title,
+            String workingPeriod,
+            boolean isScrapped,
+            String color,
+            String deadline,
+            String startYearMonth
     ){
-        public static ScrapDetail of(final Long scrapId, final Long internshipAnnouncementId, final String title,
-                                     final String dDay, final String workingPeriod, final String color,
-                                     final String companyImage, final int startYear, final int startMonth){
+        public static ScrapDetail of(final Long internshipAnnouncementId, final String companyImage, final String dDay,
+                                     final String title, final String workingPeriod, final boolean isScrapped,
+                                     final String color, final String deadline, final String startYearMonth){
             return ScrapDetail.builder()
-                    .scrapId(scrapId)
                     .internshipAnnouncementId(internshipAnnouncementId)
-                    .title(title)
-                    .dDay(dDay)
-                    .workingPeriod(workingPeriod)
-                    .color(color)
                     .companyImage(companyImage)
-                    .startYear(startYear)
-                    .startMonth(startMonth)
+                    .dDay(dDay)
+                    .title(title)
+                    .workingPeriod(workingPeriod)
+                    .isScrapped(isScrapped)
+                    .color(color)
+                    .deadline(deadline)
+                    .startYearMonth(startYearMonth)
                     .build();
         }
     }
 
-    public static MonthlyListResponseDto of(String deadline, List<ScrapDetail> scraps){
+    public static MonthlyListResponseDto of(String deadline, List<ScrapDetail> announcements){
         return MonthlyListResponseDto.builder()
                 .deadline(deadline)
-                .scraps(scraps)
+                .announcements(announcements)
                 .build();
     }
 }
