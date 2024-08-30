@@ -24,6 +24,6 @@ public interface AuthService {
 
     Filter createAndSaveFilter(SignUpFilterRequestDto request);
 
-    void connectFilterToUser(Long userId, Long filterId);
+    void connectFilterToUser(long userId, long filterId);
 
 }

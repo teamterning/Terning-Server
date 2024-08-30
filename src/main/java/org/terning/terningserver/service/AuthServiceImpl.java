@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public void connectFilterToUser(Long userId, Long filterId) {
+    public void connectFilterToUser(long userId, long filterId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_FILTER));
         Filter filter = filterRepository.findById(filterId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_FILTER));
 
