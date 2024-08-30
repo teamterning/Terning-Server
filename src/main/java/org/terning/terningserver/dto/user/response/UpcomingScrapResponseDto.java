@@ -5,7 +5,7 @@ import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.util.DateUtil;
 
 @Builder
-public record TodayScrapResponseDto(
+public record UpcomingScrapResponseDto(
         Long internshipAnnouncementId,
         String companyImage,
         String dDay,
@@ -16,10 +16,10 @@ public record TodayScrapResponseDto(
         String deadline,
         String startYearMonth
 ) {
-    public static TodayScrapResponseDto of(final Scrap scrap){
+    public static UpcomingScrapResponseDto of(final Scrap scrap){
         String startYearMonth = scrap.getInternshipAnnouncement().getStartYear() + "년 " + scrap.getInternshipAnnouncement().getStartMonth() + "월";
 
-        return TodayScrapResponseDto.builder()
+        return UpcomingScrapResponseDto.builder()
                 .internshipAnnouncementId(scrap.getInternshipAnnouncement().getId())
                 .companyImage(scrap.getInternshipAnnouncement().getCompany().getCompanyImage())
                 .dDay(DateUtil.convert(scrap.getInternshipAnnouncement().getDeadline()))
