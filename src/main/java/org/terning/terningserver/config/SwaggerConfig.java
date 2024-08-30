@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         servers = {
                 @Server(url = "https://www.terning-official.p-e.kr", description = "Default Server url"),
-                @Server(url = "http://15.165.242.132", description = "Staging Server URL")
+                @Server(url = "http://15.165.242.132", description = "Staging Server URL"),
+                @Server(url = "http://localhost:8080", description = "Local Development Server URL")
         }
 )
 public class SwaggerConfig {
@@ -39,6 +40,6 @@ public class SwaggerConfig {
         return new Info()
                 .title("Terning Point Swagger") // API의 제목
                 .description("Terning Point Swagger ver. API 명세서") // API에 대한 설명
-                .version("1.0.0"); // API의 버전
+                .version("1.1.0"); // API의 버전
     }
 }

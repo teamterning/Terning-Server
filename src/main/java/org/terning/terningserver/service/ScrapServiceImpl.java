@@ -91,21 +91,20 @@ public class ScrapServiceImpl implements ScrapService {
                         entry.getKey().toString(),
                         entry.getValue().stream()
                                 .map(s -> MonthlyListResponseDto.ScrapDetail.of(
-                                        s.getId(),
                                         s.getInternshipAnnouncement().getId(),
-                                        s.getInternshipAnnouncement().getTitle(),
-                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
-                                        s.getInternshipAnnouncement().getWorkingPeriod(),
-                                        s.getColor().getColorValue(),
                                         s.getInternshipAnnouncement().getCompany().getCompanyImage(),
-                                        s.getInternshipAnnouncement().getStartYear(),
-                                        s.getInternshipAnnouncement().getStartMonth()
+                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getTitle(),
+                                        s.getInternshipAnnouncement().getWorkingPeriod(),
+                                        true, // 이미 스크랩된 경우이므로 true
+                                        s.getColorToHexValue(),
+                                        DateUtil.convertDeadline(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getStartYear() + "년 " + s.getInternshipAnnouncement().getStartMonth() + "월"
                                 ))
                                 .toList()
                 ))
                 .toList();
     }
-  
     @Override
     public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
         return scrapRepository.findScrapsByUserIdAndDeadlineOrderByDeadline(userId, date).stream()
