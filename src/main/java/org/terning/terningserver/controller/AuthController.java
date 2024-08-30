@@ -54,7 +54,7 @@ public class AuthController implements AuthSwagger {
             @RequestBody SignUpRequestDto request
     ) {
 
-        SignUpResponseDto signUpResponseDto = authService.signUp(authId, request.name(), request.profileImage(), request.authType());
+        SignUpResponseDto signUpResponseDto = authService.signUp(authId, request);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
