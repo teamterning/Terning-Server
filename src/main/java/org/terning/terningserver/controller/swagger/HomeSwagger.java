@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
-import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
+import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
 import java.util.List;
@@ -20,8 +20,8 @@ public interface HomeSwagger {
             int startMonth
     );
 
-    @Operation(summary = "홈화면 > 오늘 마감인 스크랩 공고 조회", description = "오늘 마감인 스크랩 공고를 조회하는 API")
-    ResponseEntity<SuccessResponse<List<TodayScrapResponseDto>>> getTodayScraps(
+    @Operation(summary = "홈화면 > 곧 마감인 스크랩 공고 조회", description = "곧 마감인 스크랩 공고를 조회하는 API")
+    ResponseEntity<SuccessResponse<List<UpcomingScrapResponseDto>>> getUpcomingScraps(
             Long userId
     );
 }

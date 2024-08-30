@@ -12,7 +12,7 @@ import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
-import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
+import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
@@ -37,10 +37,11 @@ public class ScrapServiceImpl implements ScrapService {
     private final UserRepository userRepository;
 
     @Override
-    public List<TodayScrapResponseDto> getTodayScrap(Long userId){
+    public List<UpcomingScrapResponseDto> getUpcomingScrap(Long userId){
         LocalDate today = LocalDate.now();
-        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, today).stream()
-                .map(TodayScrapResponseDto::of)
+        LocalDate oneWeekFromToday = today.plusDays(7);
+        return scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, today, oneWeekFromToday).stream()
+                .map(UpcomingScrapResponseDto::of)
                 .toList();
     }
 
