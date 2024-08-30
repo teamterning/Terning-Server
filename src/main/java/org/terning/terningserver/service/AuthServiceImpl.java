@@ -29,10 +29,6 @@ import java.util.Optional;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
-
-/**
- * test develop
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
