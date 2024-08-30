@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum SuccessMessage {
     // 홈 화면
     SUCCESS_GET_ANNOUNCEMENTS(200, "인턴 공고 불러오기를 성공했습니다"),
-    SUCCESS_GET_TODAY_ANNOUNCEMENTS(200, "오늘 마감인 인턴 공고 요청을 성공했습니다"),
+    SUCCESS_GET_UPCOMING_ANNOUNCEMENTS(200, "곧 마감인 인턴 공고 요청을 성공했습니다"),
 
     // 소셜 로그인
     SUCCESS_SIGN_IN(200, "소셜 로그인에 성공하였습니다"),
