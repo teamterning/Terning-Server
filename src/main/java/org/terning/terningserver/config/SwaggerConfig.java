@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         servers = {
                 @Server(url = "https://www.terning-official.p-e.kr", description = "Default Server url"),
-                @Server(url = "http://15.165.242.132", description = "Staging Server URL")
+                @Server(url = "http://15.165.242.132", description = "Staging Server URL"),
+                @Server(url = "http://localhost:8080", description = "Local Development Server URL")
         }
 )
 public class SwaggerConfig {
