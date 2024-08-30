@@ -7,9 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.config.ValueConfig;
+import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
+import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpWithAuthIdRequestDto;
 import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
@@ -19,10 +23,11 @@ import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.JwtTokenProvider;
 import org.terning.terningserver.jwt.UserAuthentication;
+import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 import java.util.Optional;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_USER;
+import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
 @Slf4j
 @Service
@@ -36,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final ValueConfig valueConfig;
     private final UserRepository userRepository;
+    private final FilterRepository filterRepository;
 
     @Override
     @Transactional
@@ -91,14 +97,61 @@ public class AuthServiceImpl implements AuthService {
         return AccessTokenGetResponseDto.of(accessToken);
     }
 
+    @Transactional
+    public Filter createAndSaveFilter(SignUpFilterRequestDto request) {
+        Filter filter = buildFilterFromRequest(request);
+        return filterRepository.save(filter);
+    }
+
+    @Transactional
+    public void connectFilterToUser(long userId, long filterId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_USER_FILTER_CREATION));
+        Filter filter = filterRepository.findById(filterId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT));
+
+        user.assignFilter(filter);
+
+        userRepository.save(user);
+    }
+
+    private Token getToken(User user) {
+        String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
+        String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
+
+        user.updateRefreshToken(refreshToken);
+
+        return Token.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
             case APPLE -> appleService.getAppleData(authAccessToken);
             case KAKAO -> kakaoService.getKakaoData(authAccessToken);
         };
     }
+  
+    private SignUpWithAuthIdRequestDto createSignUpRequestDto(String authId, SignUpRequestDto request) {
+        return SignUpWithAuthIdRequestDto.of(
+                authId,
+                request.name(),
+                request.profileImage(),
+                request.authType()
+        );
+    }
 
-    public Token getToken(User user) {
+    private User createUser(SignUpWithAuthIdRequestDto requestDto) {
+        User user = User.builder()
+                .authId(requestDto.authId())
+                .name(requestDto.name())
+                .authType(requestDto.authType())
+                .profileImage(requestDto.profileImage())
+                .build();
+        return userRepository.save(user);
+    }
+  
+    private Token getToken(User user) {
         String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
         String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
 
@@ -133,7 +186,7 @@ public class AuthServiceImpl implements AuthService {
         return SignUpResponseDto.of(token.getAccessToken(), token.getRefreshToken(), user.getId(), user.getAuthType());
     }
 
-    public Token getAccessToken(User user) {
+    private Token getAccessToken(User user) {
         String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
 
         return Token.builder()
@@ -164,5 +217,19 @@ public class AuthServiceImpl implements AuthService {
 
     private void deleteUser(User user) {
         userService.deleteUser(user);
+    }
+
+    private Filter buildFilterFromRequest(SignUpFilterRequestDto request) {
+        Grade grade = Grade.fromKey(request.grade());
+        WorkingPeriod workingPeriod = WorkingPeriod.fromKey(request.workingPeriod());
+        int startYear = request.startYear();
+        int startMonth = request.startMonth();
+
+        return Filter.builder()
+                .grade(grade)
+                .workingPeriod(workingPeriod)
+                .startYear(startYear)
+                .startMonth(startMonth)
+                .build();
     }
 }
