@@ -27,8 +27,7 @@ import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 import java.util.Optional;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_SIGN_UP_FILTER;
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_USER;
+import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
 @Slf4j
 @Service
@@ -106,8 +105,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void connectFilterToUser(long userId, long filterId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_FILTER));
-        Filter filter = filterRepository.findById(filterId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_FILTER));
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_USER_FILTER_CREATION));
+        Filter filter = filterRepository.findById(filterId).orElseThrow(() -> new CustomException(FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT));
 
         user.assignFilter(filter);
 

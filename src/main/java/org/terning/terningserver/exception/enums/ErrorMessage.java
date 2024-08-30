@@ -20,7 +20,8 @@ public enum ErrorMessage {
     EXISTS_USER_ALREADY(401, "이미 존재하는 유저입니다"),
 
     // 사용자 필터링 정보 생성
-    FAILED_SIGN_UP_FILTER(404, "회원가입 필터링 정보 생성에 실패하였습니다"),
+    FAILED_SIGN_UP_USER_FILTER_CREATION(404, "사용자 필터 생성에 실패하였습니다"),
+    FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT(404, "사용자 필터 연결에 실패하였습니다"),
 
     //스크랩
     EXISTS_SCRAP_ALREADY(400, "이미 스크랩했습니다."),
