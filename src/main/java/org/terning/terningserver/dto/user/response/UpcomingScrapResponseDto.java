@@ -5,30 +5,30 @@ import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.util.DateUtil;
 
 @Builder
-public record TodayScrapResponseDto(
-        Long scrapId,
+public record UpcomingScrapResponseDto(
         Long internshipAnnouncementId,
         String companyImage,
-        String title,
         String dDay,
-        String deadline,
+        String title,
         String workingPeriod,
-        String startYearMonth,
-        String color
+        boolean isScrapped,
+        String color,
+        String deadline,
+        String startYearMonth
 ) {
-    public static TodayScrapResponseDto of(final Scrap scrap){
+    public static UpcomingScrapResponseDto of(final Scrap scrap){
         String startYearMonth = scrap.getInternshipAnnouncement().getStartYear() + "년 " + scrap.getInternshipAnnouncement().getStartMonth() + "월";
 
-        return TodayScrapResponseDto.builder()
-                .scrapId(scrap.getId())
+        return UpcomingScrapResponseDto.builder()
                 .internshipAnnouncementId(scrap.getInternshipAnnouncement().getId())
                 .companyImage(scrap.getInternshipAnnouncement().getCompany().getCompanyImage())
-                .title(scrap.getInternshipAnnouncement().getTitle())
                 .dDay(DateUtil.convert(scrap.getInternshipAnnouncement().getDeadline()))
+                .title(scrap.getInternshipAnnouncement().getTitle())
                 .deadline(DateUtil.convertDeadline(scrap.getInternshipAnnouncement().getDeadline()))
+                .isScrapped(true) // 스크랩된 항목이므로 항상 true
+                .color(scrap.getColorToHexValue())
                 .workingPeriod(scrap.getInternshipAnnouncement().getWorkingPeriod())
                 .startYearMonth(startYearMonth)
-                .color(scrap.getColor().getColorValue())
                 .build();
     }
 }

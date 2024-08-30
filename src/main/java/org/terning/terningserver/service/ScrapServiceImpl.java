@@ -12,7 +12,7 @@ import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
-import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
+import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
@@ -37,10 +37,11 @@ public class ScrapServiceImpl implements ScrapService {
     private final UserRepository userRepository;
 
     @Override
-    public List<TodayScrapResponseDto> getTodayScrap(Long userId){
+    public List<UpcomingScrapResponseDto> getUpcomingScrap(Long userId){
         LocalDate today = LocalDate.now();
-        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, today).stream()
-                .map(TodayScrapResponseDto::of)
+        LocalDate oneWeekFromToday = today.plusDays(7);
+        return scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, today, oneWeekFromToday).stream()
+                .map(UpcomingScrapResponseDto::of)
                 .toList();
     }
 
@@ -91,21 +92,20 @@ public class ScrapServiceImpl implements ScrapService {
                         entry.getKey().toString(),
                         entry.getValue().stream()
                                 .map(s -> MonthlyListResponseDto.ScrapDetail.of(
-                                        s.getId(),
                                         s.getInternshipAnnouncement().getId(),
-                                        s.getInternshipAnnouncement().getTitle(),
-                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
-                                        s.getInternshipAnnouncement().getWorkingPeriod(),
-                                        s.getColor().getColorValue(),
                                         s.getInternshipAnnouncement().getCompany().getCompanyImage(),
-                                        s.getInternshipAnnouncement().getStartYear(),
-                                        s.getInternshipAnnouncement().getStartMonth()
+                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getTitle(),
+                                        s.getInternshipAnnouncement().getWorkingPeriod(),
+                                        true, // 이미 스크랩된 경우이므로 true
+                                        s.getColorToHexValue(),
+                                        DateUtil.convertDeadline(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getStartYear() + "년 " + s.getInternshipAnnouncement().getStartMonth() + "월"
                                 ))
                                 .toList()
                 ))
                 .toList();
     }
-  
     @Override
     public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
         return scrapRepository.findScrapsByUserIdAndDeadlineOrderByDeadline(userId, date).stream()

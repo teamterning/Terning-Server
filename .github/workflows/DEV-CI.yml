@@ -1,0 +1,42 @@
+name: DEV-CI
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      working-directory: .
+
+    # Checkout - 가상 머신에 체크아웃
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v3
+
+      # JDK setting - JDK 21 설정
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # Gradle caching - 빌드 시간 향상
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Gradle build - 테스트 없이 gradle 빌드
+      - name: 빌드
+        run: |
+          chmod +x gradlew
+          ./gradlew build -x test
+        working-directory: ${{ env.working-directory }}
+        shell: bash

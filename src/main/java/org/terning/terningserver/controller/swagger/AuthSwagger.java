@@ -15,8 +15,6 @@ import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
-import java.security.Principal;
-
 @Tag(name = "Auth", description = "소셜 로그인 및 회원가입 API")
 public interface AuthSwagger {
 
