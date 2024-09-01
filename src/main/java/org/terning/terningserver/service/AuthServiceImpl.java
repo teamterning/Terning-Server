@@ -47,22 +47,10 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
         String authId = getAuthId(request.authType(), authAccessToken);
-        Optional<User> userOptional = userRepository.findByAuthIdAndAuthType(authId, request.authType());
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Token token = getToken(user);
-            user.updateRefreshToken(token.getRefreshToken());
-            return SignInResponseDto.of(
-                    token,
-                    authId,
-                    request.authType(),
-                    user.getId()
-            );
-        }
-        else {
-            return SignInResponseDto.of(null, authId, request.authType(), null);
-        }
+        return findUserByAuthIdAndType(authId, request.authType())
+                .map(user -> createSignInResponseForExistingUser(user, authId, request.authType()))
+                .orElseGet(() -> createSignInResponseForNonExistingUser(authId, request.authType()));
     }
 
     @Transactional
@@ -111,6 +99,25 @@ public class AuthServiceImpl implements AuthService {
         user.assignFilter(filter);
 
         userRepository.save(user);
+    }
+
+    private Optional<User> findUserByAuthIdAndType(String authId, AuthType authType) {
+        return userRepository.findByAuthIdAndAuthType(authId, authType);
+    }
+
+    private SignInResponseDto createSignInResponseForExistingUser(User user, String authId, AuthType authType) {
+        Token token = getToken(user);
+        user.updateRefreshToken(token.getRefreshToken());
+        return SignInResponseDto.of(
+                token,
+                authId,
+                authType,
+                user.getId()
+        );
+    }
+
+    private SignInResponseDto createSignInResponseForNonExistingUser(String authId, AuthType authType) {
+        return SignInResponseDto.of(null, authId, authType, null);
     }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
