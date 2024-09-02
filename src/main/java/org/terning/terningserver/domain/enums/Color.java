@@ -8,18 +8,18 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum Color {
 
-    RED(0, "ED4E54"),
-    ORANGE1(1, "EE7647"),
-    ORANGE2(2, "F3A649"),
-    YELLOW(3, "F5E660"),
-    GREEN1(4, "C4E953"),
-    GREEN2(5, "84D558"),
-    BLUE1(6, "45D0CC"),
-    BLUE2(7, "4AA9F2"),
-    PURPLE(8, "9B64E2"),
-    PINK(9, "F260AC");
+    RED("red", "ED4E54"),
+    ORANGE("orange", "F3A649"),
+    LIGHT_GREEN("lightgreen", "C4E953"),
+    MINT("mint", "45D0CC"),
+    PURPLE("purple", "9B64E2"),
+    CORAL("coral", "EE7647"),
+    YELLOW("yellow", "F5E660"),
+    GREEN("green", "84D558"),
+    BLUE("blue", "4AA9F2"),
+    PINK("pink", "F260AC");
 
-    private final int key;
+    private final String name;
     private final String value;
 
     public String getColorValue() {
