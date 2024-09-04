@@ -23,7 +23,7 @@ public enum ErrorMessage {
     FAILED_SIGN_UP_USER_FILTER_CREATION(404, "사용자 필터 생성에 실패하였습니다"),
     FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT(404, "사용자 필터 연결에 실패하였습니다"),
 
-    //스크랩
+    // 스크랩
     EXISTS_SCRAP_ALREADY(400, "이미 스크랩했습니다."),
 
     // 로그 아웃
@@ -32,8 +32,11 @@ public enum ErrorMessage {
 
     // 계정 탈퇴
     FAILED_WITHDRAW(404, "계정 탈퇴에 실패하였습니다"),
+
+    // 마이페이지
+    INVALID_PROFILE_IMAGE(404, "유효하지 않은 프로필 이미지 입니다."),
     
-    //404(NotFound)
+    // 404(NotFound)
     NOT_FOUND_INTERN_CATEGORY(404, "해당 인턴 공고는 존재하지 않습니다"),
     NOT_FOUND_INTERN_EXCEPTION(404, "해당 인턴 공고는 존재하지 않습니다"),
     NOT_FOUND_USER_EXCEPTION(404, "해당 유저가 존재하지 않습니다"),
