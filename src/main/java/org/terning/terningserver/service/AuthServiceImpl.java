@@ -11,6 +11,7 @@ import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
@@ -149,11 +150,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User createUser(SignUpWithAuthIdRequestDto requestDto) {
+        //프로필 이미지가 null일 경우 기본값 "basic"으로 설정
+        ProfileImage profileImage = requestDto.profileImage() != null
+                ? ProfileImage.fromValue(requestDto.profileImage()) : ProfileImage.BASIC;
+
         User user = User.builder()
                 .authId(requestDto.authId())
                 .name(requestDto.name())
                 .authType(requestDto.authType())
-                .profileImage(requestDto.profileImage())
+                .profileImage(profileImage) //String to Enum
                 .build();
         return userRepository.save(user);
     }
