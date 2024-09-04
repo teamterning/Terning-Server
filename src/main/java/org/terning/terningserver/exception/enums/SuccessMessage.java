@@ -52,8 +52,8 @@ public enum SuccessMessage {
     SUCCESS_UPDATE_USER_FILTER(200, "필터링 재설정에 성공했습니다"),
 
     // My page (마이페이지 화면)
-    SUCCESS_GET_PROFILE(200, "마이페이지 > 프로필 정보 불러오기를 성공했습니다");
-
+    SUCCESS_GET_PROFILE(200, "마이페이지 > 프로필 정보 불러오기를 성공했습니다"),
+    SUCCESS_UPDATE_PROFILE(200, "프로필 수정에 성공했습니다");
 
     private final int status;
     private final String message;
