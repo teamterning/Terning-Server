@@ -10,10 +10,10 @@ import static lombok.AccessLevel.*;
 public record SignUpWithAuthIdRequestDto(
         @NonNull String authId,
         @NonNull String name,
-        int profileImage,
+        String profileImage,
         @NonNull AuthType authType
 ) {
-    public static SignUpWithAuthIdRequestDto of(String authId, String name, int profileImage, AuthType authType){
+    public static SignUpWithAuthIdRequestDto of(String authId, String name, String profileImage, AuthType authType){
         return SignUpWithAuthIdRequestDto.builder()
                 .authId(authId)
                 .name(name)
