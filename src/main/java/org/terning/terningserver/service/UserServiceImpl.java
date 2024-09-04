@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.enums.ProfileImage;
+import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -32,6 +34,28 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
+
         return ProfileResponseDto.of(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(Long userId, ProfileUpdateRequestDto request){
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+
+        try{
+            // 프로필 이미지가 유효하지 않으면 IllegalArgumentException을 던짐
+            ProfileImage profileImage = ProfileImage.fromValue(request.profileImage());
+
+            //프로필 업데이트
+            user.updateProfile(request.name(), ProfileImage.fromValue(request.profileImage()));
+
+            userRepository.save(user);
+        } catch (IllegalArgumentException e){
+            // 잘못된 프로필 이미지 값이 오면 CustomException 발생
+            throw new CustomException(ErrorMessage.INVALID_PROFILE_IMAGE);
+        }
     }
 }
