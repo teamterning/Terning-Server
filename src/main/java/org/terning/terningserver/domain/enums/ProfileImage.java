@@ -1,5 +1,10 @@
 package org.terning.terningserver.domain.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
 public enum ProfileImage {
     BASIC("basic"),
     LUCKY("lucky"),
@@ -8,14 +13,6 @@ public enum ProfileImage {
     CALENDAR("calendar");
 
     private final String value;
-
-    ProfileImage(String value){
-        this.value = value;
-    }
-
-    public String getValue(){
-        return value;
-    }
 
     public static ProfileImage fromValue(String value){
         for(ProfileImage image : values()){
