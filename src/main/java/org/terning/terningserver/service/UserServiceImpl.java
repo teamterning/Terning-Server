@@ -42,8 +42,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updateProfile(Long userId, ProfileUpdateRequestDto request){
         User user = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
 
         try{
             // 프로필 이미지가 유효하지 않으면 IllegalArgumentException을 던짐
