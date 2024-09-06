@@ -9,7 +9,7 @@ import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
-import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
+import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -25,8 +25,8 @@ public class FilterServiceImpl implements FilterService {
     private final FilterRepository filterRepository;
 
     @Override
-    public UserFilterResponseDto getUserFilter(Long userId) {
-       return UserFilterResponseDto.of(findUser(userId).getFilter());
+    public UserFilterDetailResponseDto getUserFilter(Long userId) {
+       return UserFilterDetailResponseDto.of(findUser(userId).getFilter());
     }
 
     @Override

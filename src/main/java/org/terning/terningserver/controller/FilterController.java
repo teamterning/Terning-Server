@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.FilterSwagger;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
-import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
+import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.FilterService;
 
@@ -20,7 +20,7 @@ public class FilterController implements FilterSwagger {
     private final FilterService filterService;
 
     @GetMapping("/filters")
-    public ResponseEntity<SuccessResponse<UserFilterResponseDto>> getUserFilter(
+    public ResponseEntity<SuccessResponse<UserFilterDetailResponseDto>> getUserFilter(
             @AuthenticationPrincipal Long userId
     ) {
         return ResponseEntity.ok(SuccessResponse.of(

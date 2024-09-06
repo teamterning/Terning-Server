@@ -4,14 +4,14 @@ import lombok.Builder;
 import org.terning.terningserver.domain.Filter;
 
 @Builder
-public record UserFilterResponseDto(
-        Integer grade,
-        Integer workingPeriod,
+public record UserFilterDetailResponseDto(
+        String grade,
+        String workingPeriod,
         Integer startYear,
         Integer startMonth
 ) {
-    public static UserFilterResponseDto of(Filter userFilter) {
-        return UserFilterResponseDto.builder()
+    public static UserFilterDetailResponseDto of(Filter userFilter) {
+        return UserFilterDetailResponseDto.builder()
                 .grade(userFilter == null ? null : userFilter.getGrade().getKey())
                 .workingPeriod(userFilter == null ? null : userFilter.getWorkingPeriod().getKey())
                 .startYear(userFilter == null ? null : userFilter.getStartYear())
