@@ -8,7 +8,7 @@ import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
-import org.terning.terningserver.dto.filter.request.UserFilterRequestDto;
+import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.filter.FilterRepository;
@@ -31,7 +31,7 @@ public class FilterServiceImpl implements FilterService {
 
     @Override
     @Transactional
-    public void updateUserFilter(UserFilterRequestDto responseDto, Long userId) {
+    public void updateUserFilter(UpdateUserFilterRequestDto responseDto, Long userId) {
         User user = findUser(userId);
         Filter filter = user.getFilter();
         if(filter != null){

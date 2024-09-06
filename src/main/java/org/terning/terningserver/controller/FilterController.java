@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.FilterSwagger;
-import org.terning.terningserver.dto.filter.request.UserFilterRequestDto;
+import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.FilterService;
@@ -32,7 +32,8 @@ public class FilterController implements FilterSwagger {
     @PutMapping("/filters")
     public ResponseEntity<SuccessResponse> updateUserFilter(
             @AuthenticationPrincipal Long userId,
-            @RequestBody UserFilterRequestDto requestDto) {
+            @RequestBody UpdateUserFilterRequestDto requestDto
+    ) {
         filterService.updateUserFilter(requestDto, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_USER_FILTER));
     }
