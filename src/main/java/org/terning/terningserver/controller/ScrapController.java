@@ -29,20 +29,20 @@ public class ScrapController implements ScrapSwagger {
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
     }
 
-    @DeleteMapping("/scraps/{scrapId}")
+    @DeleteMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> deleteScrap(
             @AuthenticationPrincipal Long userId,
-            @PathVariable Long scrapId) {
-        scrapService.deleteScrap(scrapId, userId);
+            @PathVariable Long internshipAnnouncementId) {
+        scrapService.deleteScrap(internshipAnnouncementId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
-    @PatchMapping("/scraps/{scrapId}")
+    @PatchMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> updateScrapColor(
             @AuthenticationPrincipal Long userId,
-            @PathVariable Long scrapId,
+            @PathVariable Long internshipAnnouncementId,
             @RequestBody UpdateScrapRequestDto request) {
-        scrapService.updateScrapColor(scrapId, request, userId);
+        scrapService.updateScrapColor(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
 }
