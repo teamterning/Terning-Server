@@ -15,20 +15,21 @@ public interface ScrapSwagger {
 
     @Operation(summary = "스크랩 추가", description = "사용자가 스크랩을 추가하는 API")
     ResponseEntity<SuccessResponse> createScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId, @RequestBody CreateScrapRequestDto request
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId,
+            @RequestBody CreateScrapRequestDto request
     );
 
     @Operation(summary = "스크랩 취소", description = "사용자가 스크랩을 취소하는 API")
     ResponseEntity<SuccessResponse> deleteScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId
     );
 
     @Operation(summary = "스크랩 수정", description = "사용자가 스크랩 색상을 수정하는 API")
     public ResponseEntity<SuccessResponse> updateScrapColor(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long scrapId,
+            @AuthenticationPrincipal long userId,
+            @PathVariable long scrapId,
             @RequestBody UpdateScrapRequestDto request
     );
 

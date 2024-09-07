@@ -22,8 +22,8 @@ public class ScrapController implements ScrapSwagger {
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> createScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId,
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId,
             @RequestBody CreateScrapRequestDto request) {
         scrapService.createScrap(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
@@ -31,16 +31,16 @@ public class ScrapController implements ScrapSwagger {
 
     @DeleteMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> deleteScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId) {
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId) {
         scrapService.deleteScrap(internshipAnnouncementId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
     @PatchMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> updateScrapColor(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId,
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId,
             @RequestBody UpdateScrapRequestDto request) {
         scrapService.updateScrapColor(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
