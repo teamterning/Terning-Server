@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
 import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.State;
 import org.terning.terningserver.exception.CustomException;
 
@@ -37,8 +38,9 @@ public class User extends BaseTimeEntity {
     // TODO: 특수문자, 첫글자 , 12자리 이내
     @Column(length = 12)
     private String name; // 사용자 이름
-    
-    private Integer profileImage; //유저 아이콘
+
+    @Enumerated(STRING)
+    private ProfileImage profileImage; //유저 아이콘
 
     @Enumerated(STRING)
     private AuthType authType; // 인증 유형 (예: 카카오, 애플)
@@ -67,5 +69,11 @@ public class User extends BaseTimeEntity {
 
     public void assignFilter(Filter filter) {
         this.filter = filter;
+    }
+
+    //프로필 수정 메서드
+    public void updateProfile(String name, ProfileImage profileImage){
+        this.name = name;
+        this.profileImage = profileImage;
     }
 }

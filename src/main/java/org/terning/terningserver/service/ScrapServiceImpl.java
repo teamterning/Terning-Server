@@ -14,6 +14,7 @@ import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -135,17 +136,17 @@ public class ScrapServiceImpl implements ScrapService {
 
     @Override
     @Transactional
-    public void deleteScrap(Long scrapId, Long userId) {
-        Scrap scrap = findScrap(scrapId);
+    public void deleteScrap(Long internshipAnnouncementId, Long userId) {
+        Scrap scrap = findScrap(internshipAnnouncementId, userId);
         scrap.getInternshipAnnouncement().updateScrapCount(-1);
         verifyScrapOwner(scrap, userId);
-        scrapRepository.deleteById(scrapId);
+        scrapRepository.deleteByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId);
     }
 
     @Override
     @Transactional
-    public void updateScrapColor(Long scrapId, UpdateScrapRequestDto request, Long userId) {
-        Scrap scrap = findScrap(scrapId);
+    public void updateScrapColor(Long internshipAnnouncementId, UpdateScrapRequestDto request, Long userId) {
+        Scrap scrap = findScrap(internshipAnnouncementId, userId);
         verifyScrapOwner(scrap, userId);
         scrap.updateColor(findColor(request.color()));
     }
@@ -157,9 +158,9 @@ public class ScrapServiceImpl implements ScrapService {
         }
     }
 
-    private Color findColor(int color) {
+    private Color findColor(String color) {
         return Arrays.stream(Color.values())
-                .filter(c-> c.getKey() == color)
+                .filter(c-> c.getName().equals(color))
                 .findAny().get();
     }
 
@@ -173,8 +174,8 @@ public class ScrapServiceImpl implements ScrapService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_USER_EXCEPTION));
     }
 
-    private Scrap findScrap(Long scrapId) {
-        return scrapRepository.findById(scrapId)
+    private Scrap findScrap(Long internshipAnnouncementId, Long userId) {
+        return scrapRepository.findByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_SCRAP));
     }
 }

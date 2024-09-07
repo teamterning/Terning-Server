@@ -11,6 +11,7 @@ import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
@@ -47,22 +48,10 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
         String authId = getAuthId(request.authType(), authAccessToken);
-        Optional<User> userOptional = userRepository.findByAuthIdAndAuthType(authId, request.authType());
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Token token = getToken(user);
-            user.updateRefreshToken(token.getRefreshToken());
-            return SignInResponseDto.of(
-                    token,
-                    authId,
-                    request.authType(),
-                    user.getId()
-            );
-        }
-        else {
-            return SignInResponseDto.of(null, authId, request.authType(), null);
-        }
+        return findUserByAuthIdAndType(authId, request.authType())
+                .map(user -> createSignInResponseForExistingUser(user, authId, request.authType()))
+                .orElseGet(() -> createSignInResponseForNonExistingUser(authId, request.authType()));
     }
 
     @Transactional
@@ -113,6 +102,25 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
+    private Optional<User> findUserByAuthIdAndType(String authId, AuthType authType) {
+        return userRepository.findByAuthIdAndAuthType(authId, authType);
+    }
+
+    private SignInResponseDto createSignInResponseForExistingUser(User user, String authId, AuthType authType) {
+        Token token = getToken(user);
+        user.updateRefreshToken(token.getRefreshToken());
+        return SignInResponseDto.of(
+                token,
+                authId,
+                authType,
+                user.getId()
+        );
+    }
+
+    private SignInResponseDto createSignInResponseForNonExistingUser(String authId, AuthType authType) {
+        return SignInResponseDto.of(null, authId, authType, null);
+    }
+
     private String getAuthId(AuthType authType, String authAccessToken) {
         return switch (authType) {
             case APPLE -> appleService.getAppleData(authAccessToken);
@@ -142,11 +150,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private User createUser(SignUpWithAuthIdRequestDto requestDto) {
+        //프로필 이미지가 null일 경우 기본값 "basic"으로 설정
+        ProfileImage profileImage = requestDto.profileImage() != null
+                ? ProfileImage.fromValue(requestDto.profileImage()) : ProfileImage.BASIC;
+
         User user = User.builder()
                 .authId(requestDto.authId())
                 .name(requestDto.name())
                 .authType(requestDto.authType())
-                .profileImage(requestDto.profileImage())
+                .profileImage(profileImage) //String to Enum
                 .build();
         return userRepository.save(user);
     }
