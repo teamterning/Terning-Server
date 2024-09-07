@@ -19,6 +19,7 @@ import org.terning.terningserver.repository.internship_announcement.InternshipRe
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.util.DateUtil;
+import org.terning.terningserver.util.LogExecutionTime;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -148,7 +149,7 @@ public class ScrapServiceImpl implements ScrapService {
     public void updateScrapColor(Long internshipAnnouncementId, UpdateScrapRequestDto request, Long userId) {
         Scrap scrap = findScrap(internshipAnnouncementId, userId);
         verifyScrapOwner(scrap, userId);
-        scrap.updateColor(findColor(request.color()));
+        scrap.updateColor(Color.findByName(request.color()));
     }
 
     //토큰으로 찾은(요청한) User와 스크랩한 User가 일치한지 여부 검증하는 메서드
