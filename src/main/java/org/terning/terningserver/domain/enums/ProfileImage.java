@@ -10,7 +10,8 @@ public enum ProfileImage {
     LUCKY("lucky"),
     SMART("smart"),
     GLASS("glass"),
-    CALENDAR("calendar");
+    CALENDAR("calendar"),
+    PASSION("passion");
 
     private final String value;
 
