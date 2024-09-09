@@ -26,16 +26,19 @@ import static org.terning.terningserver.domain.QScrap.scrap;
 @RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
+    private static final int INTERNSHIP_CREATED_WITHIN_DAYS = 60;
+
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<InternshipAnnouncement> getMostViewedInternship() {
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
+                //지원 마감된 공고 및 60일 보다 오래된 공고 제외
                 .where(
                         internDeadlineGoe(),
                         internCreatedAtAfter()
-                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                )
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
                 .limit(5)
                 .fetch();
@@ -48,7 +51,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .where(
                         internDeadlineGoe(),
                         internCreatedAtAfter()
-                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                ) //지원 마감된 공고 및 60일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
                 .limit(5)
                 .fetch();
@@ -159,22 +162,16 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         );
     }
 
-//    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
-//        return Expressions.numberTemplate(
-//                Integer.class,
-//                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
-//                internshipAnnouncement.workingPeriod
-//        );
-//    }
-
     // 지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {
         return internshipAnnouncement.deadline.goe(LocalDate.now());
     }
 
-    // 현재 시점으로부터 30일 이내의 공고
+    // 현재 시점으로부터 60일 이내의 공고
     private BooleanExpression internCreatedAtAfter() {
-        return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
+        return internshipAnnouncement.createdAt.after(
+                LocalDate.now().minusDays(INTERNSHIP_CREATED_WITHIN_DAYS).atStartOfDay()
+        );
     }
 
     // 서류 마감일이 지난 공고는 가장 아래로 보여주는 로직
