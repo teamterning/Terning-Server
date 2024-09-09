@@ -26,19 +26,18 @@ public class InternshipDetailServiceImpl implements InternshipDetailService {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
 
-
         announcement.updateViewCount();
         Optional<Scrap> scrap = scrapRepository.findByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
 
         if (scrap.isPresent()) {
             return InternshipDetailResponseDto.of(
                     announcement, announcement.getCompany(),
-                    scrapRepository.findByInternshipAnnouncementIdAndUserId(announcement.getId(), userId).get().getId()
+                    scrap.get().getId(), scrap.get().getColor().getColorValue()
             );
         } else {
             return InternshipDetailResponseDto.of(
                     announcement, announcement.getCompany(),
-                    null
+                    null, null
             );
         }
     }

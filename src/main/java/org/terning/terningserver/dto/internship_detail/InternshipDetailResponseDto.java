@@ -3,10 +3,11 @@ package org.terning.terningserver.dto.internship_detail;
 import lombok.Builder;
 import org.terning.terningserver.domain.Company;
 import org.terning.terningserver.domain.InternshipAnnouncement;
-import org.terning.terningserver.domain.Scrap;
 import org.terning.terningserver.util.DateUtil;
 
-@Builder
+import static lombok.AccessLevel.PRIVATE;
+
+@Builder(access = PRIVATE)
 public record InternshipDetailResponseDto(
         String companyImage,
         String dDay,
@@ -25,7 +26,12 @@ public record InternshipDetailResponseDto(
         String detail,
         String url
 ) {
-    public static InternshipDetailResponseDto of(InternshipAnnouncement announcement, Company company, Long scrapId, String color) {
+    public static InternshipDetailResponseDto of(
+            final InternshipAnnouncement announcement,
+            final Company company,
+            final Long scrapId,
+            final String color
+    ) {
         return InternshipDetailResponseDto.builder()
                 .companyImage(company.getCompanyImage())
                 .dDay(DateUtil.convert(announcement.getDeadline()))
