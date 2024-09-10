@@ -77,8 +77,10 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .where(contentLike(keyword))
                 .fetchOne();
 
+        // 인턴공고가 없을 경우, 즉 count가 null일 경우 0L을 기본값으로 설정
+        long announcementCount = (count != null) ? count : 0L;
 
-        return new PageImpl<>(internshipAnnouncements, pageable, count);
+        return new PageImpl<>(internshipAnnouncements, pageable, announcementCount);
     }
 
     private BooleanExpression contentLike(String keyword) {
