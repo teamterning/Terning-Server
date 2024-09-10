@@ -4,6 +4,10 @@ package org.terning.terningserver.domain.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Getter
 public enum Color {
@@ -22,7 +26,16 @@ public enum Color {
     private final String name;
     private final String value;
 
+    private static final Map<String, Color> colorMap =
+            Arrays.stream(Color.values())
+                    .collect(Collectors.toMap(Color::getName, color -> color));
+
     public String getColorValue() {
         return "#" + value;
     }
+
+    public static Color findByName(String name) {
+        return colorMap.get(name);
+    }
+
 }
