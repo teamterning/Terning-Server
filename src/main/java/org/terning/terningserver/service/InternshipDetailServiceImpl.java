@@ -22,7 +22,7 @@ public class InternshipDetailServiceImpl implements InternshipDetailService {
 
     @Override
     @Transactional
-    public InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId, Long userId) {
+    public InternshipDetailResponseDto getInternshipDetail(long internshipAnnouncementId, long userId) {
         InternshipAnnouncement announcement = internshipRepository.findById(internshipAnnouncementId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_INTERN_EXCEPTION));
 
