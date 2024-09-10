@@ -128,8 +128,7 @@ public class AuthServiceImpl implements AuthService {
         };
     }
 
-    @Transactional
-    protected Token getFullToken(User user) {
+    private Token getFullToken(User user) {
         String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
         String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
 
@@ -194,8 +193,7 @@ public class AuthServiceImpl implements AuthService {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
     }
 
-    @Transactional
-    protected void deleteUser(User user) {
+    private void deleteUser(User user) {
         userService.deleteUser(user);
     }
 
