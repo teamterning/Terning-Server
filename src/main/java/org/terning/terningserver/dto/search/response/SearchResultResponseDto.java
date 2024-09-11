@@ -6,44 +6,52 @@ import org.terning.terningserver.util.DateUtil;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 public record SearchResultResponseDto(
         int totalPages,
+        long totalCount,
         Boolean hasNext,
         List<SearchAnnouncementResponse> announcements
 ) {
-    @Builder
+    @Builder(access = PRIVATE)
     public record SearchAnnouncementResponse(
-            Long internshipAnnouncementId,
-            Long scrapId,
-            String dDay,
-            String deadline,
+            long internshipAnnouncementId,
             String companyImage,
+            String dDay,
             String title,
             String workingPeriod,
-            String startYearMonth,
-            String color
+            boolean isScrapped,
+            String color,
+            String deadline,
+            String startYearMonth
 
     ) {
-        public static SearchAnnouncementResponse from(final InternshipAnnouncement announcement, final Long scrapId, final String color) {
-            String startYearMonth = announcement.getStartYear() + "년 " + announcement.getStartMonth() + "월";
-            String deadline = DateUtil.convertDeadline(announcement.getDeadline());
-
+        public static SearchAnnouncementResponse from(
+                final InternshipAnnouncement announcement,
+                final Long scrapId,
+                final String color
+        ) {
             return SearchAnnouncementResponse.builder()
                     .internshipAnnouncementId(announcement.getId())
-                    .scrapId(scrapId)
-                    .dDay(DateUtil.convert(announcement.getDeadline()))
-                    .deadline(deadline)
                     .companyImage(announcement.getCompany().getCompanyImage())
+                    .dDay(DateUtil.convert(announcement.getDeadline()))
                     .title(announcement.getTitle())
                     .workingPeriod(announcement.getWorkingPeriod())
-                    .startYearMonth(startYearMonth)
+                    .isScrapped(scrapId!=null)
                     .color(color)
-//                    .isScrapped(isScrapped)
+                    .deadline(DateUtil.convertDeadline(announcement.getDeadline()))
+                    .startYearMonth(announcement.getStartYear() + "년 " + announcement.getStartMonth() + "월")
                     .build();
         }
     }
-    public static SearchResultResponseDto of(int totalPages, Boolean hasNext, List<SearchAnnouncementResponse> announcements) {
-        return new SearchResultResponseDto(totalPages, hasNext, announcements);
+    public static SearchResultResponseDto of(
+            final int totalPages,
+            final long totalCount,
+            final Boolean hasNext,
+            final List<SearchAnnouncementResponse> announcements
+    ) {
+        return new SearchResultResponseDto(totalPages, totalCount, hasNext, announcements);
     }
 
 }

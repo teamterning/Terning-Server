@@ -43,7 +43,7 @@ public class SearchServiceImpl implements SearchService {
 
         List<InternshipAnnouncement> announcements = pageAnnouncements.getContent();
 
-        List<SearchResultResponseDto.SearchAnnouncementResponse> searchAnnouncementResponses = new ArrayList<>();
+        List<SearchResultResponseDto.SearchAnnouncementResponse> searchAnnouncementResponses;
 
         List<Scrap> scraps = scrapRepository.findAllByInternshipAndUserId(announcements, userId);
 
@@ -57,12 +57,16 @@ public class SearchServiceImpl implements SearchService {
         searchAnnouncementResponses = announcements.stream()
                 .map(a -> {
                     Scrap scrap = scrapMap.get(a.getId());
-                    return SearchResultResponseDto.SearchAnnouncementResponse.from(a, scrap != null ? scrap.getId() : null, scrap != null ? scrap.getColor().getColorValue() : null);
+                    return SearchResultResponseDto.SearchAnnouncementResponse.from(
+                            a, scrap != null ? scrap.getId() : null,
+                            scrap != null ? scrap.getColor().getColorValue() : null
+                    );
                 })
                 .toList();
 
         return new SearchResultResponseDto(
                 pageAnnouncements.getTotalPages(),
+                pageAnnouncements.getTotalElements(),
                 pageAnnouncements.hasNext(),
                 searchAnnouncementResponses
         );
