@@ -25,6 +25,7 @@ public enum ErrorMessage {
 
     // 스크랩
     EXISTS_SCRAP_ALREADY(400, "이미 스크랩했습니다."),
+    INVALID_SCRAP_COLOR(401, "유효하지 않은 스크랩 색상입니다."),
 
     // 로그 아웃
     FAILED_SIGN_OUT(404, "로그아웃에 실패하였습니다"),

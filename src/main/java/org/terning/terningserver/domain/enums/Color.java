@@ -3,6 +3,14 @@ package org.terning.terningserver.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.exception.enums.ErrorMessage;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_SCRAP_COLOR;
 
 @RequiredArgsConstructor
 @Getter
@@ -22,7 +30,20 @@ public enum Color {
     private final String name;
     private final String value;
 
+    private static final Map<String, Color> colorMap =
+            Arrays.stream(Color.values())
+                    .collect(Collectors.toMap(Color::getName, color -> color));
+
     public String getColorValue() {
         return "#" + value;
     }
+
+    public static Color findByName(String name) {
+        Color color = colorMap.get(name);
+        if (color == null) {
+            throw new CustomException(INVALID_SCRAP_COLOR);
+        }
+        return color;
+    }
+
 }

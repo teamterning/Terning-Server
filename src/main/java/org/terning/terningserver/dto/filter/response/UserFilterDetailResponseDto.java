@@ -3,15 +3,17 @@ package org.terning.terningserver.dto.filter.response;
 import lombok.Builder;
 import org.terning.terningserver.domain.Filter;
 
-@Builder
-public record UserFilterResponseDto(
-        Integer grade,
-        Integer workingPeriod,
+import static lombok.AccessLevel.PRIVATE;
+
+@Builder(access = PRIVATE)
+public record UserFilterDetailResponseDto(
+        String grade,
+        String workingPeriod,
         Integer startYear,
         Integer startMonth
 ) {
-    public static UserFilterResponseDto of(Filter userFilter) {
-        return UserFilterResponseDto.builder()
+    public static UserFilterDetailResponseDto of(final Filter userFilter) {
+        return UserFilterDetailResponseDto.builder()
                 .grade(userFilter == null ? null : userFilter.getGrade().getKey())
                 .workingPeriod(userFilter == null ? null : userFilter.getWorkingPeriod().getKey())
                 .startYear(userFilter == null ? null : userFilter.getStartYear())

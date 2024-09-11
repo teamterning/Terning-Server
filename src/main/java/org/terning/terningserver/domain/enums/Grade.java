@@ -6,17 +6,17 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Grade {
-    FRESHMAN(0, "1학년"),
-    SOPHOMORE(1, "2학년"),
-    JUNIOR(2, "3학년"),
-    SENIOR(3, "4학년");
+    FRESHMAN("freshman", "1학년"),
+    SOPHOMORE("sophomore", "2학년"),
+    JUNIOR("junior", "3학년"),
+    SENIOR("senior", "4학년");
 
-    private final int key;
+    private final String key;
     private final String value;
     
-    public static Grade fromKey(int key){
+    public static Grade fromKey(String key){
         for(Grade grade : Grade.values()){
-            if(grade.key == key){
+            if(grade.key.equals(key)){
                 return grade;
             }
         }

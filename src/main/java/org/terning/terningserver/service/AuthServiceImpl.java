@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = createUser(requestDto);
 
-        Token token = getToken(user);
+        Token token = getFullToken(user);
 
         return createSignUpResponseDto(token, user);
     }
@@ -68,20 +68,20 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void signOut(long userId) {
-        val user = findUser(userId);
+        val user = findUserById(userId);
         user.resetRefreshToken();
     }
 
     @Override
     @Transactional
     public void withdraw(long userId) {
-        val user = findUser(userId);
+        val user = findUserById(userId);
         deleteUser(user);
     }
 
     @Override
     public AccessTokenGetResponseDto reissueToken(String refreshToken) {
-        val user = findUser(refreshToken);
+        val user = findUserByRefreshToken(refreshToken);
         Token accessToken = getAccessToken(user);
         return AccessTokenGetResponseDto.of(accessToken);
     }
@@ -102,12 +102,13 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
-    private Optional<User> findUserByAuthIdAndType(String authId, AuthType authType) {
+    protected Optional<User> findUserByAuthIdAndType(String authId, AuthType authType) {
         return userRepository.findByAuthIdAndAuthType(authId, authType);
     }
 
-    private SignInResponseDto createSignInResponseForExistingUser(User user, String authId, AuthType authType) {
-        Token token = getToken(user);
+    @Transactional
+    protected SignInResponseDto createSignInResponseForExistingUser(User user, String authId, AuthType authType) {
+        Token token = getFullToken(user);
         user.updateRefreshToken(token.getRefreshToken());
         return SignInResponseDto.of(
                 token,
@@ -128,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
         };
     }
 
-    private Token getToken(User user) {
+    private Token getFullToken(User user) {
         String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
         String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
 
@@ -183,14 +184,15 @@ public class AuthServiceImpl implements AuthService {
         return jwtTokenProvider.generateToken(authentication, valueConfig.getRefreshTokenExpired());
     }
 
-    private User findUser(long id) {
+    private User findUserById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new CustomException(INVALID_USER));
     }
 
-    private User findUser(String refreshToken) {
+    private User findUserByRefreshToken(String refreshToken) {
         return userRepository.findByRefreshToken(getTokenFromBearerString(refreshToken))
                 .orElseThrow(() -> new CustomException(INVALID_USER));
     }
+
 
     private String getTokenFromBearerString(String token) {
         return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
