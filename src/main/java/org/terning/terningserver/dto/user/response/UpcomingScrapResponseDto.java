@@ -14,7 +14,8 @@ public record UpcomingScrapResponseDto(
         boolean isScrapped,
         String color,
         String deadline,
-        String startYearMonth
+        String startYearMonth,
+        String companyInfo
 ) {
     public static UpcomingScrapResponseDto of(final Scrap scrap){
         String startYearMonth = scrap.getInternshipAnnouncement().getStartYear() + "년 " + scrap.getInternshipAnnouncement().getStartMonth() + "월";
@@ -29,6 +30,7 @@ public record UpcomingScrapResponseDto(
                 .color(scrap.getColorToHexValue())
                 .workingPeriod(scrap.getInternshipAnnouncement().getWorkingPeriod())
                 .startYearMonth(startYearMonth)
+                .companyInfo(scrap.getInternshipAnnouncement().getCompany().getCompanyInfo())
                 .build();
     }
 }
