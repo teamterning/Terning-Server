@@ -48,7 +48,7 @@ public class AuthController implements AuthSwagger {
 
     @PostMapping("/sign-up")
     public ResponseEntity<SuccessResponse<SignUpResponseDto>> signUp(
-            @RequestHeader("authId") String authId,
+            @RequestHeader("Authorization") String authId,
             @RequestBody SignUpRequestDto request
     ) {
 
