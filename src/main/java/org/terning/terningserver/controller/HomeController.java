@@ -13,8 +13,7 @@ import org.terning.terningserver.service.ScrapService;
 
 import java.util.List;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_ANNOUNCEMENTS;
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_UPCOMING_ANNOUNCEMENTS;
+import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +44,13 @@ public class HomeController implements HomeSwagger {
         List<UpcomingScrapResponseDto.ScrapDetail> scrapList = scrapService.getUpcomingScrap(userId);
 
         UpcomingScrapResponseDto responseDto = new UpcomingScrapResponseDto(hasScrapped, scrapList);
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, responseDto));
+
+        if(!hasScrapped){
+            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_NO_SCRAP, responseDto));
+        } else if (scrapList.isEmpty()) {
+            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST, responseDto));
+        } else {
+            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, responseDto));
+        }
     }
 }
