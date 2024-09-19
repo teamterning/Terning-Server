@@ -41,8 +41,10 @@ public class HomeController implements HomeSwagger {
             @AuthenticationPrincipal Long userId
     ){
 
-        List<UpcomingScrapResponseDto> scrapList = scrapService.getUpcomingScrap(userId);
+        boolean hasScrapped = scrapService.hasUserScrapped(userId);
+        List<UpcomingScrapResponseDto.ScrapDetail> scrapList = scrapService.getUpcomingScrap(userId);
 
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, scrapList));
+        UpcomingScrapResponseDto responseDto = new UpcomingScrapResponseDto(hasScrapped, scrapList);
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, responseDto));
     }
 }
