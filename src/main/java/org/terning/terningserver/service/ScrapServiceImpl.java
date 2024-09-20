@@ -39,11 +39,16 @@ public class ScrapServiceImpl implements ScrapService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UpcomingScrapResponseDto> getUpcomingScrap(Long userId){
+    public boolean hasUserScrapped(long userId) {
+        return scrapRepository.existsByUserId(userId);
+    }
+
+    @Override
+    public List<UpcomingScrapResponseDto.ScrapDetail> getUpcomingScrap(long userId){
         LocalDate today = LocalDate.now();
         LocalDate oneWeekFromToday = today.plusDays(7);
         return scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, today, oneWeekFromToday).stream()
-                .map(UpcomingScrapResponseDto::of)
+                .map(UpcomingScrapResponseDto.ScrapDetail::of)
                 .toList();
     }
 

@@ -9,6 +9,8 @@ public enum SuccessMessage {
     // 홈 화면
     SUCCESS_GET_ANNOUNCEMENTS(200, "인턴 공고 불러오기를 성공했습니다"),
     SUCCESS_GET_UPCOMING_ANNOUNCEMENTS(200, "곧 마감인 인턴 공고 요청을 성공했습니다"),
+    SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_NO_SCRAP(200, "아직 스크랩된 인턴 공고가 없어요!"),
+    SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST(200, "일주일 내에 마감인 공고가 없어요\n캘린더에서 스크랩한 공고 일정을 확인해 보세요"),
 
     // 소셜 로그인
     SUCCESS_SIGN_IN(200, "소셜 로그인에 성공하였습니다"),
