@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScrapService {
-    List<UpcomingScrapResponseDto> getUpcomingScrap(Long userId);
+
+    boolean hasUserScrapped(long userId);
+    List<UpcomingScrapResponseDto.ScrapDetail> getUpcomingScrap(long userId);
 
     void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId);
 
