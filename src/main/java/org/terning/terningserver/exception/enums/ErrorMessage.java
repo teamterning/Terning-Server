@@ -16,8 +16,8 @@ public enum ErrorMessage {
     UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
 
     // 회원가입
-    FAILED_SIGN_UP(401, "회원가입에 실패하였습니다"),
-    EXISTS_USER_ALREADY(401, "이미 존재하는 유저입니다"),
+    FAILED_SIGN_UP(400, "회원가입에 실패하였습니다"),
+    EXISTS_USER_ALREADY(409, "이미 존재하는 유저입니다"),
 
     // 사용자 필터링 정보 생성
     FAILED_SIGN_UP_USER_FILTER_CREATION(404, "사용자 필터 생성에 실패하였습니다"),
