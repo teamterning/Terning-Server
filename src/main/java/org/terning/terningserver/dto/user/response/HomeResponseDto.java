@@ -6,7 +6,7 @@ import org.terning.terningserver.util.DateUtil;
 
 @Builder
 public record HomeResponseDto(
-        Long intershipAnnouncementId,
+        Long internshipAnnouncementId,
         String companyImage,
         String dDay,
         String title,
@@ -22,7 +22,7 @@ public record HomeResponseDto(
         String deadline = DateUtil.convertDeadline(internshipAnnouncement.getDeadline());
 
         return HomeResponseDto.builder()
-                .intershipAnnouncementId(internshipAnnouncement.getId())
+                .internshipAnnouncementId(internshipAnnouncement.getId())
                 .companyImage(internshipAnnouncement.getCompany().getCompanyImage())
                 .dDay(dDay)
                 .title(internshipAnnouncement.getTitle())
