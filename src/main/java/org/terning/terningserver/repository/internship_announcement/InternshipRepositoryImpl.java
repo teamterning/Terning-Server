@@ -84,7 +84,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         return internshipAnnouncement.title.contains(keyword);
     }
 
-
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
     private OrderSpecifier createOrderSpecifier(String sortBy) {
         return switch (sortBy) {
