@@ -4,11 +4,13 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
@@ -63,30 +65,24 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps).fetchJoin()
+                .leftJoin(internshipAnnouncement.scraps)
                 .where(contentLike(keyword))
                 .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = jpaQueryFactory
+        JPAQuery<Long> count = jpaQueryFactory
                 .select(internshipAnnouncement.count())
                 .from(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps)
-                .where(contentLike(keyword))
-                .fetchOne();
+                .where(contentLike(keyword));
 
-        // 인턴공고가 없을 경우, 즉 count가 null일 경우 0L을 기본값으로 설정
-        long announcementCount = (count != null) ? count : 0L;
-
-        return new PageImpl<>(internshipAnnouncements, pageable, announcementCount);
+        return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
     private BooleanExpression contentLike(String keyword) {
         return internshipAnnouncement.title.contains(keyword);
     }
-
 
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
     private OrderSpecifier createOrderSpecifier(String sortBy) {
