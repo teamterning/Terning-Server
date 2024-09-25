@@ -190,7 +190,7 @@ public class AuthServiceImpl implements AuthService {
 
     private User findUserByRefreshToken(String refreshToken) {
         return userRepository.findByRefreshToken(getTokenFromBearerString(refreshToken))
-                .orElseThrow(() -> new CustomException(INVALID_USER));
+                .orElseThrow(() -> new CustomException(FAILED_TOKEN_REISSUE));
     }
 
 
