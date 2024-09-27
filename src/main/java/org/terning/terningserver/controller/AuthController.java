@@ -16,7 +16,6 @@ import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.AuthService;
-import org.terning.terningserver.service.SignUpFilterService;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
@@ -27,7 +26,6 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 public class AuthController implements AuthSwagger {
 
     private final AuthService authService;
-    private final SignUpFilterService signUpFilterService;
 
     @PostMapping("/sign-in")
     public ResponseEntity<SuccessResponse<SignInResponseDto>> signIn(
@@ -50,11 +48,11 @@ public class AuthController implements AuthSwagger {
 
     @PostMapping("/sign-up")
     public ResponseEntity<SuccessResponse<SignUpResponseDto>> signUp(
-            @RequestHeader("authId") String authId,
+            @RequestHeader("Authorization") String authId,
             @RequestBody SignUpRequestDto request
     ) {
 
-        SignUpResponseDto signUpResponseDto = authService.signUp(authId, request.name(), request.profileImage(), request.authType());
+        SignUpResponseDto signUpResponseDto = authService.signUp(authId, request);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
@@ -63,11 +61,9 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("User-Id") Long userId,
             @RequestBody SignUpFilterRequestDto request
     ) {
-        // 필터 생성 및 저장
-        Filter newFilter = signUpFilterService.createAndSaveFilter(request);
+        Filter newFilter = authService.createAndSaveFilter(request);
 
-        // 사용자에게 필터 연결
-        signUpFilterService.connectFilterToUser(userId, newFilter.getId());
+        authService.connectFilterToUser(userId, newFilter.getId());
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP_FILTER));
     }

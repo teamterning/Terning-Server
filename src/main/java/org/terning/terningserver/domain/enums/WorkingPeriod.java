@@ -7,16 +7,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum WorkingPeriod {
-    OPTION1(0, "1개월 ~ 3개월"),
-    OPTION2(1, "4개월 ~ 6개월"),
-    OPTION3(2, "7개월 이상");
+    OPTION1("short", "1개월 ~ 3개월"),
+    OPTION2("middle", "4개월 ~ 6개월"),
+    OPTION3("long", "7개월 이상");
 
-    private final int key;
+    private final String key;
     private final String value;
 
-    public static WorkingPeriod fromKey(int key){
+    public static WorkingPeriod fromKey(String key){
         for(WorkingPeriod period : WorkingPeriod.values()){
-            if(period.key == key){
+            if(period.key.equals(key)){
                 return period;
             }
         }

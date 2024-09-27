@@ -12,9 +12,9 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long>, ScrapReposi
 
     Optional<Scrap> findByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 
-    List<Scrap> findByUserIdAndInternshipAnnouncement_Deadline(Long userId, LocalDate deadline);
+    void deleteByInternshipAnnouncementIdAndUserId(Long internshipId, Long userId);
 
-    List<Scrap> findByUserIdAndInternshipAnnouncement_DeadlineBetween(Long userId, LocalDate start, LocalDate end);
+    boolean existsByUserId(Long userId);
 
 }
 

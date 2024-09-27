@@ -5,13 +5,15 @@ import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
-import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
+import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ScrapService {
-    List<TodayScrapResponseDto> getTodayScrap(Long userId);
+
+    boolean hasUserScrapped(long userId);
+    List<UpcomingScrapResponseDto.ScrapDetail> getUpcomingScrap(long userId);
 
     void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId);
 

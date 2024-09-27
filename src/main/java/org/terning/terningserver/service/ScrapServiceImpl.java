@@ -12,12 +12,14 @@ import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
-import org.terning.terningserver.dto.user.response.TodayScrapResponseDto;
+import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
 import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.util.DateUtil;
+import org.terning.terningserver.util.LogExecutionTime;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -37,10 +39,16 @@ public class ScrapServiceImpl implements ScrapService {
     private final UserRepository userRepository;
 
     @Override
-    public List<TodayScrapResponseDto> getTodayScrap(Long userId){
+    public boolean hasUserScrapped(long userId) {
+        return scrapRepository.existsByUserId(userId);
+    }
+
+    @Override
+    public List<UpcomingScrapResponseDto.ScrapDetail> getUpcomingScrap(long userId){
         LocalDate today = LocalDate.now();
-        return scrapRepository.findByUserIdAndInternshipAnnouncement_Deadline(userId, today).stream()
-                .map(TodayScrapResponseDto::of)
+        LocalDate oneWeekFromToday = today.plusDays(7);
+        return scrapRepository.findScrapsByUserIdAndDeadlineBetweenOrderByDeadline(userId, today, oneWeekFromToday).stream()
+                .map(UpcomingScrapResponseDto.ScrapDetail::of)
                 .toList();
     }
 
@@ -91,21 +99,20 @@ public class ScrapServiceImpl implements ScrapService {
                         entry.getKey().toString(),
                         entry.getValue().stream()
                                 .map(s -> MonthlyListResponseDto.ScrapDetail.of(
-                                        s.getId(),
                                         s.getInternshipAnnouncement().getId(),
-                                        s.getInternshipAnnouncement().getTitle(),
-                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
-                                        s.getInternshipAnnouncement().getWorkingPeriod(),
-                                        s.getColor().getColorValue(),
                                         s.getInternshipAnnouncement().getCompany().getCompanyImage(),
-                                        s.getInternshipAnnouncement().getStartYear(),
-                                        s.getInternshipAnnouncement().getStartMonth()
+                                        DateUtil.convert(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getTitle(),
+                                        s.getInternshipAnnouncement().getWorkingPeriod(),
+                                        true, // 이미 스크랩된 경우이므로 true
+                                        s.getColorToHexValue(),
+                                        DateUtil.convertDeadline(s.getInternshipAnnouncement().getDeadline()),
+                                        s.getInternshipAnnouncement().getStartYear() + "년 " + s.getInternshipAnnouncement().getStartMonth() + "월"
                                 ))
                                 .toList()
                 ))
                 .toList();
     }
-  
     @Override
     public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
         return scrapRepository.findScrapsByUserIdAndDeadlineOrderByDeadline(userId, date).stream()
@@ -135,19 +142,19 @@ public class ScrapServiceImpl implements ScrapService {
 
     @Override
     @Transactional
-    public void deleteScrap(Long scrapId, Long userId) {
-        Scrap scrap = findScrap(scrapId);
+    public void deleteScrap(Long internshipAnnouncementId, Long userId) {
+        Scrap scrap = findScrap(internshipAnnouncementId, userId);
         scrap.getInternshipAnnouncement().updateScrapCount(-1);
         verifyScrapOwner(scrap, userId);
-        scrapRepository.deleteById(scrapId);
+        scrapRepository.deleteByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId);
     }
 
     @Override
     @Transactional
-    public void updateScrapColor(Long scrapId, UpdateScrapRequestDto request, Long userId) {
-        Scrap scrap = findScrap(scrapId);
+    public void updateScrapColor(Long internshipAnnouncementId, UpdateScrapRequestDto request, Long userId) {
+        Scrap scrap = findScrap(internshipAnnouncementId, userId);
         verifyScrapOwner(scrap, userId);
-        scrap.updateColor(findColor(request.color()));
+        scrap.updateColor(Color.findByName(request.color()));
     }
 
     //토큰으로 찾은(요청한) User와 스크랩한 User가 일치한지 여부 검증하는 메서드
@@ -157,9 +164,9 @@ public class ScrapServiceImpl implements ScrapService {
         }
     }
 
-    private Color findColor(int color) {
+    private Color findColor(String color) {
         return Arrays.stream(Color.values())
-                .filter(c-> c.getKey() == color)
+                .filter(c-> c.getName().equals(color))
                 .findAny().get();
     }
 
@@ -173,8 +180,8 @@ public class ScrapServiceImpl implements ScrapService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_USER_EXCEPTION));
     }
 
-    private Scrap findScrap(Long scrapId) {
-        return scrapRepository.findById(scrapId)
+    private Scrap findScrap(Long internshipAnnouncementId, Long userId) {
+        return scrapRepository.findByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_SCRAP));
     }
 }

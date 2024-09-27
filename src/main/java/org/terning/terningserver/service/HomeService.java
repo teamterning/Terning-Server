@@ -1,10 +1,8 @@
 package org.terning.terningserver.service;
 
-import org.terning.terningserver.dto.user.response.HomeResponseDto;
-
-import java.util.List;
+import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 
 public interface HomeService {
 
-    List<HomeResponseDto> getAnnouncements(Long userId, String sortBy, int startYear, int startMonth);
+    HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, int startYear, int startMonth);
 }

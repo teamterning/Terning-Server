@@ -6,27 +6,30 @@ import org.terning.terningserver.util.DateUtil;
 
 @Builder
 public record DailyScrapResponseDto(
-        Long scrapId,
         Long internshipAnnouncementId,
-        String title,
-        String dDay,
-        String workingPeriod,
-        String color,
         String companyImage,
-        int startYear,
-        int startMonth
+        String dDay,
+        String title,
+        String workingPeriod,
+        boolean isScrapped,
+        String color,
+        String deadline,
+        String startYearMonth
 ) {
     public static DailyScrapResponseDto of(final Scrap scrap){
+        String startYearMonth = scrap.getInternshipAnnouncement().getStartYear() + "년 " + scrap.getInternshipAnnouncement().getStartMonth() + "월";
+        String deadline = DateUtil.convertDeadline(scrap.getInternshipAnnouncement().getDeadline());
+
         return DailyScrapResponseDto.builder()
-                .scrapId(scrap.getId())
                 .internshipAnnouncementId(scrap.getInternshipAnnouncement().getId())
-                .title(scrap.getInternshipAnnouncement().getTitle())
-                .dDay(DateUtil.convert(scrap.getInternshipAnnouncement().getDeadline()))
-                .workingPeriod(scrap.getInternshipAnnouncement().getWorkingPeriod())
-                .color(scrap.getColor().getColorValue())
                 .companyImage(scrap.getInternshipAnnouncement().getCompany().getCompanyImage())
-                .startYear(scrap.getInternshipAnnouncement().getStartYear())
-                .startMonth(scrap.getInternshipAnnouncement().getStartMonth())
+                .dDay(DateUtil.convert(scrap.getInternshipAnnouncement().getDeadline()))
+                .title(scrap.getInternshipAnnouncement().getTitle())
+                .workingPeriod(scrap.getInternshipAnnouncement().getWorkingPeriod())
+                .isScrapped(true) // 스크랩된 경우에만 DTO 생성하므로 true
+                .color(scrap.getColorToHexValue())
+                .deadline(deadline)
+                .startYearMonth(startYearMonth)
                 .build();
     }
 }

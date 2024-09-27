@@ -5,5 +5,5 @@ import org.terning.terningserver.dto.internship_detail.InternshipDetailResponseD
 
 public interface InternshipDetailService {
 
-    InternshipDetailResponseDto getInternshipDetail(Long internshipAnnouncementId, Long userId);
+    InternshipDetailResponseDto getInternshipDetail(long internshipAnnouncementId, long userId);
 }

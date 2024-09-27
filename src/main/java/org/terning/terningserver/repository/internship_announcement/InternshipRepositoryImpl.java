@@ -4,11 +4,14 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberTemplate;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
@@ -26,16 +29,19 @@ import static org.terning.terningserver.domain.QScrap.scrap;
 @RequiredArgsConstructor
 public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
+    private static final int INTERNSHIP_CREATED_WITHIN_DAYS = 60;
+
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<InternshipAnnouncement> getMostViewedInternship() {
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
+                //지원 마감된 공고 및 60일 보다 오래된 공고 제외
                 .where(
                         internDeadlineGoe(),
                         internCreatedAtAfter()
-                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                )
                 .orderBy(internshipAnnouncement.viewCount.desc(), internshipAnnouncement.createdAt.desc())
                 .limit(5)
                 .fetch();
@@ -48,7 +54,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .where(
                         internDeadlineGoe(),
                         internCreatedAtAfter()
-                ) //지원 마감된 공고 및 30일 보다 오래된 공고 제외
+                ) //지원 마감된 공고 및 60일 보다 오래된 공고 제외
                 .orderBy(internshipAnnouncement.scrapCount.desc(), internshipAnnouncement.createdAt.desc())
                 .limit(5)
                 .fetch();
@@ -60,31 +66,28 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps).fetchJoin()
                 .where(contentLike(keyword))
                 .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        Long count = jpaQueryFactory
+        JPAQuery<Long> count = jpaQueryFactory
                 .select(internshipAnnouncement.count())
                 .from(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps)
-                .where(contentLike(keyword))
-                .fetchOne();
+                .where(contentLike(keyword));
 
 
-        return new PageImpl<>(internshipAnnouncements, pageable, count);
+        return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
     private BooleanExpression contentLike(String keyword) {
         return internshipAnnouncement.title.contains(keyword);
     }
 
-
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
     private OrderSpecifier createOrderSpecifier(String sortBy) {
+        System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
             case "mostViewed" -> internshipAnnouncement.viewCount.desc();
             case "shortestDuration" -> getWorkingPeriodAsNumber().asc();
@@ -99,7 +102,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scrapList, scrap).on(scrap.user.eq(user))
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
                         getGraduatingFilter(user),
                         getWorkingPeriodFilter(user),
@@ -159,22 +162,16 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         );
     }
 
-//    private NumberTemplate<Integer> getWorkingPeriodAsNumber(){
-//        return Expressions.numberTemplate(
-//                Integer.class,
-//                "CAST(SUBSTRING({0}, 1, LENGTH({0}) - 2) AS INTEGER)",
-//                internshipAnnouncement.workingPeriod
-//        );
-//    }
-
     // 지원 마감일이 지나지 않은 공고
     private BooleanExpression internDeadlineGoe() {
         return internshipAnnouncement.deadline.goe(LocalDate.now());
     }
 
-    // 현재 시점으로부터 30일 이내의 공고
+    // 현재 시점으로부터 60일 이내의 공고
     private BooleanExpression internCreatedAtAfter() {
-        return internshipAnnouncement.createdAt.after(LocalDate.now().minusDays(30).atStartOfDay());
+        return internshipAnnouncement.createdAt.after(
+                LocalDate.now().minusDays(INTERNSHIP_CREATED_WITHIN_DAYS).atStartOfDay()
+        );
     }
 
     // 서류 마감일이 지난 공고는 가장 아래로 보여주는 로직

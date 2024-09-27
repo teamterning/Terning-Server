@@ -53,4 +53,15 @@ public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
                 .orderBy(scrap.internshipAnnouncement.deadline.asc())
                 .fetch();
     }
+
+    @Override
+    public String findColorByInternshipAnnouncementIdAndUserId(Long internshipAnnouncementId, Long userId){
+        Scrap foundScrap = jpaQueryFactory
+                .selectFrom(scrap)
+                .where(scrap.internshipAnnouncement.id.eq(internshipAnnouncementId)
+                        .and(scrap.user.id.eq(userId)))
+                .fetchOne();
+
+        return foundScrap != null ? foundScrap.getColorToHexValue() : null;
+    }
 }

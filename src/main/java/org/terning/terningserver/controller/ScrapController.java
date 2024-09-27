@@ -10,6 +10,7 @@ import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.jwt.PrincipalHandler;
 import org.terning.terningserver.service.ScrapService;
+import org.terning.terningserver.util.LogExecutionTime;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
@@ -22,27 +23,27 @@ public class ScrapController implements ScrapSwagger {
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> createScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long internshipAnnouncementId,
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId,
             @RequestBody CreateScrapRequestDto request) {
         scrapService.createScrap(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_CREATE_SCRAP));
     }
 
-    @DeleteMapping("/scraps/{scrapId}")
+    @DeleteMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> deleteScrap(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long scrapId) {
-        scrapService.deleteScrap(scrapId, userId);
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId) {
+        scrapService.deleteScrap(internshipAnnouncementId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
     }
 
-    @PatchMapping("/scraps/{scrapId}")
+    @PatchMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> updateScrapColor(
-            @AuthenticationPrincipal Long userId,
-            @PathVariable Long scrapId,
+            @AuthenticationPrincipal long userId,
+            @PathVariable long internshipAnnouncementId,
             @RequestBody UpdateScrapRequestDto request) {
-        scrapService.updateScrapColor(scrapId, request, userId);
+        scrapService.updateScrapColor(internshipAnnouncementId, request, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_SCRAP));
     }
 }
