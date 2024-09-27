@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -65,7 +66,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps, scrap)
                 .where(contentLike(keyword))
                 .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
@@ -76,6 +76,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .select(internshipAnnouncement.count())
                 .from(internshipAnnouncement)
                 .where(contentLike(keyword));
+
 
         return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
@@ -101,7 +102,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
         return jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scrapList, scrap).on(scrap.user.eq(user))
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
                         getGraduatingFilter(user),
                         getWorkingPeriodFilter(user),
