@@ -65,7 +65,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps)
+                .leftJoin(internshipAnnouncement.scraps, scrap)
                 .where(contentLike(keyword))
                 .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
@@ -86,6 +86,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
     private OrderSpecifier createOrderSpecifier(String sortBy) {
+        System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
             case "mostViewed" -> internshipAnnouncement.viewCount.desc();
             case "shortestDuration" -> getWorkingPeriodAsNumber().asc();

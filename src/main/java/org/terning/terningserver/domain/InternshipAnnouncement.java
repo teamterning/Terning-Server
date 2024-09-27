@@ -48,7 +48,7 @@ public class InternshipAnnouncement extends BaseTimeEntity {
     @Column(nullable = false, length = 256)
     private String url;  // 인턴십 공고 URL
 
-    @OneToMany(mappedBy = "internshipAnnouncement")
+    @OneToMany(mappedBy = "internshipAnnouncement", cascade = CascadeType.ALL)
     private List<Scrap> scraps;
 
     @Embedded
@@ -65,9 +65,6 @@ public class InternshipAnnouncement extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean isGraduating; // 졸업 예정 여부
-
-    @OneToMany(mappedBy = "internshipAnnouncement", cascade = CascadeType.ALL)
-    private List<Scrap> scrapList = new ArrayList<>(); //스크랩 리스트
 
     public void updateViewCount(){
         this.viewCount += 1;
