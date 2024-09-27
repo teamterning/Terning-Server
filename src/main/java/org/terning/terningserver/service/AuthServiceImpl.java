@@ -56,7 +56,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public SignUpResponseDto signUp(String authId, SignUpRequestDto request) {
-        SignUpWithAuthIdRequestDto requestDto = createSignUpRequestDto(authId, request);
+        String tokenWithoutBearer = authId.replace("Bearer ", "").trim();
+
+        SignUpWithAuthIdRequestDto requestDto = createSignUpRequestDto(tokenWithoutBearer, request);
 
         User user = createUser(requestDto);
 
