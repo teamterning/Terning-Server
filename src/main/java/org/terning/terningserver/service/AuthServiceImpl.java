@@ -43,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final ValueConfig valueConfig;
     private final UserRepository userRepository;
     private final FilterRepository filterRepository;
+    private final WebhookService webhookService;
 
     @Override
     @Transactional
@@ -61,6 +62,8 @@ public class AuthServiceImpl implements AuthService {
         User user = createUser(requestDto);
 
         Token token = getFullToken(user);
+
+        webhookService.sendDiscordNotification(user); // 디스코드에 회원가입 알림 전송
 
         return createSignUpResponseDto(token, user);
     }
