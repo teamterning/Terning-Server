@@ -15,10 +15,6 @@ public enum ErrorMessage {
     FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다"),
     UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
 
-    // 회원가입
-    FAILED_SIGN_UP(400, "회원가입에 실패하였습니다"),
-    EXISTS_USER_ALREADY(409, "이미 존재하는 유저입니다"),
-
     // 사용자 필터링 정보 생성
     FAILED_SIGN_UP_USER_FILTER_CREATION(404, "사용자 필터 생성에 실패하였습니다"),
     FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT(404, "사용자 필터 연결에 실패하였습니다"),
@@ -32,7 +28,7 @@ public enum ErrorMessage {
     FAILED_REFRESH_TOKEN_RESET(400, "리프레쉬 토큰 초기화에 실패하였습니다"),
 
     // 계정 탈퇴
-    FAILED_WITHDRAW(404, "계정 탈퇴에 실패하였습니다"),
+    FAILED_WITHDRAW(400, "계정 탈퇴에 실패하였습니다"),
 
     // 마이페이지
     INVALID_PROFILE_IMAGE(404, "유효하지 않은 프로필 이미지 입니다."),
