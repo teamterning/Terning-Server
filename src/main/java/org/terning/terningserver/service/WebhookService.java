@@ -35,7 +35,7 @@ public class WebhookService {
         Long totalMembers = userRepository.count();
 
         // 알림 메시지 생성
-        String message = String.format("가입자명 : %s\n[%d] 번째 유저가 회원가입했습니다!", user.getName(), totalMembers);
+        String message = String.format("가입자명 : %s\n로그인방식: %s\n[%d] 번째 유저가 회원가입했습니다!", user.getName(), user.getAuthType(), totalMembers);
 
         // HTTP 요청을 위한 헤더 설정
         HttpHeaders headers = new HttpHeaders();
