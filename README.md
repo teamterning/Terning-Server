@@ -3,6 +3,8 @@
 
 ![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581) 
 
+- Behance URL : https://www.behance.net/gallery/209714965/terning-College-Internship-App
+- 랜딩페이지 URL (Mobile Ver.) : https://terning.framer.website/
 
 ### 내 계획에 딱 맞는 대학생 인턴의 시작, 터닝 (terning) 
 
