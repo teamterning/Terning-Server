@@ -99,12 +99,12 @@ ex) feat/#20
 <br/>
 
 ## 🌱 Architecture Diagram
-![터닝 AD](https://github.com/user-attachments/assets/966b11f8-f8d9-4a1e-b9db-19bf20c2fa82)
+<img width="750" alt="image" src="https://github.com/user-attachments/assets/0bf49d8a-bcfa-4810-87ca-734e2b3a2d71">
 
 <br/>
 
 ## 🪴 IA
-<img width="691" alt="image" src="https://github.com/user-attachments/assets/0dac17fd-5950-4f47-95d1-d2aa261bdfa5">
+<img width="1024" alt="image" src="https://github.com/user-attachments/assets/0dac17fd-5950-4f47-95d1-d2aa261bdfa5">
 
 <br/><br/>
 
