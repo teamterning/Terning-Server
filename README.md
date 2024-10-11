@@ -4,7 +4,7 @@
 ![image](https://github.com/user-attachments/assets/b5ba8653-c30b-4ad7-afa3-5083dc001581) 
 
 - Behance URL : https://www.behance.net/gallery/209714965/terning-College-Internship-App
-- 랜딩페이지 URL (Mobile Ver.) : https://terning.framer.website/
+- 앱 소개 URL : https://terning.framer.website/
 
 ### 내 계획에 딱 맞는 대학생 인턴의 시작, 터닝 (terning) 
 > 인턴은 취업 전 전공 관련 실무 경험을 쌓을 수 있을 뿐만 아니라 취업 시장에서 중요한 평가 요소로 자리하고 있습니다. <br/> 하지만 채용 플랫폼에는 졸업자와 경력자를 위한 공고만 가득할 뿐, 대학생을 대상으로 한 인턴 공고만을 모아 탐색하기에는 어렵고 복잡하기만 합니다. <br/> <br/> 터닝에서는 **대학생이 세운 계획에 딱 맞는 공고를 모아볼 수 있고, 인턴 지원 일정까지 효율적으로 관리할 수 있는 서비스**를 제공합니다. <br/> 나만의 인턴 계획이 있는 대학생이라면, 지금 바로 터닝으로 대학생 인턴을 시작해보세요.
