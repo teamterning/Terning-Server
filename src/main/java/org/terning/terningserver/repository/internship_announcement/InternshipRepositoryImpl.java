@@ -94,7 +94,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
             keyword = keyword.replaceAll("\\s", "");
             return Expressions.stringTemplate("REPLACE(LOWER({0}), ' ', '')", internshipAnnouncement.title).contains(keyword);
         }
-//        return internshipAnnouncement.title.contains(keyword);
     }
 
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
