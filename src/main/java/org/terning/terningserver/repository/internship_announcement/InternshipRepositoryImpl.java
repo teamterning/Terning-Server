@@ -63,10 +63,11 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     @Override
     public Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable) {
+        keyword = keyword.toLowerCase();
 
         List<InternshipAnnouncement> internshipAnnouncements = jpaQueryFactory
                 .selectFrom(internshipAnnouncement)
-                .where(contentLike(keyword))
+                .where(contentLike(keyword, isPureEnglish(keyword)))
                 .orderBy(sortAnnouncementsByDeadline().asc(), createOrderSpecifier(sortBy))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -75,14 +76,24 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         JPAQuery<Long> count = jpaQueryFactory
                 .select(internshipAnnouncement.count())
                 .from(internshipAnnouncement)
-                .where(contentLike(keyword));
+                .where(contentLike(keyword, isPureEnglish(keyword)));
 
 
         return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
-    private BooleanExpression contentLike(String keyword) {
-        return internshipAnnouncement.title.contains(keyword);
+    private boolean isPureEnglish(String summonerName) {
+        //공백은 무시
+        return summonerName.replaceAll("\\s", "").matches("^[a-zA-Z]+$");
+    }
+
+    private BooleanExpression contentLike(String keyword, boolean isPureEnglish) {
+        if(isPureEnglish) {
+            return Expressions.stringTemplate("LOWER({0})", internshipAnnouncement.title).contains(keyword);
+        } else {
+            keyword = keyword.replaceAll("\\s", "");
+            return Expressions.stringTemplate("REPLACE(LOWER({0}), ' ', '')", internshipAnnouncement.title).contains(keyword);
+        }
     }
 
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
