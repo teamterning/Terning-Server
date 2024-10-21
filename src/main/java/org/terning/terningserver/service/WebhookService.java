@@ -28,6 +28,12 @@ public class WebhookService {
     // 알림을 보내는 메서드
     public void sendDiscordNotification(User user) {
 
+        // discord.webhook.url 값이 비어있으면 웹훅을 실행하지 않음
+        if (discordWebhookUrl == null || discordWebhookUrl.isEmpty()) {
+            // 스테이징 환경에서는 웹훅을 비활성화
+            return;
+        }
+
         // REST 요청을 처리하기 위한 RestTemplate 객체 생성
         RestTemplate restTemplate = new RestTemplate();
 
