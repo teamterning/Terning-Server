@@ -1,8 +1,10 @@
 package org.terning.terningserver.util;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class DateUtil {
 
@@ -15,7 +17,7 @@ public class DateUtil {
         } else if (deadline.isBefore(currentDate)) {
             return "지원마감";
         } else {
-            long daysUntilDeadline = currentDate.until(deadline).getDays();
+            long daysUntilDeadline = ChronoUnit.DAYS.between(currentDate, deadline);
             return "D-" + daysUntilDeadline;
         }
     }
