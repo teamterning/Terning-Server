@@ -18,7 +18,7 @@ public class BannerController {
 
     private final BannerService bannerService;
 
-    @GetMapping("/banners")
+    @GetMapping("/search/banners")
     public ResponseEntity<SuccessResponse<BannerListResponseDto>> getBanners() {
         return ResponseEntity.ok(
                 SuccessResponse.of(SuccessMessage.SUCCESS_GET_BANNERS, bannerService.getBanners())
