@@ -113,6 +113,7 @@ public class ScrapServiceImpl implements ScrapService {
                 ))
                 .toList();
     }
+
     @Override
     public List<DailyScrapResponseDto> getDailyScraps(Long userId, LocalDate date) {
         return scrapRepository.findScrapsByUserIdAndDeadlineOrderByDeadline(userId, date).stream()
