@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -82,6 +83,28 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
+    @Override
+    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, int startYear, int startMonth) {
+        return jpaQueryFactory
+                .select(
+                        internshipAnnouncement,
+                        scrap.id,
+                        scrap.color
+                )
+                .from(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
+                .where(
+                        getGraduatingFilter(user),
+                        getWorkingPeriodFilter(user),
+                        getStartDateFilter(startYear, startMonth)
+                )
+                .orderBy(
+                        sortAnnouncementsByDeadline().asc(),
+                        getSortOrder(sortBy)
+                )
+                .fetch();
+    }
+
     private boolean isPureEnglish(String summonerName) {
         //공백은 무시
         return summonerName.replaceAll("\\s", "").matches("^[a-zA-Z]+$");
@@ -97,6 +120,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     //정렬 조건(5가지, 채용 마감 이른 순, 짧은 근무 기간 순, 긴 근무 기간 순,
+    // 성능(기준 15 ~ 20), 가독성(case가 보기 좋다)
     private OrderSpecifier createOrderSpecifier(String sortBy) {
         System.out.println("sortBy = " + sortBy);
         return switch (sortBy) {
@@ -108,23 +132,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         };
     }
 
-
-    @Override
-    public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
-        return jpaQueryFactory
-                .selectFrom(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
-                .where(
-                        getGraduatingFilter(user),
-                        getWorkingPeriodFilter(user),
-                        getStartDateFilter(startYear, startMonth)
-                )
-                .orderBy(
-                        sortAnnouncementsByDeadline().asc(),
-                        getSortOrder(sortBy)
-                )
-                .fetch();
-    }
 
     private BooleanExpression getGraduatingFilter(User user){
         if(user.getFilter().getGrade() != Grade.SENIOR){

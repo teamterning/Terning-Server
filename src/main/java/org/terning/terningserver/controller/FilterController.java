@@ -10,6 +10,8 @@ import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto
 import org.terning.terningserver.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.FilterService;
 
+import java.security.Principal;
+
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
@@ -21,8 +23,9 @@ public class FilterController implements FilterSwagger {
 
     @GetMapping("/filters")
     public ResponseEntity<SuccessResponse<UserFilterDetailResponseDto>> getUserFilter(
-            @AuthenticationPrincipal long userId
+            @AuthenticationPrincipal Principal principal
     ) {
+        long userId = extractUserId(principal);
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_USER_FILTER,
                 filterService.getUserFilter(userId)
@@ -31,11 +34,15 @@ public class FilterController implements FilterSwagger {
 
     @PutMapping("/filters")
     public ResponseEntity<SuccessResponse> updateUserFilter(
-            @AuthenticationPrincipal long userId,
+            @AuthenticationPrincipal Principal principal,
             @RequestBody UpdateUserFilterRequestDto requestDto
     ) {
+        long userId = extractUserId(principal);
         filterService.updateUserFilter(requestDto, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_USER_FILTER));
     }
 
+    private long extractUserId(Principal principal) {
+        return Long.parseLong(principal.getName());
+    }
 }
