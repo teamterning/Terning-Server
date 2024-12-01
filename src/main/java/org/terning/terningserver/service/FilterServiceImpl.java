@@ -34,28 +34,40 @@ public class FilterServiceImpl implements FilterService {
     public void updateUserFilter(UpdateUserFilterRequestDto responseDto, Long userId) {
         User user = findUser(userId);
         Filter filter = user.getFilter();
-        if(filter != null){
-            filter.updateFilter(
-                    Grade.fromKey(responseDto.grade()),
-                    WorkingPeriod.fromKey(responseDto.workingPeriod()),
-                    responseDto.startYear(),
-                    responseDto.startMonth()
-            );
-        } else {
-            Filter savedFilter = filterRepository.save(
-                    Filter.builder()
-                            .grade(Grade.fromKey(responseDto.grade()))
-                            .workingPeriod(WorkingPeriod.fromKey(responseDto.workingPeriod()))
-                            .startYear(responseDto.startYear())
-                            .startMonth(responseDto.startMonth())
-                            .build()
-            );
-            user.assignFilter(savedFilter);
+
+        Grade grade = Grade.fromKey(responseDto.grade());
+        WorkingPeriod workingPeriod = WorkingPeriod.fromKey(responseDto.workingPeriod());
+
+        if (filter != null) {
+            updateExistingFilter(filter, grade, workingPeriod, responseDto);
         }
+
+        createFilter(user, grade, workingPeriod, responseDto);
     }
 
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private void updateExistingFilter(Filter filter, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
+        filter.updateFilter(
+                grade,
+                workingPeriod,
+                dto.startYear(),
+                dto.startMonth()
+        );
+    }
+
+    private void createFilter(User user, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
+        Filter savedFilter = filterRepository.save(
+                Filter.builder()
+                        .grade(grade)
+                        .workingPeriod(workingPeriod)
+                        .startYear(dto.startYear())
+                        .startMonth(dto.startMonth())
+                        .build()
+        );
+        user.assignFilter(savedFilter);
     }
 }
