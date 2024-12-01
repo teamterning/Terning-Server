@@ -38,19 +38,21 @@ public class HomeController implements HomeSwagger {
     @GetMapping("/home/upcoming")
     public ResponseEntity<SuccessResponse<List<UpcomingScrapResponseDto>>> getUpcomingScraps(
             @AuthenticationPrincipal Long userId
-    ){
+    ) {
 
         boolean hasScrapped = scrapService.hasUserScrapped(userId);
         List<UpcomingScrapResponseDto.ScrapDetail> scrapList = scrapService.getUpcomingScrap(userId);
 
         UpcomingScrapResponseDto responseDto = new UpcomingScrapResponseDto(hasScrapped, scrapList);
 
-        if(!hasScrapped){
+        if (!hasScrapped) {
             return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_NO_SCRAP, responseDto));
-        } else if (scrapList.isEmpty()) {
-            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST, responseDto));
-        } else {
-            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, responseDto));
         }
+
+        if (scrapList.isEmpty()) {
+            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST, responseDto));
+        }
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_UPCOMING_ANNOUNCEMENTS, responseDto));
     }
+
 }

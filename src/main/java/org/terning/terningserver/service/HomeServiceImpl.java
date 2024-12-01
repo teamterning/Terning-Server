@@ -1,5 +1,6 @@
 package org.terning.terningserver.service;
 
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,9 @@ import org.terning.terningserver.repository.user.UserRepository;
 
 import java.util.List;
 
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,7 +26,6 @@ public class HomeServiceImpl implements HomeService{
 
     private final InternshipRepository internshipRepository;
     private final UserRepository userRepository;
-    private final ScrapRepository scrapRepository;
 
     @Override
     public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, int startYear, int startMonth){
@@ -30,17 +33,19 @@ public class HomeServiceImpl implements HomeService{
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
 
-        // 필터링 상태가 없을 경우 NULL 리턴
         if(user.getFilter() == null){
             return HomeAnnouncementsResponseDto.of(0,List.of());
         }
 
-        List<InternshipAnnouncement> announcements = internshipRepository.findFilteredInternships(user, sortBy, startYear, startMonth);
+        List<Tuple> results = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, startYear, startMonth);
 
-        List<HomeResponseDto> responseDtos = announcements.stream()
-                .map(announcement -> {
-                    boolean isScrapped = scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
-                    String color = scrapRepository.findColorByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
+        List<HomeResponseDto> responseDtos = results.stream()
+                .map(tuple -> {
+                    InternshipAnnouncement announcement = tuple.get(internshipAnnouncement);
+                    Long scrapId = tuple.get(scrap.id);
+                    String color = tuple.get(scrap.color.stringValue());
+
+                    boolean isScrapped = scrapId != null;
                     return HomeResponseDto.of(announcement, isScrapped, color);
                 })
                 .toList();
