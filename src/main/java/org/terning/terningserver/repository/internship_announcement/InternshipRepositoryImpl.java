@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -110,9 +111,10 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
 
     @Override
-    public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
+    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, int startYear, int startMonth){
         return jpaQueryFactory
-                .selectFrom(internshipAnnouncement)
+                .select(internshipAnnouncement, scrap.id, scrap.color) // tuple -> Scrap 정보 한번에 불러오기
+                .from(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
                         getGraduatingFilter(user),
