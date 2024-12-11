@@ -1,8 +1,5 @@
 package org.terning.terningserver.service;
 
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
-
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +15,9 @@ import org.terning.terningserver.repository.internship_announcement.InternshipRe
 import org.terning.terningserver.repository.user.UserRepository;
 
 import java.util.List;
+
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +60,9 @@ public class HomeServiceImpl implements HomeService{
                 .toList();
 
         return HomeAnnouncementsResponseDto.of(responseDtos.size(), responseDtos);
+    }
+
+    private boolean isScrapped(Long scrapId) {
+        return scrapId != null;
     }
 }
