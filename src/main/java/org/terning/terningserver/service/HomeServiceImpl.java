@@ -28,7 +28,7 @@ public class HomeServiceImpl implements HomeService{
     private final UserRepository userRepository;
 
     @Override
-    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, int startYear, int startMonth){
+    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy){
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
@@ -38,7 +38,7 @@ public class HomeServiceImpl implements HomeService{
             return HomeAnnouncementsResponseDto.of(0,List.of());
         }
 
-        List<Tuple> announcements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, startYear, startMonth);
+        List<Tuple> announcements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy);
 
         // 해당하는 공고가 없는 경우
         if(announcements.isEmpty()){

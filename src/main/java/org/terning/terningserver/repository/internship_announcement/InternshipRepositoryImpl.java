@@ -109,7 +109,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     @Override
-    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, int startYear, int startMonth){
+    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy){
         return jpaQueryFactory
                 .select(internshipAnnouncement, scrap.id, scrap.color) // tuple -> Scrap 정보 한번에 불러오기
                 .from(internshipAnnouncement)
@@ -117,7 +117,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .where(
                         getGraduatingFilter(user),
                         getWorkingPeriodFilter(user),
-                        getStartDateFilter(startYear, startMonth)
+                        getStartDateFilter(user)
                 )
                 .orderBy(
                         sortAnnouncementsByDeadline().asc(),
@@ -143,7 +143,9 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         }
     }
 
-    private BooleanExpression getStartDateFilter(int startYear, int startMonth){
+    private BooleanExpression getStartDateFilter(User user){
+        int startYear = user.getFilter().getStartYear();
+        int startMonth = user.getFilter().getStartMonth();
         return internshipAnnouncement.startYear.eq(startYear)
                 .and(internshipAnnouncement.startMonth.eq(startMonth));
     }
