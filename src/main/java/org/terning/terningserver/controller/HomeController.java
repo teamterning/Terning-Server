@@ -26,11 +26,9 @@ public class HomeController implements HomeSwagger {
     @GetMapping("/home")
     public ResponseEntity<SuccessResponse<HomeAnnouncementsResponseDto>> getAnnouncements(
             @AuthenticationPrincipal Long userId,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "deadlineSoon") String sortBy,
-            @RequestParam("startYear") int startYear,
-            @RequestParam("startMonth") int startMonth
+            @RequestParam(value = "sortBy", required = false, defaultValue = "deadlineSoon") String sortBy
     ){
-        HomeAnnouncementsResponseDto announcements = homeService.getAnnouncements(userId, sortBy, startYear, startMonth);
+        HomeAnnouncementsResponseDto announcements = homeService.getAnnouncements(userId, sortBy);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_ANNOUNCEMENTS, announcements));
     }
