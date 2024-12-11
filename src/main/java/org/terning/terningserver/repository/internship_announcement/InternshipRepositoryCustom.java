@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.terning.terningserver.domain.InternshipAnnouncement;
@@ -14,6 +15,6 @@ public interface InternshipRepositoryCustom {
 
     Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 
-    List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth);
+    List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy);
 
 }

@@ -15,9 +15,7 @@ public interface HomeSwagger {
     @Operation(summary = "홈화면 > 나에게 딱맞는 인턴 공고 조회", description = "특정 사용자에 필터링 조건에 맞는 인턴 공고 정보를 조회하는 API")
     ResponseEntity<SuccessResponse<HomeAnnouncementsResponseDto>> getAnnouncements(
             Long userId,
-            String sortBy,
-            int startYear,
-            int startMonth
+            String sortBy
     );
 
     @Operation(summary = "홈화면 > 곧 마감인 스크랩 공고 조회", description = "곧 마감인 스크랩 공고를 조회하는 API")
