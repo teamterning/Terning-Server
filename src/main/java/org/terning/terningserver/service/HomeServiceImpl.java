@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
@@ -32,20 +33,29 @@ public class HomeServiceImpl implements HomeService{
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
         );
 
+        // 유저의 필터 정보가 없는 경우
         if(user.getFilter() == null){
             return HomeAnnouncementsResponseDto.of(0,List.of());
         }
 
-        List<Tuple> results = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, startYear, startMonth);
+        List<Tuple> announcements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, startYear, startMonth);
 
-        List<HomeResponseDto> responseDtos = results.stream()
+        // 해당하는 공고가 없는 경우
+        if(announcements.isEmpty()){
+            return HomeAnnouncementsResponseDto.of(0, List.of());
+        }
+
+        List<HomeResponseDto> responseDtos = announcements.stream()
                 .map(tuple -> {
                     InternshipAnnouncement announcement = tuple.get(internshipAnnouncement);
                     Long scrapId = tuple.get(scrap.id);
-                    String color = tuple.get(scrap.color.stringValue());
+                    Color color = tuple.get(scrap.color);
+                    boolean isScrapped = (scrapId != null); // 스크랩 여부
 
-                    boolean isScrapped = isScrapped(scrapId);
-                    return HomeResponseDto.of(announcement, isScrapped, color);
+                    // scrap 하지 않은 경우 color는 지정되지 않아야 한다.
+                    String colorValue = (isScrapped && color != null) ? color.getColorValue() : null;
+
+                    return HomeResponseDto.of(announcement, isScrapped, colorValue);
                 })
                 .toList();
 

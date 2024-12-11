@@ -81,27 +81,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
-    @Override
-    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, int startYear, int startMonth) {
-        return jpaQueryFactory
-                .select(
-                        internshipAnnouncement,
-                        scrap.id,
-                        scrap.color
-                )
-                .from(internshipAnnouncement)
-                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user)) // Fetch Join
-                .where(
-                        getGraduatingFilter(user),
-                        getWorkingPeriodFilter(user),
-                        getStartDateFilter(startYear, startMonth)
-                )
-                .orderBy(
-                        sortAnnouncementsByDeadline().asc(),
-                        getSortOrder(sortBy)
-                )
-                .fetch();
-    }
 
     private boolean isPureEnglish(String summonerName) {
         //공백은 무시
@@ -129,7 +108,24 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         };
     }
 
-
+    @Override
+    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, int startYear, int startMonth){
+        return jpaQueryFactory
+                .select(internshipAnnouncement, scrap.id, scrap.color) // tuple -> Scrap 정보 한번에 불러오기
+                .from(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
+                .where(
+                        getGraduatingFilter(user),
+                        getWorkingPeriodFilter(user),
+                        getStartDateFilter(startYear, startMonth)
+                )
+                .orderBy(
+                        sortAnnouncementsByDeadline().asc(),
+                        getSortOrder(sortBy)
+                )
+                .fetch();
+    }
+  
     private BooleanExpression getGraduatingFilter(User user){
         if(user.getFilter().getGrade() != Grade.SENIOR){
             return internshipAnnouncement.isGraduating.isFalse();
