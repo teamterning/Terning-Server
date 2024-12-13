@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 
 
@@ -115,6 +116,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 .from(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
+                        getJobTypeFilter(user),
                         getGraduatingFilter(user),
                         getWorkingPeriodFilter(user),
                         getStartDateFilter(user)
@@ -198,5 +200,12 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 "CASE WHEN {0} THEN 1 ELSE 2 END",
                 isNotExpired
         );
+    }
+
+    private BooleanExpression getJobTypeFilter(User user) {
+        if (user.getFilter().getJobType() == JobType.TOTAL) {
+            return null; // total일 경우 모든 직무 공고 허용
+        }
+        return internshipAnnouncement.jobType.eq(user.getFilter().getJobType().getValue());
     }
 }
