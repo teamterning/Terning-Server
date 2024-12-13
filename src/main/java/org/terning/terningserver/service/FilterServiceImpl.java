@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
@@ -35,14 +36,16 @@ public class FilterServiceImpl implements FilterService {
         User user = findUser(userId);
         Filter filter = user.getFilter();
 
+        JobType jobType = (responseDto.jobType() == null || responseDto.jobType().isBlank())
+                ? JobType.TOTAL : JobType.fromKey(responseDto.jobType());
         Grade grade = Grade.fromKey(responseDto.grade());
         WorkingPeriod workingPeriod = WorkingPeriod.fromKey(responseDto.workingPeriod());
 
         if (filter != null) {
-            updateExistingFilter(filter, grade, workingPeriod, responseDto);
+            updateExistingFilter(filter, jobType, grade, workingPeriod, responseDto);
         }
 
-        createFilter(user, grade, workingPeriod, responseDto);
+        createFilter(user, jobType, grade, workingPeriod, responseDto);
     }
 
     private User findUser(Long userId) {
@@ -50,8 +53,9 @@ public class FilterServiceImpl implements FilterService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_USER_EXCEPTION));
     }
 
-    private void updateExistingFilter(Filter filter, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
+    private void updateExistingFilter(Filter filter, JobType jobType, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
         filter.updateFilter(
+                jobType,
                 grade,
                 workingPeriod,
                 dto.startYear(),
@@ -59,9 +63,10 @@ public class FilterServiceImpl implements FilterService {
         );
     }
 
-    private void createFilter(User user, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
+    private void createFilter(User user, JobType jobType, Grade grade, WorkingPeriod workingPeriod, UpdateUserFilterRequestDto dto) {
         Filter savedFilter = filterRepository.save(
                 Filter.builder()
+                        .jobType(jobType)
                         .grade(grade)
                         .workingPeriod(workingPeriod)
                         .startYear(dto.startYear())

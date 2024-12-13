@@ -11,6 +11,7 @@ import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
@@ -208,12 +209,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Filter buildFilterFromRequest(SignUpFilterRequestDto request) {
+        JobType jobType = JobType.TOTAL;
         Grade grade = Grade.fromKey(request.grade());
         WorkingPeriod workingPeriod = WorkingPeriod.fromKey(request.workingPeriod());
         int startYear = request.startYear();
         int startMonth = request.startMonth();
 
         return Filter.builder()
+                .jobType(jobType)
                 .grade(grade)
                 .workingPeriod(workingPeriod)
                 .startYear(startYear)
