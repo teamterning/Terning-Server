@@ -2,6 +2,8 @@ package org.terning.terningserver.service;
 
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
@@ -22,47 +24,71 @@ import static org.terning.terningserver.domain.QScrap.scrap;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HomeServiceImpl implements HomeService{
+public class HomeServiceImpl implements HomeService {
 
     private final InternshipRepository internshipRepository;
     private final UserRepository userRepository;
 
     @Override
-    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy){
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
-        );
+    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, Pageable pageable) {
+        User user = getUserById(userId);
 
-        // 유저의 필터 정보가 없는 경우
-        if(user.getFilter() == null){
-            return HomeAnnouncementsResponseDto.of(0,List.of());
+        if (user.getFilter() == null) {
+            return createEmptyResponse();
         }
 
-        List<Tuple> announcements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy);
+        Page<Tuple> pagedAnnouncements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, pageable);
 
-        // 해당하는 공고가 없는 경우
-        if(announcements.isEmpty()){
-            return HomeAnnouncementsResponseDto.of(0, List.of());
+        if (pagedAnnouncements.isEmpty()) {
+            return createEmptyResponse();
         }
 
-        List<HomeResponseDto> responseDtos = announcements.stream()
+        List<HomeResponseDto> responseDtos = mapToHomeResponseDtos(pagedAnnouncements);
+
+        return createResponse(pagedAnnouncements, responseDtos);
+    }
+
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private HomeAnnouncementsResponseDto createEmptyResponse() {
+        return HomeAnnouncementsResponseDto.of(0, 0, false, List.of());
+    }
+
+    private List<HomeResponseDto> mapToHomeResponseDtos(Page<Tuple> pagedAnnouncements) {
+        return pagedAnnouncements.getContent().stream()
                 .map(tuple -> {
                     InternshipAnnouncement announcement = tuple.get(internshipAnnouncement);
                     Long scrapId = tuple.get(scrap.id);
                     Color color = tuple.get(scrap.color);
-                    boolean isScrapped = (scrapId != null); // 스크랩 여부
 
-                    // scrap 하지 않은 경우 color는 지정되지 않아야 한다.
-                    String colorValue = (isScrapped && color != null) ? color.getColorValue() : null;
+                    boolean isScrapped = isScrapped(scrapId);
+                    String colorValue = determineColorValue(isScrapped, color);
 
                     return HomeResponseDto.of(announcement, isScrapped, colorValue);
                 })
                 .toList();
-
-        return HomeAnnouncementsResponseDto.of(responseDtos.size(), responseDtos);
     }
 
     private boolean isScrapped(Long scrapId) {
         return scrapId != null;
+    }
+
+    private String determineColorValue(boolean isScrapped, Color color) {
+        if (isScrapped && color != null) {
+            return color.getColorValue();
+        }
+        return null;
+    }
+
+    private HomeAnnouncementsResponseDto createResponse(Page<Tuple> pagedAnnouncements, List<HomeResponseDto> responseDtos) {
+        return HomeAnnouncementsResponseDto.of(
+                pagedAnnouncements.getTotalPages(),
+                pagedAnnouncements.getTotalElements(),
+                pagedAnnouncements.hasNext(),
+                responseDtos
+        );
     }
 }
