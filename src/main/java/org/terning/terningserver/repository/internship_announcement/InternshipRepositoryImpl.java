@@ -110,9 +110,9 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     @Override
-    public List<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy){
-        return jpaQueryFactory
-                .select(internshipAnnouncement, scrap.id, scrap.color) // tuple -> Scrap 정보 한번에 불러오기
+    public Page<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable) {
+        List<Tuple> content = jpaQueryFactory
+                .select(internshipAnnouncement, scrap.id, scrap.color)
                 .from(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
@@ -125,9 +125,23 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                         sortAnnouncementsByDeadline().asc(),
                         getSortOrder(sortBy)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(internshipAnnouncement.count())
+                .from(internshipAnnouncement)
+                .where(
+                        getJobTypeFilter(user),
+                        getGraduatingFilter(user),
+                        getWorkingPeriodFilter(user),
+                        getStartDateFilter(user)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
-  
+
     private BooleanExpression getGraduatingFilter(User user){
         if(user.getFilter().getGrade() != Grade.SENIOR){
             return internshipAnnouncement.isGraduating.isFalse();
