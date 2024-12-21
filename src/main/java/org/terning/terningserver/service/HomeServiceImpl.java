@@ -1,50 +1,94 @@
 package org.terning.terningserver.service;
 
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.User;
+import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
-import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 
 import java.util.List;
 
+import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.domain.QScrap.scrap;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HomeServiceImpl implements HomeService{
+public class HomeServiceImpl implements HomeService {
 
     private final InternshipRepository internshipRepository;
     private final UserRepository userRepository;
-    private final ScrapRepository scrapRepository;
 
     @Override
-    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, int startYear, int startMonth){
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION)
-        );
+    public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, Pageable pageable) {
+        User user = getUserById(userId);
 
-        // 필터링 상태가 없을 경우 NULL 리턴
-        if(user.getFilter() == null){
-            return HomeAnnouncementsResponseDto.of(0,List.of());
+        if (user.getFilter() == null) {
+            return createEmptyResponse();
         }
 
-        List<InternshipAnnouncement> announcements = internshipRepository.findFilteredInternships(user, sortBy, startYear, startMonth);
+        Page<Tuple> pagedAnnouncements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, pageable);
 
-        List<HomeResponseDto> responseDtos = announcements.stream()
-                .map(announcement -> {
-                    boolean isScrapped = scrapRepository.existsByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
-                    String color = scrapRepository.findColorByInternshipAnnouncementIdAndUserId(announcement.getId(), userId);
-                    return HomeResponseDto.of(announcement, isScrapped, color);
+        if (pagedAnnouncements.isEmpty()) {
+            return createEmptyResponse();
+        }
+
+        List<HomeResponseDto> responseDtos = mapToHomeResponseDtos(pagedAnnouncements);
+
+        return createResponse(pagedAnnouncements, responseDtos);
+    }
+
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private HomeAnnouncementsResponseDto createEmptyResponse() {
+        return HomeAnnouncementsResponseDto.of(0, 0, false, List.of());
+    }
+
+    private List<HomeResponseDto> mapToHomeResponseDtos(Page<Tuple> pagedAnnouncements) {
+        return pagedAnnouncements.getContent().stream()
+                .map(tuple -> {
+                    InternshipAnnouncement announcement = tuple.get(internshipAnnouncement);
+                    Long scrapId = tuple.get(scrap.id);
+                    Color color = tuple.get(scrap.color);
+
+                    boolean isScrapped = isScrapped(scrapId);
+                    String colorValue = determineColorValue(isScrapped, color);
+
+                    return HomeResponseDto.of(announcement, isScrapped, colorValue);
                 })
                 .toList();
+    }
 
-        return HomeAnnouncementsResponseDto.of(responseDtos.size(), responseDtos);
+    private boolean isScrapped(Long scrapId) {
+        return scrapId != null;
+    }
+
+    private String determineColorValue(boolean isScrapped, Color color) {
+        if (isScrapped && color != null) {
+            return color.getColorValue();
+        }
+        return null;
+    }
+
+    private HomeAnnouncementsResponseDto createResponse(Page<Tuple> pagedAnnouncements, List<HomeResponseDto> responseDtos) {
+        return HomeAnnouncementsResponseDto.of(
+                pagedAnnouncements.getTotalPages(),
+                pagedAnnouncements.getTotalElements(),
+                pagedAnnouncements.hasNext(),
+                responseDtos
+        );
     }
 }

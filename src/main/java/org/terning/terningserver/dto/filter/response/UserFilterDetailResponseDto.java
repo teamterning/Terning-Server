@@ -7,6 +7,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Builder(access = PRIVATE)
 public record UserFilterDetailResponseDto(
+        String jobType,
         String grade,
         String workingPeriod,
         Integer startYear,
@@ -14,8 +15,9 @@ public record UserFilterDetailResponseDto(
 ) {
     public static UserFilterDetailResponseDto of(final Filter userFilter) {
         return UserFilterDetailResponseDto.builder()
-                .grade(userFilter == null ? null : userFilter.getGrade().getKey())
-                .workingPeriod(userFilter == null ? null : userFilter.getWorkingPeriod().getKey())
+                .jobType(userFilter == null || userFilter.getJobType() == null ? "total" : userFilter.getJobType().getKey())
+                .grade(userFilter == null || userFilter.getGrade() == null ? null : userFilter.getGrade().getKey())
+                .workingPeriod(userFilter == null || userFilter.getWorkingPeriod() == null ? null : userFilter.getWorkingPeriod().getKey())
                 .startYear(userFilter == null ? null : userFilter.getStartYear())
                 .startMonth(userFilter == null ? null : userFilter.getStartMonth())
                 .build();

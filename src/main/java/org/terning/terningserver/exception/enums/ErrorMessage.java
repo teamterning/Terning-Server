@@ -15,9 +15,10 @@ public enum ErrorMessage {
     FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다"),
     UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
 
-    // 사용자 필터링 정보 생성
+    // 필터링
     FAILED_SIGN_UP_USER_FILTER_CREATION(404, "사용자 필터 생성에 실패하였습니다"),
     FAILED_SIGN_UP_USER_FILTER_ASSIGNMENT(404, "사용자 필터 연결에 실패하였습니다"),
+    INVALID_JOB_TYPE(401, "유효하지 않은 직무 카테고리입니다."),
 
     // 스크랩
     EXISTS_SCRAP_ALREADY(400, "이미 스크랩했습니다."),
