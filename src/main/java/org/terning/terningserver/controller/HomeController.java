@@ -31,7 +31,6 @@ public class HomeController implements HomeSwagger {
             @RequestParam(value = "sortBy", required = false, defaultValue = "deadlineSoon") String sortBy,
             @PageableDefault(size = 10) Pageable pageable) {
         HomeAnnouncementsResponseDto announcements = homeService.getAnnouncements(userId, sortBy, pageable);
-
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_ANNOUNCEMENTS, announcements));
     }
 

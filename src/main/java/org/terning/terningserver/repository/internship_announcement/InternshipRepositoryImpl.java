@@ -142,7 +142,6 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
-
     private BooleanExpression getGraduatingFilter(User user){
         if(user.getFilter().getGrade() != Grade.SENIOR){
             return internshipAnnouncement.isGraduating.isFalse();
