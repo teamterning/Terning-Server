@@ -38,8 +38,10 @@ public class FilterServiceImpl implements FilterService {
 
         JobType jobType = (responseDto.jobType() == null || responseDto.jobType().isBlank())
                 ? JobType.TOTAL : JobType.fromKey(responseDto.jobType());
-        Grade grade = Grade.fromKey(responseDto.grade());
-        WorkingPeriod workingPeriod = WorkingPeriod.fromKey(responseDto.workingPeriod());
+        Grade grade = (responseDto.grade() == null || responseDto.grade().isBlank())
+                ? null : Grade.fromKey(responseDto.grade());
+        WorkingPeriod workingPeriod = (responseDto.workingPeriod() == null || responseDto.workingPeriod().isBlank())
+                ? null : WorkingPeriod.fromKey(responseDto.workingPeriod());
 
         if (filter != null) {
             updateExistingFilter(filter, jobType, grade, workingPeriod, responseDto);
