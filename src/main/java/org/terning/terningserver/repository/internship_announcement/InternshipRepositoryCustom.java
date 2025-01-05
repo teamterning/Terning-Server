@@ -16,4 +16,6 @@ public interface InternshipRepositoryCustom {
     Page<InternshipAnnouncement> searchInternshipAnnouncement(String keyword, String sortBy, Pageable pageable);
 
     Page<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable);
+
+    Page<Tuple> findAllInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable);
 }

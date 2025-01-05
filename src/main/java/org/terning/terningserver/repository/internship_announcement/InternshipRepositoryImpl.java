@@ -110,6 +110,27 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     @Override
+    public Page<Tuple> findAllInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable) {
+        List<Tuple> content = jpaQueryFactory
+                .select(internshipAnnouncement, scrap.id, scrap.color)
+                .from(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
+                .orderBy(
+                        sortAnnouncementsByDeadline().asc(),
+                        getSortOrder(sortBy)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(internshipAnnouncement.count())
+                .from(internshipAnnouncement);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
     public Page<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable) {
         List<Tuple> content = jpaQueryFactory
                 .select(internshipAnnouncement, scrap.id, scrap.color)
