@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.Color;
+import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
 import org.terning.terningserver.exception.CustomException;
@@ -32,25 +34,33 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public HomeAnnouncementsResponseDto getAnnouncements(Long userId, String sortBy, Pageable pageable) {
         User user = getUserById(userId);
-
-        if (user.getFilter() == null) {
-            return createEmptyResponse();
+        Filter filter = user.getFilter();
+        Page<Tuple> pagedAnnouncements;
+        if (filter == null || isDefaultFilter(filter)) {
+            pagedAnnouncements = internshipRepository.findAllInternshipsWithScrapInfo(user, sortBy, pageable);
+        } else {
+            pagedAnnouncements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, pageable);
         }
-
-        Page<Tuple> pagedAnnouncements = internshipRepository.findFilteredInternshipsWithScrapInfo(user, sortBy, pageable);
 
         if (pagedAnnouncements.isEmpty()) {
             return createEmptyResponse();
         }
 
         List<HomeResponseDto> responseDtos = mapToHomeResponseDtos(pagedAnnouncements);
-
         return createResponse(pagedAnnouncements, responseDtos);
     }
 
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private boolean isDefaultFilter(Filter filter) {
+        return filter.getJobType() == JobType.TOTAL
+                && filter.getGrade() == null
+                && filter.getWorkingPeriod() == null
+                && filter.getStartYear() == 0
+                && filter.getStartMonth() == 0;
     }
 
     private HomeAnnouncementsResponseDto createEmptyResponse() {
