@@ -164,13 +164,15 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     private BooleanExpression getGraduatingFilter(User user){
-        if(user.getFilter().getGrade() != Grade.SENIOR){
-            return internshipAnnouncement.isGraduating.isFalse();
+        if(user.getFilter().getGrade() == null) return null;
+        if(user.getFilter().getGrade() == Grade.SENIOR){
+            return internshipAnnouncement.isGraduating.isTrue();
         }
-        return null;
+        return internshipAnnouncement.isGraduating.isFalse();
     }
 
     private BooleanExpression getWorkingPeriodFilter(User user){
+        if(user.getFilter().getWorkingPeriod() == null) return null;
         if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION1){
             return getWorkingPeriodAsNumber().between(1,3);
         } else if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION2){
@@ -183,6 +185,8 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     private BooleanExpression getStartDateFilter(User user){
         int startYear = user.getFilter().getStartYear();
         int startMonth = user.getFilter().getStartMonth();
+
+        if(startYear == 0 || startMonth == 0) return null;
         return internshipAnnouncement.startYear.eq(startYear)
                 .and(internshipAnnouncement.startMonth.eq(startMonth));
     }
@@ -238,7 +242,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
     }
 
     private BooleanExpression getJobTypeFilter(User user) {
-        if (user.getFilter().getJobType() == JobType.TOTAL) {
+        if (user.getFilter().getJobType() == null || user.getFilter().getJobType() == JobType.TOTAL) {
             return null; // total일 경우 모든 직무 공고 허용
         }
         return internshipAnnouncement.jobType.eq(user.getFilter().getJobType().getValue());
