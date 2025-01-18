@@ -6,12 +6,20 @@ import java.util.List;
 
 @Builder
 public record HomeAnnouncementsResponseDto(
-        int totalCount, // 필터링 된 공고 총 개수
+        int totalPages,
+        long totalCount,
+        boolean hasNext,
         List<HomeResponseDto> result
 ) {
-    public static HomeAnnouncementsResponseDto of(final int totalCount, final List<HomeResponseDto> announcements){
+    public static HomeAnnouncementsResponseDto of(
+            final int totalPages,
+            final long totalCount,
+            final boolean hasNext,
+            final List<HomeResponseDto> announcements) {
         return HomeAnnouncementsResponseDto.builder()
+                .totalPages(totalPages)
                 .totalCount(totalCount)
+                .hasNext(hasNext)
                 .result(announcements)
                 .build();
     }

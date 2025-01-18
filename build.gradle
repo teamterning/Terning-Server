@@ -23,46 +23,41 @@ ext {
 
 dependencies {
 
-	//default
+	// Spring Boot 기본 의존성
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	//postgresql
+	// PostgreSQL
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
-	//swagger
+	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-	//Health-check
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-	//QueryDSL
+	// QueryDSL
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	//validation
-//	implementation 'ort.springframework.boot:spring-boot-starter-validation'
-
-	//JWT
+	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-	implementation 'com.nimbusds:nimbus-jose-jwt:3.10'
+//	implementation 'com.nimbusds:nimbus-jose-jwt:3.10'
 
-	// security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	// gson
+	// Gson
 	implementation 'com.google.code.gson:gson:2.8.6'
-
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-
 }
 
 //QueryDSL 초기 설정

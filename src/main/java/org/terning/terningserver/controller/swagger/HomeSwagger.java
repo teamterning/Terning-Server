@@ -2,6 +2,7 @@ package org.terning.terningserver.controller.swagger;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
@@ -16,8 +17,7 @@ public interface HomeSwagger {
     ResponseEntity<SuccessResponse<HomeAnnouncementsResponseDto>> getAnnouncements(
             Long userId,
             String sortBy,
-            int startYear,
-            int startMonth
+            Pageable pageable
     );
 
     @Operation(summary = "홈화면 > 곧 마감인 스크랩 공고 조회", description = "곧 마감인 스크랩 공고를 조회하는 API")

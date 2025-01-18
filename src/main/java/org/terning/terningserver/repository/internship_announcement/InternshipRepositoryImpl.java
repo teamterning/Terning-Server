@@ -1,5 +1,6 @@
 package org.terning.terningserver.repository.internship_announcement;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -7,13 +8,12 @@ import com.querydsl.core.types.dsl.NumberTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.terning.terningserver.domain.InternshipAnnouncement;
 import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 
 
@@ -82,6 +82,7 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         return PageableExecutionUtils.getPage(internshipAnnouncements, pageable, count::fetchOne);
     }
 
+
     private boolean isPureEnglish(String summonerName) {
         //공백은 무시
         return summonerName.replaceAll("\\s", "").matches("^[a-zA-Z]+$");
@@ -108,32 +109,70 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         };
     }
 
+    @Override
+    public Page<Tuple> findAllInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable) {
+        List<Tuple> content = jpaQueryFactory
+                .select(internshipAnnouncement, scrap.id, scrap.color)
+                .from(internshipAnnouncement)
+                .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
+                .orderBy(
+                        sortAnnouncementsByDeadline().asc(),
+                        getSortOrder(sortBy)
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(internshipAnnouncement.count())
+                .from(internshipAnnouncement);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
 
     @Override
-    public List<InternshipAnnouncement> findFilteredInternships(User user, String sortBy, int startYear, int startMonth){
-        return jpaQueryFactory
-                .selectFrom(internshipAnnouncement)
+    public Page<Tuple> findFilteredInternshipsWithScrapInfo(User user, String sortBy, Pageable pageable) {
+        List<Tuple> content = jpaQueryFactory
+                .select(internshipAnnouncement, scrap.id, scrap.color)
+                .from(internshipAnnouncement)
                 .leftJoin(internshipAnnouncement.scraps, scrap).on(scrap.user.eq(user))
                 .where(
+                        getJobTypeFilter(user),
                         getGraduatingFilter(user),
                         getWorkingPeriodFilter(user),
-                        getStartDateFilter(startYear, startMonth)
+                        getStartDateFilter(user)
                 )
                 .orderBy(
                         sortAnnouncementsByDeadline().asc(),
                         getSortOrder(sortBy)
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(internshipAnnouncement.count())
+                .from(internshipAnnouncement)
+                .where(
+                        getJobTypeFilter(user),
+                        getGraduatingFilter(user),
+                        getWorkingPeriodFilter(user),
+                        getStartDateFilter(user)
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression getGraduatingFilter(User user){
-        if(user.getFilter().getGrade() != Grade.SENIOR){
-            return internshipAnnouncement.isGraduating.isFalse();
+        if(user.getFilter().getGrade() == null) return null;
+        if(user.getFilter().getGrade() == Grade.SENIOR){
+            return internshipAnnouncement.isGraduating.isTrue();
         }
-        return null;
+        return internshipAnnouncement.isGraduating.isFalse();
     }
 
     private BooleanExpression getWorkingPeriodFilter(User user){
+        if(user.getFilter().getWorkingPeriod() == null) return null;
         if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION1){
             return getWorkingPeriodAsNumber().between(1,3);
         } else if(user.getFilter().getWorkingPeriod() == WorkingPeriod.OPTION2){
@@ -143,7 +182,11 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
         }
     }
 
-    private BooleanExpression getStartDateFilter(int startYear, int startMonth){
+    private BooleanExpression getStartDateFilter(User user){
+        int startYear = user.getFilter().getStartYear();
+        int startMonth = user.getFilter().getStartMonth();
+
+        if(startYear == 0 || startMonth == 0) return null;
         return internshipAnnouncement.startYear.eq(startYear)
                 .and(internshipAnnouncement.startMonth.eq(startMonth));
     }
@@ -196,5 +239,12 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
                 "CASE WHEN {0} THEN 1 ELSE 2 END",
                 isNotExpired
         );
+    }
+
+    private BooleanExpression getJobTypeFilter(User user) {
+        if (user.getFilter().getJobType() == null || user.getFilter().getJobType() == JobType.TOTAL) {
+            return null; // total일 경우 모든 직무 공고 허용
+        }
+        return internshipAnnouncement.jobType.eq(user.getFilter().getJobType().getValue());
     }
 }
