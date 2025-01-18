@@ -65,8 +65,8 @@ jobs:
 
       - name: docker image 빌드 및 푸시
         run: |
-          docker build --platform linux/amd64 -t terningpoint/terning-deploy .
-          docker push terningpoint/terning-deploy
+          docker build --platform linux/amd64 -t terningpoint/terning2025 .
+          docker push terningpoint/terning2025
         working-directory: ${{ env.working-directory }}
 
   cd:
