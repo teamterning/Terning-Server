@@ -1,21 +1,19 @@
-package org.terning.terningserver.controller;
+package org.terning.terningserver.auth.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.auth.application.AuthService;
 import org.terning.terningserver.controller.swagger.AuthSwagger;
-import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.dto.auth.request.SignInRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.service.AuthService;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
@@ -32,9 +30,12 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authAccessToken,
             @RequestBody SignInRequestDto request
     ) {
-        val signInResponse = authService.signIn(authAccessToken, request);
+        String extractedToken = authAccessToken.substring(7);
 
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, signInResponse));
+        if (extractedToken.split("\\.").length != 3) {
+            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, authService.signIn(extractedToken, request)));
+        }
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, authService.signIn(extractedToken, request)));
     }
 
     @PostMapping("/token-reissue")
@@ -51,20 +52,16 @@ public class AuthController implements AuthSwagger {
             @RequestHeader("Authorization") String authId,
             @RequestBody SignUpRequestDto request
     ) {
-
         SignUpResponseDto signUpResponseDto = authService.signUp(authId, request);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP, signUpResponseDto));
     }
 
     @PostMapping("/sign-up/filter")
-    public ResponseEntity<SuccessResponse<SignUpFilterResponseDto>> filter(
+    public ResponseEntity<SuccessResponse> registerUserFilter(
             @RequestHeader("User-Id") Long userId,
             @RequestBody SignUpFilterRequestDto request
     ) {
-        Filter newFilter = authService.createAndSaveFilter(request);
-
-        authService.connectFilterToUser(userId, newFilter.getId());
-
+        authService.registerFilterWithUser(userId, request);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_UP_FILTER));
     }
 
