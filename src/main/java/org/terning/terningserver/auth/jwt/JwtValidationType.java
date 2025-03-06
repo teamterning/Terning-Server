@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt;
+package org.terning.terningserver.auth.jwt;
 
 public enum JwtValidationType {
     VALID_JWT,

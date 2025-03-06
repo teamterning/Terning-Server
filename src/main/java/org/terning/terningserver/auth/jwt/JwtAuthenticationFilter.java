@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt;
+package org.terning.terningserver.auth.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import static io.jsonwebtoken.lang.Strings.hasText;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.terning.terningserver.jwt.JwtValidationType.VALID_JWT;
 
 @Slf4j
 @Component
@@ -30,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             val token = getAccessTokenFromRequest(request);
-            if (hasText(token) && jwtTokenProvider.validateToken(token) == VALID_JWT) {
+            if (hasText(token) && jwtTokenProvider.validateToken(token) == JwtValidationType.VALID_JWT) {
                 val authentication = new UserAuthentication(getUserId(token), null, null);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
