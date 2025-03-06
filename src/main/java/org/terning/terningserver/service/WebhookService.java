@@ -2,6 +2,7 @@ package org.terning.terningserver.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.terning.terningserver.domain.User;
+import org.terning.terningserver.event.UserSignedUpEvent;
 import org.terning.terningserver.repository.user.UserRepository;
 
 import java.util.HashMap;
@@ -25,8 +27,14 @@ public class WebhookService {
 
     private final UserRepository userRepository;
 
+    @EventListener
+    public void handleUserSignedUpEvent(UserSignedUpEvent event) {
+        sendDiscordNotification(event.getUser());
+    }
+
+
     // 알림을 보내는 메서드
-    public void sendDiscordNotification(User user) {
+    private void sendDiscordNotification(User user) {
 
         // discord.webhook.url 값이 비어있으면 웹훅을 실행하지 않음
         if (discordWebhookUrl == null || discordWebhookUrl.isEmpty()) {
