@@ -12,7 +12,6 @@ import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.response.SignUpFilterResponseDto;
 import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
@@ -33,7 +32,7 @@ public interface AuthSwagger {
     );
 
     @Operation(summary = "사용자 필터링 정보 생성", description = "사용자 필터링 정보 생성 API")
-    ResponseEntity<SuccessResponse<SignUpFilterResponseDto>> filter(
+    ResponseEntity<SuccessResponse> registerUserFilter(
             @Parameter(name = "User-Id", description = "", example = "userId")
             @RequestHeader("User-Id") Long userId,
             @RequestBody SignUpFilterRequestDto request
@@ -53,6 +52,4 @@ public interface AuthSwagger {
     @Operation(summary = "계정탈퇴", description = "계정탈퇴 API")
     ResponseEntity<SuccessResponse> withdraw(
             @AuthenticationPrincipal Long userId);
-
-
 }
