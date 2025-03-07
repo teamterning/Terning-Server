@@ -1,4 +1,13 @@
-package org.terning.terningserver.service;
+package org.terning.terningserver.auth.application.social.apple;
+
+import com.google.gson.*;
+import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.http.HttpMethod;
+import org.springframework.stereotype.Component;
+import org.terning.terningserver.config.ValueConfig;
+import org.terning.terningserver.exception.CustomException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,33 +23,15 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Objects;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import io.jsonwebtoken.Jwts;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import org.terning.terningserver.config.ValueConfig;
-import org.terning.terningserver.exception.CustomException;
-
 import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_KEY;
 
-@Service
+@Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class AppleServiceImpl implements AppleService{
+public class AppleAuthTokenValidator {
 
     private final ValueConfig valueConfig;
 
-    @Override
-    public String getAppleData(String authAccessToken) {
+    public String extractAppleId(String authAccessToken) {
         val publicKeyList = getApplePublicKeys();
         val publicKey = makePublicKey(authAccessToken, publicKeyList);
 
@@ -50,7 +41,7 @@ public class AppleServiceImpl implements AppleService{
                 .parseClaimsJws(getTokenFromBearerString(authAccessToken))
                 .getBody();
 
-        val userInfoObject = (JsonObject)JsonParser.parseString(new Gson().toJson(userInfo));
+        val userInfoObject = (JsonObject) JsonParser.parseString(new Gson().toJson(userInfo));
         return userInfoObject.get(ValueConfig.ID).getAsString();
     }
 
@@ -149,5 +140,4 @@ public class AppleServiceImpl implements AppleService{
             throw new CustomException(INVALID_KEY);
         }
     }
-
 }

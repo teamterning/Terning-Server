@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt;
+package org.terning.terningserver.auth.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import static io.jsonwebtoken.Header.JWT_TYPE;
 import static io.jsonwebtoken.Header.TYPE;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
 import static java.util.Base64.getEncoder;
-import static org.terning.terningserver.jwt.JwtValidationType.*;
+import static org.terning.terningserver.auth.jwt.JwtValidationType.*;
 
 @Slf4j
 @Component
@@ -76,5 +76,4 @@ public class JwtTokenProvider {
         val encodedKey = getEncoder().encodeToString(valueConfig.getSecretKey().getBytes());
         return hmacShaKeyFor(encodedKey.getBytes());
     }
-
 }

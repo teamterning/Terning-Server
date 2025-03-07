@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt;
+package org.terning.terningserver.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

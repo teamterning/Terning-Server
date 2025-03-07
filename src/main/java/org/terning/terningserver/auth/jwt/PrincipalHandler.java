@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt;
+package org.terning.terningserver.auth.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

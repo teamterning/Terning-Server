@@ -8,9 +8,7 @@ import org.terning.terningserver.controller.swagger.ScrapSwagger;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.jwt.PrincipalHandler;
 import org.terning.terningserver.service.ScrapService;
-import org.terning.terningserver.util.LogExecutionTime;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
