@@ -5,16 +5,14 @@ import lombok.val;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.terning.terningserver.auth.jwt.JwtTokenProvider;
-import org.terning.terningserver.auth.jwt.UserAuthentication;
-import org.terning.terningserver.config.ValueConfig;
+import org.terning.terningserver.domain.enums.Grade;
+import org.terning.terningserver.domain.enums.JobType;
+import org.terning.terningserver.domain.enums.ProfileImage;
+import org.terning.terningserver.domain.enums.WorkingPeriod;
+import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.domain.enums.ProfileImage;
-import org.terning.terningserver.domain.enums.Grade;
-import org.terning.terningserver.domain.enums.JobType;
-import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
 import org.terning.terningserver.dto.auth.request.SignUpWithAuthIdRequestDto;
@@ -30,8 +28,7 @@ import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 @RequiredArgsConstructor
 public class AuthSignUpServiceImpl implements AuthSignUpService {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final ValueConfig valueConfig;
+    private final JwtTokenManager jwtTokenManager;
     private final UserRepository userRepository;
     private final FilterRepository filterRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -42,7 +39,7 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
         String tokenWithoutBearer = authId.replace("Bearer ", "").trim();
         SignUpWithAuthIdRequestDto requestDto = createSignUpRequestDto(tokenWithoutBearer, request);
         User user = createUser(requestDto);
-        Token token = getFullToken(user);
+        Token token = jwtTokenManager.generateToken(user);
 
         eventPublisher.publishEvent(UserSignedUpEvent.of(user));
 
@@ -72,40 +69,17 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
     }
 
     private User createUser(SignUpWithAuthIdRequestDto requestDto) {
-        ProfileImage profileImage = requestDto.profileImage() != null
-                ? ProfileImage.fromValue(requestDto.profileImage()) : ProfileImage.BASIC;
-
         User user = User.builder()
                 .authId(requestDto.authId())
                 .name(requestDto.name())
                 .authType(requestDto.authType())
-                .profileImage(profileImage)
+                .profileImage(ProfileImage.fromValue(requestDto.profileImage()))
                 .build();
         return userRepository.save(user);
     }
 
-    private Token getFullToken(User user) {
-        String accessToken = createAccessToken(new UserAuthentication(user.getId(), null, null));
-        String refreshToken = createRefreshToken(new UserAuthentication(user.getId(), null, null));
-
-        user.updateRefreshToken(refreshToken);
-
-        return Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-    }
-
     private SignUpResponseDto createSignUpResponseDto(Token token, User user) {
         return SignUpResponseDto.of(token.getAccessToken(), token.getRefreshToken(), user.getId(), user.getAuthType());
-    }
-
-    private String createAccessToken(UserAuthentication authentication) {
-        return jwtTokenProvider.generateToken(authentication, valueConfig.getAccessTokenExpired());
-    }
-
-    private String createRefreshToken(UserAuthentication authentication) {
-        return jwtTokenProvider.generateToken(authentication, valueConfig.getRefreshTokenExpired());
     }
 
     private Filter buildFilterFromRequest(SignUpFilterRequestDto request) {
