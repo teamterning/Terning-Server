@@ -2,7 +2,7 @@ package org.terning.terningserver.jwt.filter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.terning.terningserver.jwt.parser.JwtParserService;
+import org.terning.terningserver.jwt.application.JwtUserIdExtractor;
 
 import java.util.Optional;
 
@@ -10,11 +10,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtTokenVerifier {
 
-    private final JwtParserService jwtParserService;
+    private final JwtUserIdExtractor jwtUserIdExtractor;
 
     public Optional<Long> validateAndExtractUserId(String token) {
         try {
-            return Optional.of(jwtParserService.extractUserId(token));
+            return Optional.of(jwtUserIdExtractor.extractUserId(token));
         } catch (Exception e) {
             return Optional.empty();
         }
