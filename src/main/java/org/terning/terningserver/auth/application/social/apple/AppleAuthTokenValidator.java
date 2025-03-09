@@ -1,9 +1,9 @@
 package org.terning.terningserver.auth.application.social.apple;
 
 import com.google.gson.*;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.config.ValueConfig;
@@ -28,34 +28,46 @@ import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_KEY
 @Component
 @RequiredArgsConstructor
 public class AppleAuthTokenValidator {
+    private static final String TOKEN_VALUE_DELIMITER = "\\.";
+    private static final String BEARER_HEADER = "Bearer ";
+    private static final String BLANK = "";
+    private static final String MODULUS = "n";
+    private static final String EXPONENT = "e";
+    private static final String KID_HEADER_KEY = "kid";
+    private static final String ALG_HEADER_KEY = "alg";
+    private static final String RSA = "RSA";
+    private static final String KEY = "keys";
+    private static final String ID = "sub";
+    private static final int QUOTES = 1;
+    private static final int POSITIVE_NUMBER = 1;
 
     private final ValueConfig valueConfig;
 
     public String extractAppleId(String authAccessToken) {
-        val publicKeyList = getApplePublicKeys();
-        val publicKey = makePublicKey(authAccessToken, publicKeyList);
+        JsonArray publicKeyList = getApplePublicKeys();
+        PublicKey publicKey = makePublicKey(authAccessToken, publicKeyList);
 
-        val userInfo = Jwts.parserBuilder()
+        Claims userInfo = Jwts.parserBuilder()
                 .setSigningKey(publicKey)
                 .build()
                 .parseClaimsJws(getTokenFromBearerString(authAccessToken))
                 .getBody();
 
-        val userInfoObject = (JsonObject) JsonParser.parseString(new Gson().toJson(userInfo));
-        return userInfoObject.get(ValueConfig.ID).getAsString();
+        JsonObject userInfoObject = (JsonObject) JsonParser.parseString(new Gson().toJson(userInfo));
+        return userInfoObject.get(ID).getAsString();
     }
 
     private JsonArray getApplePublicKeys() {
-        val connection = sendHttpRequest();
-        val result = getHttpResponse(connection);
-        val keys = (JsonObject)JsonParser.parseString(result.toString());
-        return (JsonArray)keys.get(ValueConfig.KEY);
+        HttpURLConnection connection = sendHttpRequest();
+        StringBuilder result = getHttpResponse(connection);
+        JsonObject keys = (JsonObject) JsonParser.parseString(result.toString());
+        return (JsonArray) keys.get(KEY);
     }
 
     private HttpURLConnection sendHttpRequest() {
-        try{
-            val url = new URL(valueConfig.getAppleUri());
-            val connection = (HttpURLConnection)url.openConnection();
+        try {
+            URL url = new URL(valueConfig.getAppleUri());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(HttpMethod.GET.name());
             return connection;
         } catch (IOException e) {
@@ -64,8 +76,7 @@ public class AppleAuthTokenValidator {
     }
 
     private StringBuilder getHttpResponse(HttpURLConnection connection) {
-        try {
-            val bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             return splitResponse(bufferedReader);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -73,15 +84,12 @@ public class AppleAuthTokenValidator {
     }
 
     private StringBuilder splitResponse(BufferedReader bufferedReader) {
-        try{
-            val result = new StringBuilder();
-
+        try {
+            StringBuilder result = new StringBuilder();
             String line;
-            while (Objects.nonNull(line = bufferedReader.readLine())) {
+            while ((line = bufferedReader.readLine()) != null) {
                 result.append(line);
             }
-            bufferedReader.close();
-
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -89,12 +97,14 @@ public class AppleAuthTokenValidator {
     }
 
     private PublicKey makePublicKey(String accessToken, JsonArray publicKeyList) {
-        val decodeArray = accessToken.split(ValueConfig.TOKEN_VALUE_DELIMITER);
-        val header = new String(Base64.getDecoder().decode(getTokenFromBearerString(decodeArray[0])));
-        val kid = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.KID_HEADER_KEY);
-        val alg = ((JsonObject) JsonParser.parseString(header)).get(ValueConfig.ALG_HEADER_KEY);
+        String[] decodeArray = accessToken.split(TOKEN_VALUE_DELIMITER);
+        String header = new String(Base64.getDecoder().decode(getTokenFromBearerString(decodeArray[0])));
+        JsonObject headerObject = (JsonObject) JsonParser.parseString(header);
 
-        val matchingPublicKey = findMatchingPublicKey(publicKeyList, kid, alg);
+        JsonElement kid = headerObject.get(KID_HEADER_KEY);
+        JsonElement alg = headerObject.get(ALG_HEADER_KEY);
+
+        JsonObject matchingPublicKey = findMatchingPublicKey(publicKeyList, kid, alg);
         if (Objects.isNull(matchingPublicKey)) {
             throw new CustomException(INVALID_KEY);
         }
@@ -102,38 +112,35 @@ public class AppleAuthTokenValidator {
     }
 
     private String getTokenFromBearerString(String token) {
-        return token.replaceFirst(ValueConfig.BEARER_HEADER, ValueConfig.BLANK);
+        return token.replaceFirst(BEARER_HEADER, BLANK);
     }
 
     private JsonObject findMatchingPublicKey(JsonArray publicKeyList, JsonElement kid, JsonElement alg) {
         for (JsonElement publicKey : publicKeyList) {
-            val publicKeyObject = publicKey.getAsJsonObject();
-            val publicKid = publicKeyObject.get(ValueConfig.KID_HEADER_KEY);
-            val publicAlg = publicKeyObject.get(ValueConfig.ALG_HEADER_KEY);
+            JsonObject publicKeyObject = publicKey.getAsJsonObject();
+            JsonElement publicKid = publicKeyObject.get(KID_HEADER_KEY);
+            JsonElement publicAlg = publicKeyObject.get(ALG_HEADER_KEY);
 
             if (Objects.equals(kid, publicKid) && Objects.equals(alg, publicAlg)) {
                 return publicKeyObject;
             }
         }
-
         return null;
     }
 
     private PublicKey getPublicKey(JsonObject object) {
         try {
-            val modulus = object.get(ValueConfig.MODULUS).toString();
-            val exponent = object.get(ValueConfig.EXPONENT).toString();
+            String modulus = object.get(MODULUS).getAsString();
+            String exponent = object.get(EXPONENT).getAsString();
 
-            val quotes = ValueConfig.QUOTES;
-            val modulusBytes = Base64.getUrlDecoder().decode(modulus.substring(quotes, modulus.length() - quotes));
-            val exponentBytes = Base64.getUrlDecoder().decode(exponent.substring(quotes, exponent.length() - quotes));
+            byte[] modulusBytes = Base64.getUrlDecoder().decode(modulus.substring(QUOTES, modulus.length() - QUOTES));
+            byte[] exponentBytes = Base64.getUrlDecoder().decode(exponent.substring(QUOTES, exponent.length() - QUOTES));
 
-            val positiveNumber = ValueConfig.POSITIVE_NUMBER;
-            val modulusValue = new BigInteger(positiveNumber, modulusBytes);
-            val exponentValue = new BigInteger(positiveNumber, exponentBytes);
+            BigInteger modulusValue = new BigInteger(POSITIVE_NUMBER, modulusBytes);
+            BigInteger exponentValue = new BigInteger(POSITIVE_NUMBER, exponentBytes);
 
-            val publicKeySpec = new RSAPublicKeySpec(modulusValue, exponentValue);
-            val keyFactory = KeyFactory.getInstance(ValueConfig.RSA);
+            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(modulusValue, exponentValue);
+            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
 
             return keyFactory.generatePublic(publicKeySpec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException exception) {
