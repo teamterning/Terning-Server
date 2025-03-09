@@ -8,7 +8,7 @@ import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.jwt.parser.TokenExtractor;
+import org.terning.terningserver.jwt.auth.TokenExtractor;
 import org.terning.terningserver.repository.user.UserRepository;
 
 import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_TOKEN_REISSUE;
