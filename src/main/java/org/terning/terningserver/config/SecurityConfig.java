@@ -9,8 +9,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.terning.terningserver.auth.jwt.CustomJwtAuthenticationEntryPoint;
-import org.terning.terningserver.auth.jwt.JwtAuthenticationFilter;
+import org.terning.terningserver.jwt.filter.CustomJwtAuthenticationEntryPoint;
+import org.terning.terningserver.jwt.filter.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
