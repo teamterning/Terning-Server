@@ -1,4 +1,4 @@
-package org.terning.terningserver.jwt.application;
+package org.terning.terningserver.jwt.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
