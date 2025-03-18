@@ -1,0 +1,24 @@
+package org.terning.terningserver.auth.dto.response;
+
+import org.terning.terningserver.domain.Token;
+import org.terning.terningserver.domain.enums.AuthType;
+
+import java.util.Optional;
+
+public record SignInResponse(
+        String accessToken,
+        String refreshToken,
+        Long userId,
+        String authId,
+        AuthType authType
+) {
+    public static SignInResponse of(Token token, String authId, AuthType authType, Long userId) {
+        return new SignInResponse(
+                Optional.ofNullable(token).map(Token::getAccessToken).orElse(null),
+                Optional.ofNullable(token).map(Token::getRefreshToken).orElse(null),
+                userId,
+                authId,
+                authType
+        );
+    }
+}
