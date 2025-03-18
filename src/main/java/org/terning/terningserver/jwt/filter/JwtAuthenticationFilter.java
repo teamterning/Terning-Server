@@ -9,8 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.terning.terningserver.jwt.auth.UserAuthentication;
-import org.terning.terningserver.jwt.auth.UserDetailsFactory;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -38,8 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void authenticateUser(Long userId) {
-        UserDetails userDetails = UserDetailsFactory.create(userId);
-        UserAuthentication authentication = UserAuthentication.authenticated(userDetails);
+        UserAuthentication authentication = new UserAuthentication(userId);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
