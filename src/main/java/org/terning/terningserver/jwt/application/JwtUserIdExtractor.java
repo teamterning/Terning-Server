@@ -18,8 +18,14 @@ public class JwtUserIdExtractor {
 
     public Long extractUserId(String token) {
         Claims claims = jwtClaimsParser.parse(token);
-        return Optional.ofNullable(claims.get(CLAIM_USER_ID))
-                .map(UserIdConverter::convertToLong)
-                .orElseThrow(() -> new JwtException(JwtErrorCode.INVALID_USER_ID_TYPE));
+        Object userIdClaim = claims.get(CLAIM_USER_ID);
+
+        if (userIdClaim instanceof Number) {
+            return ((Number) userIdClaim).longValue();
+        } else if (userIdClaim instanceof String) {
+            return Long.parseLong((String) userIdClaim);
+        }
+
+        throw new JwtException(JwtErrorCode.INVALID_USER_ID_TYPE);
     }
 }
