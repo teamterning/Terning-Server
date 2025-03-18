@@ -13,9 +13,6 @@ public enum SuccessMessage {
     SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_NO_SCRAP(200, "아직 스크랩된 인턴 공고가 없어요!"),
     SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST(200, "일주일 내에 마감인 공고가 없어요\n캘린더에서 스크랩한 공고 일정을 확인해 보세요"),
 
-    // 소셜 로그인
-    SUCCESS_SIGN_IN(200, "소셜 로그인에 성공하였습니다"),
-
     // 토큰 재발급
     SUCCESS_REISSUE_TOKEN(200, "토큰 재발급에 성공하였습니다."),
 
