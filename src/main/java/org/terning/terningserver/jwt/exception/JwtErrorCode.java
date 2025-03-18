@@ -11,7 +11,7 @@ public enum JwtErrorCode {
     INVALID_USER_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 userId 값입니다."),
     INVALID_USER_ID_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 userId 타입입니다.");
 
-    public static final String PREFIX = "[AUTH ERROR]";
+    public static final String PREFIX = "[JWT ERROR]";
 
     private final HttpStatus status;
     private final String rawMessage;
