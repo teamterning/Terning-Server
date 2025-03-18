@@ -7,14 +7,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.auth.application.AuthService;
 import org.terning.terningserver.controller.swagger.AuthSwagger;
-import org.terning.terningserver.dto.auth.request.SignInRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
-import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
-import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
+import org.terning.terningserver.auth.dto.request.SignInRequest;
+import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
+import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
+import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
+import org.terning.terningserver.auth.dto.response.SignInResponse;
+import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
 
+import static org.terning.terningserver.auth.common.success.AuthSuccessCode.SUCCESS_SIGN_IN;
 import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 
@@ -26,16 +27,11 @@ public class AuthController implements AuthSwagger {
     private final AuthService authService;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<SuccessResponse<SignInResponseDto>> signIn(
+    public ResponseEntity<SuccessResponse<SignInResponse>> signIn(
             @RequestHeader("Authorization") String authAccessToken,
-            @RequestBody SignInRequestDto request
+            @RequestBody SignInRequest request
     ) {
-        String extractedToken = authAccessToken.substring(7);
-
-        if (extractedToken.split("\\.").length != 3) {
-            return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, authService.signIn(extractedToken, request)));
-        }
-        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, authService.signIn(extractedToken, request)));
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_SIGN_IN, authService.signIn(authAccessToken, request)));
     }
 
     @PostMapping("/token-reissue")
