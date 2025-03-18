@@ -1,4 +1,4 @@
-package org.terning.terningserver.dto.auth.request;
+package org.terning.terningserver.auth.dto.request;
 
 import lombok.Builder;
 import lombok.NonNull;

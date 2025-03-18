@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
+import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.jwt.auth.TokenExtractor;
 import org.terning.terningserver.repository.user.UserRepository;
