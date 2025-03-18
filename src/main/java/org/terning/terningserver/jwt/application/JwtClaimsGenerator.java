@@ -1,11 +1,12 @@
 package org.terning.terningserver.jwt.application;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.terning.terningserver.jwt.exception.JwtErrorCode;
 
 import java.util.Map;
 
@@ -20,13 +21,10 @@ public class JwtClaimsGenerator {
     }
 
     private Map<String, Object> createClaimsMap(Authentication authentication) {
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof UserDetails userDetails) {
-            return Map.of(USER_ID_CLAIM, userDetails.getUsername());
+        if (authentication.getPrincipal() instanceof Long userId) {
+            return Map.of(USER_ID_CLAIM, userId);
         }
 
-        return Map.of(USER_ID_CLAIM, principal.toString());
+        throw new JwtException(JwtErrorCode.INVALID_USER_DETAILS_TYPE.getMessage());
     }
 }
-
