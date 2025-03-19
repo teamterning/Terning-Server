@@ -165,10 +165,10 @@ public class InternshipRepositoryImpl implements InternshipRepositoryCustom {
 
     private BooleanExpression getGraduatingFilter(User user){
         if(user.getFilter().getGrade() == null) return null;
-        if(user.getFilter().getGrade() == Grade.SENIOR){
-            return internshipAnnouncement.isGraduating.isTrue();
+        if(user.getFilter().getGrade() != Grade.SENIOR){
+            return internshipAnnouncement.isGraduating.isFalse();
         }
-        return internshipAnnouncement.isGraduating.isFalse();
+        return null;
     }
 
     private BooleanExpression getWorkingPeriodFilter(User user){
