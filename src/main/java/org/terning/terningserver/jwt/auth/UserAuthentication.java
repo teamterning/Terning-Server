@@ -1,22 +1,24 @@
 package org.terning.terningserver.jwt.auth;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-import java.util.Collection;
+public class UserAuthentication extends AbstractAuthenticationToken {
 
-public class UserAuthentication extends UsernamePasswordAuthenticationToken {
-    private UserAuthentication(UserDetails principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
-        super(principal, credentials, authorities);
+    private final Long userId;
+
+    public UserAuthentication(Long userId) {
+        super(null);
+        this.userId = userId;
+        setAuthenticated(true);
     }
 
-    public static UserAuthentication authenticated(UserDetails userDetails) {
-        return new UserAuthentication(userDetails, null, userDetails.getAuthorities());
+    @Override
+    public Object getPrincipal() {
+        return userId;
     }
 
-    public static UserAuthentication unauthenticated(UserDetails userDetails, Object credentials) {
-        return new UserAuthentication(userDetails, credentials, null);
+    @Override
+    public Object getCredentials() {
+        return null;
     }
 }
-

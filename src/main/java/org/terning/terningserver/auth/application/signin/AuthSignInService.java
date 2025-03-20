@@ -1,8 +1,8 @@
 package org.terning.terningserver.auth.application.signin;
 
-import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.request.SignInRequestDto;
+import org.terning.terningserver.auth.dto.response.SignInResponse;
+import org.terning.terningserver.auth.dto.request.SignInRequest;
 
 public interface AuthSignInService {
-    SignInResponseDto signIn(String authAccessToken, SignInRequestDto request);
+    SignInResponse signIn(String authAccessToken, SignInRequest request);
 }

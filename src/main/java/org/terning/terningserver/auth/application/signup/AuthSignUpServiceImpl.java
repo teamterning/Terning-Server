@@ -13,10 +13,10 @@ import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpWithAuthIdRequestDto;
-import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
+import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
+import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
+import org.terning.terningserver.auth.dto.request.SignUpWithAuthIdRequestDto;
+import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
 import org.terning.terningserver.event.UserSignedUpEvent;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.filter.FilterRepository;
@@ -40,8 +40,9 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
         SignUpWithAuthIdRequestDto requestDto = createSignUpRequestDto(tokenWithoutBearer, request);
         User user = createUser(requestDto);
         Token token = jwtTokenManager.generateToken(user);
-
+        user.updateRefreshToken(token.getRefreshToken());
         eventPublisher.publishEvent(UserSignedUpEvent.of(user));
+
 
         return createSignUpResponseDto(token, user);
     }

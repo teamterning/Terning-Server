@@ -9,11 +9,9 @@ import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.AuthType;
-import org.terning.terningserver.dto.auth.request.SignInRequestDto;
-import org.terning.terningserver.dto.auth.response.SignInResponseDto;
+import org.terning.terningserver.auth.dto.request.SignInRequest;
+import org.terning.terningserver.auth.dto.response.SignInResponse;
 import org.terning.terningserver.repository.user.UserRepository;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +23,18 @@ public class AuthSignInServiceImpl implements AuthSignInService {
 
     @Transactional
     @Override
-    public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
+    public SignInResponse signIn(String authAccessToken, SignInRequest request) {
         String authId = getAuthId(request.authType(), authAccessToken);
+        User user = findUserByAuthIdAndType(authId, request.authType());
 
-        return findUserByAuthIdAndType(authId, request.authType())
-                .map(user -> createSignInResponseForExistingUser(user, authId, request.authType()))
-                .orElseGet(() -> createSignInResponseForNonExistingUser(authId, request.authType()));
+        if (user == null) {
+            return SignInResponse.of(null, authId, request.authType(), null);
+        }
+
+        Token token = jwtTokenManager.generateToken(user);
+        user.updateRefreshToken(token.getRefreshToken());
+
+        return SignInResponse.of(token, authId, request.authType(), user.getId());
     }
 
     private String getAuthId(AuthType authType, String authAccessToken) {
@@ -38,23 +42,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
         return provider.getAuthId(authAccessToken);
     }
 
-    private Optional<User> findUserByAuthIdAndType(String authId, AuthType authType) {
-        return userRepository.findByAuthIdAndAuthType(authId, authType);
-    }
-
-    private SignInResponseDto createSignInResponseForExistingUser(User user, String authId, AuthType authType) {
-        Token token = jwtTokenManager.generateToken(user);
-        user.updateRefreshToken(token.getRefreshToken());
-
-        return SignInResponseDto.of(
-                token,
-                authId,
-                authType,
-                user.getId()
-        );
-    }
-
-    private SignInResponseDto createSignInResponseForNonExistingUser(String authId, AuthType authType) {
-        return SignInResponseDto.of(null, authId, authType, null);
+    private User findUserByAuthIdAndType(String authId, AuthType authType) {
+        return userRepository.findByAuthIdAndAuthType(authId, authType).orElse(null);
     }
 }

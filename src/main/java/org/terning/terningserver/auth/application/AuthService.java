@@ -8,12 +8,12 @@ import org.terning.terningserver.auth.application.signin.AuthSignInService;
 import org.terning.terningserver.auth.application.signout.AuthSignOutService;
 import org.terning.terningserver.auth.application.signup.AuthSignUpService;
 import org.terning.terningserver.auth.application.withdraw.AuthWithdrawService;
-import org.terning.terningserver.dto.auth.request.SignInRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpFilterRequestDto;
-import org.terning.terningserver.dto.auth.request.SignUpRequestDto;
-import org.terning.terningserver.dto.auth.response.AccessTokenGetResponseDto;
-import org.terning.terningserver.dto.auth.response.SignInResponseDto;
-import org.terning.terningserver.dto.auth.response.SignUpResponseDto;
+import org.terning.terningserver.auth.dto.request.SignInRequest;
+import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
+import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
+import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
+import org.terning.terningserver.auth.dto.response.SignInResponse;
+import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +27,9 @@ public class AuthService {
     private final AuthReissueService authReissueService;
 
     @Transactional
-    public SignInResponseDto signIn(String authAccessToken, SignInRequestDto request) {
-        SignInResponseDto signInResponseDto = authSignInService.signIn(authAccessToken, request);
-        return signInResponseDto;
+    public SignInResponse signIn(String authAccessToken, SignInRequest request) {
+        SignInResponse signInResponse = authSignInService.signIn(authAccessToken, request);
+        return signInResponse;
     }
 
     @Transactional

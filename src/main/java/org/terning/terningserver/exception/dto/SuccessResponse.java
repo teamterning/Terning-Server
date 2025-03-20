@@ -3,6 +3,7 @@ package org.terning.terningserver.exception.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.terning.terningserver.exception.enums.SuccessMessage;
+import org.terning.terningserver.exception.SuccessCode;
 
 @JsonPropertyOrder({"status", "message", "result"})
 public record SuccessResponse<T>(
@@ -17,5 +18,13 @@ public record SuccessResponse<T>(
 
     public static <T> SuccessResponse of(SuccessMessage successMessage, T result){
         return new SuccessResponse(successMessage.getStatus(), successMessage.getMessage(), result);
+    }
+
+    public static <T> SuccessResponse<T> of(SuccessCode successCode) {
+        return new SuccessResponse<>(successCode.getStatus().value(), successCode.getMessage(), null);
+    }
+
+    public static <T> SuccessResponse<T> of(SuccessCode successCode, T result) {
+        return new SuccessResponse<>(successCode.getStatus().value(), successCode.getMessage(), result);
     }
 }

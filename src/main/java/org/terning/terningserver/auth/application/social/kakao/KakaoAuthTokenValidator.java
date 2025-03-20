@@ -28,7 +28,7 @@ public class KakaoAuthTokenValidator {
     public String extractKakaoId(String authAccessToken) {
         try {
             val headers = new HttpHeaders();
-            headers.add("Authorization", "Bearer " + authAccessToken);
+            headers.add("Authorization", authAccessToken);
             val httpEntity = new HttpEntity<JsonArray>(headers);
             val responseData = restTemplate.postForEntity(valueConfig.getKakaoUri(), httpEntity, Object.class);
             return objectMapper.convertValue(responseData.getBody(), Map.class).get("id").toString();

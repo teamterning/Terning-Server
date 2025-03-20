@@ -1,4 +1,4 @@
-package org.terning.terningserver.dto.auth.response;
+package org.terning.terningserver.auth.dto.response;
 
 import org.terning.terningserver.domain.enums.AuthType;
 
