@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty name="LOG_HOME_PATH" source="/home/ubuntu"/>
+    <property name="LOG_PATH" value="${LOG_HOME_PATH}/dev-logs"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/terning.log"/>
+    <appender name="TERNING_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/terning-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
+            <maxHistory>14</maxHistory> <!-- 14일간 보관 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} [%X{traceId:-NoTraceID}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <logger name="org.terning.terningserver" level="INFO" additivity="false">
+        <appender-ref ref="TERNING_LOG"/>
+    </logger>
+</configuration>
