@@ -10,7 +10,6 @@ import java.util.List;
 
 import static org.terning.terningserver.domain.QScrap.scrap;
 
-
 @RequiredArgsConstructor
 public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
 
@@ -63,5 +62,15 @@ public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
                 .fetchOne();
 
         return foundScrap != null ? foundScrap.getColorToHexValue() : null;
+    }
+
+    @Override
+    public List<Long> findUserIdsWithUnsyncedScraps() {
+        return jpaQueryFactory
+                .select(scrap.user.id)
+                .from(scrap)
+                .where(scrap.syncStatus.value.eq(false))
+                .distinct()
+                .fetch();
     }
 }
