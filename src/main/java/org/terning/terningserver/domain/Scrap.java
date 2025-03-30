@@ -1,13 +1,11 @@
 package org.terning.terningserver.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
 import org.terning.terningserver.domain.enums.Color;
-
-import java.awt.*;
+import org.terning.terningserver.domain.vo.SyncStatus;
 
 import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
@@ -21,40 +19,45 @@ public class Scrap extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id; // 스크랩 고유 ID
+    private Long id;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // 스크랩한 사용자
+    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "internship_announcement_id", nullable = false)
-    private InternshipAnnouncement internshipAnnouncement; // 스크랩한 인턴십 공고
+    private InternshipAnnouncement internshipAnnouncement;
 
     @Enumerated(STRING)
     @Column(nullable = false)
-    private Color color; // 스크랩 색상 (사용자가 지정)
+    private Color color;
 
-    @Builder
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "synced", nullable = false))
+    private SyncStatus syncStatus;
+
     private Scrap(User user, InternshipAnnouncement internshipAnnouncement, Color color) {
         this.user = user;
         this.internshipAnnouncement = internshipAnnouncement;
         this.color = color;
+        this.syncStatus = SyncStatus.notSynced();
     }
 
     public static Scrap create(User user, InternshipAnnouncement internshipAnnouncement, Color color) {
-        return Scrap.builder()
-                .user(user)
-                .internshipAnnouncement(internshipAnnouncement)
-                .color(color)
-                .build();
+        return new Scrap(user, internshipAnnouncement, color);
     }
 
     public void updateColor(Color color) {
         this.color = color;
     }
 
-    public String getColorToHexValue(){
+    public String getColorToHexValue() {
         return this.color.getColorValue();
     }
+
+    public void markSynced() {
+        this.syncStatus = SyncStatus.synced();
+    }
 }
+
