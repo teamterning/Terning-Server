@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.auth.application.social.SocialAuthProvider;
 import org.terning.terningserver.auth.application.social.SocialAuthServiceManager;
+import org.terning.terningserver.external.notification.FcmTokenValidationClient;
 import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
@@ -20,6 +21,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
     private final SocialAuthServiceManager socialAuthServiceManager;
     private final JwtTokenManager jwtTokenManager;
     private final UserRepository userRepository;
+    private final FcmTokenValidationClient fcmTokenValidationClient;
 
     @Transactional
     @Override
@@ -28,14 +30,17 @@ public class AuthSignInServiceImpl implements AuthSignInService {
         User user = findUserByAuthIdAndType(authId, request.authType());
 
         if (user == null) {
-            return SignInResponse.of(null, authId, request.authType(), null);
+            return SignInResponse.of(null, authId, request.authType(), null, false);
         }
 
         Token token = jwtTokenManager.generateToken(user);
         user.updateRefreshToken(token.getRefreshToken());
 
-        return SignInResponse.of(token, authId, request.authType(), user.getId());
+        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
+
+        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);
     }
+
 
     private String getAuthId(AuthType authType, String authAccessToken) {
         SocialAuthProvider provider = socialAuthServiceManager.getAuthService(authType);
