@@ -27,7 +27,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/api/v1/auth/**",
             "/actuator/health",
-            "/api/v1/external/scraps/unsynced"
+            "/api/v1/external/scraps/unsynced",
+            "/api/v1/external/scraps/sync/result"
     };
 
     @Bean
