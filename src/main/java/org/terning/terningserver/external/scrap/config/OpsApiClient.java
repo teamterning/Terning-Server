@@ -14,17 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpsApiClient implements ScrapSyncNotifier {
 
-    private final WebClient opsWebClient;
+    private final WebClient operationBaseUrlWebClient;
 
     @Override
-    public void sendScrapSyncResult(List<Long> userIds) {
+    public void notify(List<Long> userIds) {
         if (userIds == null || userIds.isEmpty()) {
             throw new ScrapExternalException(ScrapExternalErrorCode.EMPTY_USER_IDS);
         }
 
         ScrapUserIdsRequest request = ScrapUserIdsRequest.of(userIds);
         try {
-            opsWebClient.post()
+            operationBaseUrlWebClient.post()
                     .uri("/api/v1/external/scraps/sync/result")
                     .bodyValue(request)
                     .retrieve()
