@@ -44,12 +44,5 @@ public class WebClientConfig {
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
-
-    @Bean
-    public WebClient opsWebClient(@Value("${operation.base-url}") String operationBaseUrl) {
-        return WebClient.builder()
-                .baseUrl(operationBaseUrl)
-                .build();
-    }
 }
 
