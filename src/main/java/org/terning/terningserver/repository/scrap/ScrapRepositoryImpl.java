@@ -73,4 +73,15 @@ public class ScrapRepositoryImpl implements ScrapRepositoryCustom{
                 .distinct()
                 .fetch();
     }
+
+    @Override
+    public List<Scrap> findUnsyncedScrapsByUserIds(List<Long> userIds) {
+        return jpaQueryFactory
+                .selectFrom(scrap)
+                .where(
+                        scrap.user.id.in(userIds),
+                        scrap.syncStatus.value.eq(false)
+                )
+                .fetch();
+    }
 }
