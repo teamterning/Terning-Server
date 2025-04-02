@@ -24,11 +24,11 @@ public class WebClientConfig {
 
     private static final String DEFAULT_CONTENT_TYPE = MediaType.APPLICATION_JSON_VALUE;
 
-    @Value("${notification.base-url}")
-    private String notificationBaseUrl;
+    @Value("${operation.base-url}")
+    private String operationBaseUrl;
 
     @Bean
-    public WebClient notificationWebClient() {
+    public WebClient operationBaseUrlWebClient() {
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIMEOUT_MILLIS)
                 .doOnConnected(conn -> conn
@@ -39,9 +39,16 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.from(tcpClient);
 
         return WebClient.builder()
-                .baseUrl(notificationBaseUrl)
+                .baseUrl(operationBaseUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, DEFAULT_CONTENT_TYPE)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean
+    public WebClient opsWebClient(@Value("${operation.base-url}") String operationBaseUrl) {
+        return WebClient.builder()
+                .baseUrl(operationBaseUrl)
                 .build();
     }
 }
