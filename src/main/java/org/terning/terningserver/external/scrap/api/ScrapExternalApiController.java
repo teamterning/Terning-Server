@@ -2,10 +2,8 @@ package org.terning.terningserver.external.scrap.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.terning.terningserver.external.scrap.application.ScrapExternalService;
+import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.external.scrap.application.usecase.ScrapSyncOrchestrator;
 import org.terning.terningserver.external.scrap.dto.response.UnsyncedScrapUsersResponse;
 
 @RestController
@@ -13,11 +11,16 @@ import org.terning.terningserver.external.scrap.dto.response.UnsyncedScrapUsersR
 @RequestMapping("/api/v1/external/scraps")
 public class ScrapExternalApiController {
 
-    private final ScrapExternalService scrapExternalService;
+    private final ScrapSyncOrchestrator scrapSyncOrchestrator;
 
     @GetMapping("/unsynced")
     public ResponseEntity<UnsyncedScrapUsersResponse> fetchUnsyncedScrapUsers() {
-        UnsyncedScrapUsersResponse response = scrapExternalService.fetchUnsyncedScrapUsers();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(scrapSyncOrchestrator.readUnsyncedUsers());
+    }
+
+    @PostMapping("/sync/result")
+    public ResponseEntity<Void> syncScrapsManually() {
+        scrapSyncOrchestrator.syncUnsyncedUsers();
+        return ResponseEntity.ok().build();
     }
 }

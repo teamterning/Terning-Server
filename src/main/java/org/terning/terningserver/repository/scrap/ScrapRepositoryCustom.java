@@ -18,4 +18,6 @@ public interface ScrapRepositoryCustom {
     String findColorByInternshipAnnouncementIdAndUserId(Long internshipAnnouncementId, Long userId);
 
     List<Long> findUserIdsWithUnsyncedScraps();
+
+    List<Scrap> findUnsyncedScrapsByUserIds(List<Long> userIds);
 }
