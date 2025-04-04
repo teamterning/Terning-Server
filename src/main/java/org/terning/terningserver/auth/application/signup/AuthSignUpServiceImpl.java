@@ -9,6 +9,7 @@ import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
+import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
@@ -32,6 +33,7 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
     private final UserRepository userRepository;
     private final FilterRepository filterRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final NotificationUserClient notificationUserClient;
 
     @Transactional
     @Override
@@ -43,6 +45,12 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
         user.updateRefreshToken(token.getRefreshToken());
         eventPublisher.publishEvent(UserSignedUpEvent.of(user));
 
+        notificationUserClient.createUserOnNotificationServer(
+                user.getId(),
+                user.getName(),
+                user.getAuthType(),
+                request.fcmToken()
+        );
 
         return createSignUpResponseDto(token, user);
     }

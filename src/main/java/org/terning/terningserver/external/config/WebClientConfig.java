@@ -45,4 +45,3 @@ public class WebClientConfig {
                 .build();
     }
 }
-
