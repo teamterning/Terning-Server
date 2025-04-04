@@ -1,4 +1,4 @@
-package org.terning.terningserver.external.scrap.application.service;
+package org.terning.terningserver.external.scrap;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
