@@ -2,6 +2,7 @@ package org.terning.terningserver.exception.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -10,7 +11,7 @@ public enum ErrorMessage {
     // 소셜 로그인
     INVALID_TOKEN(401, "유효하지 않은 토큰입니다"),
     INVALID_KEY(401, "유효하지 않은 키입니다"),
-    FAILED_SOCIAL_LOGIN(404, "소셜 로그인애 실패하였습니다"),
+    FAILED_SOCIAL_LOGIN(404, "소셜 로그인에 실패하였습니다"),
     INVALID_USER(404, "유효하지 않은 유저입니다"),
     FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다"),
     UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
@@ -39,7 +40,17 @@ public enum ErrorMessage {
     NOT_FOUND_INTERN_EXCEPTION(404, "해당 인턴 공고는 존재하지 않습니다"),
     NOT_FOUND_USER_EXCEPTION(404, "해당 유저가 존재하지 않습니다"),
     NOT_FOUND_SCRAP(404, "스크랩 정보가 존재하지 않습니다"),
-    FORBIDDEN_DELETE_SCRAP(403, "해당 유저가 스크랩하지 않았으므로 스크랩 취소가 불가합니다");
+    FORBIDDEN_DELETE_SCRAP(403, "해당 유저가 스크랩하지 않았으므로 스크랩 취소가 불가합니다"),
+
+
+    INVALID_ARGUMENT_ERROR( 400, "올바르지 않은 파라미터입니다."),
+    INVALID_FORMAT_ERROR(400, "올바르지 않은 포맷입니다."),
+    INVALID_TYPE_ERROR(400, "올바르지 않은 타입입니다."),
+    ILLEGAL_ARGUMENT_ERROR( 400, "필수 파라미터가 없습니다"),
+    INVALID_HTTP_METHOD( 400, "잘못된 Http Method 요청입니다."),
+    INTERNAL_SERVER_ERROR( 500, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
+    ;
+
 
     private final int status;
     private final String message;
