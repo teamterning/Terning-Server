@@ -50,4 +50,56 @@ public class NotificationUserClient {
         log.info("User (id={}) created on notification server : ", userId);
     }
 
+    /**
+     * 알림서버에 신규 사용자 정보를 전달하여 사용자 레코드를 생성합니다.
+     * 운영서버에서는 pushStatus 값을 DB에 저장하지 않고,
+     * pushStatus="enabled" 또는 "disabled 로 변경합니다.
+     *
+     * @param userId         기존 사용자 ID
+     * @param newPushStatus  새로운 푸시알림 허용 여부
+     */
+    public void updatePushStatus(Long userId, String newPushStatus) {
+        notificationWebClient.put()
+                .uri("/api/v1/users/{userId}/push-status", userId)
+                .body(Mono.just(newPushStatus), String.class)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+
+        log.info("Push status updated for user (id={}): {}", userId, newPushStatus);
+    }
+
+    /**
+     * 프로필 정보를 변경하면, 알림서버에 새로운 사용자 이름을 전달하여 사용자 레코드를 변경합니다.
+     * 운영서버와 알림서버 모두 변경 값을 반영하도록 합니다.
+     *
+     * @param userId    기존 사용자 ID
+     * @param newName   변경된 새로운 사용자 이름
+     */
+    public void updateUserName(Long userId, String newName) {
+        notificationWebClient.put()
+                .uri("/api/v1/users/{userId}/name", userId)
+                .body(Mono.just(newName), String.class)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+
+        log.info("User name updated for user (id={}): {}", userId, newName);
+    }
+
+    /**
+     * 회원 탈퇴 시 알림서버에 존재하는 사용자를 삭제하여 사용자 레코드를 변경합니다.
+     * 운영서버와 알림서버 모두 해당 유저를 삭제하도록 합니다.
+     *
+     * @param userId    기존 사용자 ID
+     */
+    public void deleteUser(Long userId) {
+        notificationWebClient.delete()
+                .uri("/api/v1/users/{userId}", userId)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+
+        log.info("User (id={}) deleted on notification server.", userId);
+    }
 }
