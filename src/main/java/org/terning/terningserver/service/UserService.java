@@ -9,4 +9,5 @@ public interface UserService {
     ProfileResponseDto getProfile(Long userId);
 
     void updateProfile(Long userId, ProfileUpdateRequestDto request);
+    void updatePushStatus(Long userId, String newStatus);
 }

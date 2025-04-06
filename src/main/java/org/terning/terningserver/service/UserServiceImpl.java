@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.ProfileImage;
+import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.external.user.application.UserSyncEventService;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.dto.user.response.ProfileResponseDto;
 
@@ -19,11 +21,14 @@ import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_WITH
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserSyncEventService userSyncEventService;
 
     @Override
+    @Transactional
     public void deleteUser(User user) {
         try {
             userRepository.delete(user);
+            userSyncEventService.recordWithdraw(user.getId());
         } catch (Exception e) {
             throw new CustomException(FAILED_WITHDRAW);
         }
@@ -48,6 +53,10 @@ public class UserServiceImpl implements UserService {
             // 프로필 이미지가 유효하지 않으면 IllegalArgumentException을 던짐
             ProfileImage profileImage = ProfileImage.fromValue(request.profileImage());
 
+            if (!user.getName().equals(request.name())) {
+                userSyncEventService.recordNameChange(userId, request.name());
+            }
+
             //프로필 업데이트
             user.updateProfile(request.name(), ProfileImage.fromValue(request.profileImage()));
 
@@ -56,5 +65,13 @@ public class UserServiceImpl implements UserService {
             // 잘못된 프로필 이미지 값이 오면 CustomException 발생
             throw new CustomException(ErrorMessage.INVALID_PROFILE_IMAGE);
         }
+    }
+
+    @Transactional
+    public void updatePushStatus(Long userId, String newStatus) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER_EXCEPTION));
+        user.setPushStatus(PushNotificationStatus.from(newStatus));
+        userRepository.save(user);
     }
 }
