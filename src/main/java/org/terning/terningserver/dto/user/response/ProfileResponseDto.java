@@ -7,13 +7,15 @@ import org.terning.terningserver.domain.User;
 public record ProfileResponseDto(
         String name,
         String profileImage,
-        String authType
+        String authType,
+        String pushStatus
 ) {
     public static ProfileResponseDto of(final User user){
         return ProfileResponseDto.builder()
                 .name(user.getName())
                 .profileImage(user.getProfileImage().getValue()) // Enum to String
                 .authType(user.getAuthType().name().toUpperCase())
+                .pushStatus(user.getPushStatus().value())
                 .build();
     }
 }

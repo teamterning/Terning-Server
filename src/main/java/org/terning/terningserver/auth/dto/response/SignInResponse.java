@@ -10,15 +10,17 @@ public record SignInResponse(
         String refreshToken,
         Long userId,
         String authId,
-        AuthType authType
+        AuthType authType,
+        boolean fcmTokenReissueRequired
 ) {
-    public static SignInResponse of(Token token, String authId, AuthType authType, Long userId) {
+    public static SignInResponse of(Token token, String authId, AuthType authType, Long userId, boolean fcmTokenReissueRequired) {
         return new SignInResponse(
                 Optional.ofNullable(token).map(Token::getAccessToken).orElse(null),
                 Optional.ofNullable(token).map(Token::getRefreshToken).orElse(null),
                 userId,
                 authId,
-                authType
+                authType,
+                fcmTokenReissueRequired
         );
     }
 }

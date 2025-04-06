@@ -11,7 +11,7 @@ public enum ErrorMessage {
     // 소셜 로그인
     INVALID_TOKEN(401, "유효하지 않은 토큰입니다"),
     INVALID_KEY(401, "유효하지 않은 키입니다"),
-    FAILED_SOCIAL_LOGIN(404, "소셜 로그인애 실패하였습니다"),
+    FAILED_SOCIAL_LOGIN(404, "소셜 로그인에 실패하였습니다"),
     INVALID_USER(404, "유효하지 않은 유저입니다"),
     FAILED_TOKEN_REISSUE(404, "토큰 재발급에 실패하였습니다"),
     UNAUTHORIZED_JWT_EXCEPTION(401, "유효하지 않은 토큰입니다"),
@@ -49,6 +49,8 @@ public enum ErrorMessage {
     ILLEGAL_ARGUMENT_ERROR( 400, "필수 파라미터가 없습니다"),
     INVALID_HTTP_METHOD( 400, "잘못된 Http Method 요청입니다."),
     INTERNAL_SERVER_ERROR( 500, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
+    ALREADY_ENABLED_PUSH_NOTIFICATION(400, "이미 푸시 알림이 활성화되어 있습니다."),
+    ALREADY_DISABLED_PUSH_NOTIFICATION(400, "이미 푸시 알림이 비활성화되어 있습니다."),
     ;
 
 
