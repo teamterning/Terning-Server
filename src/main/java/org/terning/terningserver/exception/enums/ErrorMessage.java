@@ -49,6 +49,8 @@ public enum ErrorMessage {
     ILLEGAL_ARGUMENT_ERROR( 400, "필수 파라미터가 없습니다"),
     INVALID_HTTP_METHOD( 400, "잘못된 Http Method 요청입니다."),
     INTERNAL_SERVER_ERROR( 500, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
+    ALREADY_ENABLED_PUSH_NOTIFICATION(400, "이미 푸시 알림이 활성화되어 있습니다."),
+    ALREADY_DISABLED_PUSH_NOTIFICATION(400, "이미 푸시 알림이 비활성화되어 있습니다."),
     ;
 
 

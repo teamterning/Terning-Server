@@ -66,6 +66,9 @@ dependencies {
 	implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
 	implementation 'io.github.resilience4j:resilience4j-reactor:2.1.0'
 
+	// Spring Batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
 }
 
 //QueryDSL 초기 설정

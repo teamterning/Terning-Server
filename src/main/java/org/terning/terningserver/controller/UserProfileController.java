@@ -1,14 +1,16 @@
 package org.terning.terningserver.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.UserSwagger;
 import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
+import org.terning.terningserver.dto.user.request.PushStatusUpdateRequest;
 import org.terning.terningserver.dto.user.response.ProfileResponseDto;
 import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.exception.enums.SuccessMessage;
+import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.service.UserService;
 
 import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_PROFILE;
@@ -20,6 +22,7 @@ import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_U
 public class UserProfileController implements UserSwagger {
 
     private final UserService userService;
+    private final NotificationUserClient notificationUserClient;
 
     @GetMapping("/mypage/profile")
     public ResponseEntity<SuccessResponse<ProfileResponseDto>> getProfile(
@@ -36,5 +39,19 @@ public class UserProfileController implements UserSwagger {
     ){
         userService.updateProfile(userId, request);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_PROFILE));
+    }
+
+    @PatchMapping("/push-status")
+    public ResponseEntity<SuccessResponse<Void>> updatePushStatus(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody PushStatusUpdateRequest request
+    ) {
+        // 운영서버에서 User 엔티티 업데이트
+        userService.updatePushStatus(userId, request.newStatus());
+
+        // 알림서버에 변경사항 동기화
+        notificationUserClient.updatePushStatus(userId, request.newStatus());
+
+        return ResponseEntity.ok(SuccessResponse.of(SuccessMessage.PUSH_STATUS_UPDATED));
     }
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.terning.terningserver.domain.common.BaseTimeEntity;
 import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.domain.enums.ProfileImage;
+import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.domain.enums.State;
 import org.terning.terningserver.exception.CustomException;
 
@@ -44,6 +45,10 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(STRING)
     private AuthType authType; // 인증 유형 (예: 카카오, 애플)
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private PushNotificationStatus pushStatus;
 
     @Column(length = 256)
     private String authId; // 인증 서비스에서 제공하는 고유 ID
