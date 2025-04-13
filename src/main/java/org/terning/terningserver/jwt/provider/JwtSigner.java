@@ -19,7 +19,7 @@ public class JwtSigner {
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(JwtKeyProvider.getSigningKey(valueConfig), SignatureAlgorithm.HS256)
+                .signWith(JwtKeyProvider.getSigningKey(valueConfig))
                 .compact();
     }
 }
