@@ -30,15 +30,17 @@ public class AuthSignInServiceImpl implements AuthSignInService {
         User user = findUserByAuthIdAndType(authId, request.authType());
 
         if (user == null) {
-            return SignInResponse.of(null, authId, request.authType(), null, false);
+//            return SignInResponse.of(null, authId, request.authType(), null, false);
+            return SignInResponse.of(null, authId, request.authType(), null);
         }
 
         Token token = jwtTokenManager.generateToken(user);
         user.updateRefreshToken(token.getRefreshToken());
 
-        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
+//        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
 
-        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);
+//        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);
+        return SignInResponse.of(token, authId, request.authType(), user.getId());
     }
 
 
