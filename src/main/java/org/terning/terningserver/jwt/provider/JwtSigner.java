@@ -2,6 +2,7 @@ package org.terning.terningserver.jwt.provider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.config.ValueConfig;
@@ -18,7 +19,7 @@ public class JwtSigner {
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(JwtKeyProvider.getSigningKey(valueConfig))
+                .signWith(JwtKeyProvider.getSigningKey(valueConfig), SignatureAlgorithm.HS256)
                 .compact();
     }
 }
