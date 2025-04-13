@@ -10,6 +10,6 @@ import javax.crypto.SecretKey;
 @Component
 public class JwtKeyProvider {
     public static SecretKey getSigningKey(ValueConfig valueConfig) {
-        return Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes());
+        return Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes(StandardCharsets.UTF_8));
     }
 }

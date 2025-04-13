@@ -27,8 +27,8 @@ public class ValueConfig {
     @Value("${jwt.refresh-token-expired}")
     private Long refreshTokenExpired;
 
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
-    }
+//    @PostConstruct
+//    protected void init() {
+//        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+//    }
 }
