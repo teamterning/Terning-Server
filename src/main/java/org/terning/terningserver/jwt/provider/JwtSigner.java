@@ -12,14 +12,15 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtSigner {
-    private final ValueConfig valueConfig;
+//    private final ValueConfig valueConfig;
+    private final JwtKeyProvider jwtKeyProvider;
 
     public String sign(Claims claims, long expiration) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(JwtKeyProvider.getSigningKey(valueConfig), SignatureAlgorithm.HS256)
+                .signWith(jwtKeyProvider.getPrivateKey(), SignatureAlgorithm.RS256)
                 .compact();
     }
 }
