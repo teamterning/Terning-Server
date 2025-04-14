@@ -70,8 +70,8 @@ jobs:
 
       - name: docker image 빌드 및 푸시
         run: |
-          docker build -f Dockerfile-staging --platform linux/amd64 -t terningpoint/terning-staging .
-          docker push terningpoint/terning-staging
+          docker build -f Dockerfile-staging --platform linux/amd64 -t terningpoint/terning2025-staging .
+          docker push terningpoint/terning2025-staging
         working-directory: ${{ env.working-directory }}
 
   cd:

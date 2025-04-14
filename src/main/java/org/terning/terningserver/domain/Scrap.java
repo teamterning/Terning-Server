@@ -34,7 +34,7 @@ public class Scrap extends BaseTimeEntity {
     private Color color;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "synced", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "synced"))
     private SyncStatus syncStatus;
 
     private Scrap(User user, InternshipAnnouncement internshipAnnouncement, Color color) {

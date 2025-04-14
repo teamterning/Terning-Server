@@ -21,7 +21,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
     private final SocialAuthServiceManager socialAuthServiceManager;
     private final JwtTokenManager jwtTokenManager;
     private final UserRepository userRepository;
-    private final FcmTokenValidationClient fcmTokenValidationClient;
+//    private final FcmTokenValidationClient fcmTokenValidationClient;
 
     @Transactional
     @Override
@@ -30,15 +30,17 @@ public class AuthSignInServiceImpl implements AuthSignInService {
         User user = findUserByAuthIdAndType(authId, request.authType());
 
         if (user == null) {
-            return SignInResponse.of(null, authId, request.authType(), null, false);
+//            return SignInResponse.of(null, authId, request.authType(), null, false);
+            return SignInResponse.of(null, authId, request.authType(), null);
         }
 
         Token token = jwtTokenManager.generateToken(user);
         user.updateRefreshToken(token.getRefreshToken());
 
-        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
+//        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
 
-        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);
+//        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);
+        return SignInResponse.of(token, authId, request.authType(), user.getId());
     }
 
 
