@@ -132,7 +132,7 @@ public class ScrapServiceImpl implements ScrapService {
 
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
 
-        announcement.updateScrapCount(1);
+        updateScrapCount(announcement, 1);
 
         scrapRepository.save(Scrap.create(
                 findUser(userId),
@@ -145,7 +145,8 @@ public class ScrapServiceImpl implements ScrapService {
     @Transactional
     public void deleteScrap(Long internshipAnnouncementId, Long userId) {
         Scrap scrap = findScrap(internshipAnnouncementId, userId);
-        scrap.getInternshipAnnouncement().updateScrapCount(-1);
+        InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
+        updateScrapCount(announcement, -1);
         verifyScrapOwner(scrap, userId);
         scrapRepository.deleteByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId);
     }
@@ -158,7 +159,10 @@ public class ScrapServiceImpl implements ScrapService {
         scrap.updateColor(Color.findByName(request.color()));
     }
 
-    //토큰으로 찾은(요청한) User와 스크랩한 User가 일치한지 여부 검증하는 메서드
+    private void updateScrapCount(InternshipAnnouncement announcement, int plusOrMinus) {
+        announcement.updateScrapCount(plusOrMinus);
+    }
+
     private void verifyScrapOwner(Scrap scrap, Long userId) {
         if(!scrap.getUser().equals(findUser(userId))) {
             throw new CustomException(FORBIDDEN_DELETE_SCRAP);
