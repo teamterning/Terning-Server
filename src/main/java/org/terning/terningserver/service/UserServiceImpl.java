@@ -9,6 +9,7 @@ import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
 import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.external.user.application.UserSyncEventService;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.dto.user.response.ProfileResponseDto;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserSyncEventService userSyncEventService;
+    private final NotificationUserClient notificationUserClient;
 
     @Override
     @Transactional
@@ -54,7 +56,8 @@ public class UserServiceImpl implements UserService {
             ProfileImage profileImage = ProfileImage.fromValue(request.profileImage());
 
             if (!user.getName().equals(request.name())) {
-                userSyncEventService.recordNameChange(userId, request.name());
+//                userSyncEventService.recordNameChange(userId, request.name());
+                notificationUserClient.updateUserName(userId, request.name());
             }
 
             //프로필 업데이트
