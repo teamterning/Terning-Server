@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         try {
             userRepository.delete(user);
-            userSyncEventService.recordWithdraw(user.getId());
+//            userSyncEventService.recordWithdraw(user.getId());
+            notificationUserClient.deleteUser(user.getId());
         } catch (Exception e) {
             throw new CustomException(FAILED_WITHDRAW);
         }
