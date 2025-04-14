@@ -12,13 +12,12 @@ import org.terning.terningserver.jwt.provider.JwtKeyProvider;
 @Service
 @RequiredArgsConstructor
 public class JwtClaimsParser {
-//    private final ValueConfig valueConfig;
-    private final JwtKeyProvider jwtKeyProvider;
+    private final ValueConfig valueConfig;
 
     public Claims parse(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(jwtKeyProvider.getPublicKey())
+                    .setSigningKey(JwtKeyProvider.getSigningKey(valueConfig))
                     .build()
                     .parseClaimsJws(token)
                     .getBody();

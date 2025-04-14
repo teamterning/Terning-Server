@@ -133,8 +133,10 @@ public class AppleAuthTokenValidator {
             String modulus = object.get(MODULUS).getAsString();
             String exponent = object.get(EXPONENT).getAsString();
 
-            byte[] modulusBytes = Base64.getUrlDecoder().decode(modulus.substring(QUOTES, modulus.length() - QUOTES));
-            byte[] exponentBytes = Base64.getUrlDecoder().decode(exponent.substring(QUOTES, exponent.length() - QUOTES));
+//            byte[] modulusBytes = Base64.getUrlDecoder().decode(modulus.substring(QUOTES, modulus.length() - QUOTES));
+            byte[] modulusBytes = Base64.getUrlDecoder().decode(modulus);
+//            byte[] exponentBytes = Base64.getUrlDecoder().decode(exponent.substring(QUOTES, exponent.length() - QUOTES));
+            byte[] exponentBytes = Base64.getUrlDecoder().decode(exponent);
 
             BigInteger modulusValue = new BigInteger(POSITIVE_NUMBER, modulusBytes);
             BigInteger exponentValue = new BigInteger(POSITIVE_NUMBER, exponentBytes);

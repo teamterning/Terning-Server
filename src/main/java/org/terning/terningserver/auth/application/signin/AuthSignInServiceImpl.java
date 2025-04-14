@@ -21,7 +21,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
     private final SocialAuthServiceManager socialAuthServiceManager;
     private final JwtTokenManager jwtTokenManager;
     private final UserRepository userRepository;
-    private final FcmTokenValidationClient fcmTokenValidationClient;
+//    private final FcmTokenValidationClient fcmTokenValidationClient;
 
     @Transactional
     @Override
