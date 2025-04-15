@@ -51,6 +51,23 @@ public class NotificationUserClient {
     }
 
     /**
+     * 알림서버에 새로운 fcm 토큰을 전달합니다.
+     *
+     * @param userId    사용자 ID
+     * @param newToken  새로운 fcm 토큰
+     */
+    public void updateFcmToken(Long userId, String newToken) {
+        notificationWebClient.put()
+                .uri("/api/v1/users/{userId}/fcm-tokens", userId)
+                .body(Mono.just(newToken), String.class)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+
+        log.info("FCM tokens updated for user (id={}): {}", userId, newToken);
+    }
+
+    /**
      * 알림서버에 신규 사용자 정보를 전달하여 사용자 레코드를 생성합니다.
      * 운영서버에서는 pushStatus 값을 DB에 저장하지 않고,
      * pushStatus="enabled" 또는 "disabled 로 변경합니다.

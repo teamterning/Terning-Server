@@ -37,6 +37,7 @@ dependencies {
 	// 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testRuntimeOnly 'com.h2database:h2'
 
 	// PostgreSQL
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
