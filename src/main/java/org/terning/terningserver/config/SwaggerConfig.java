@@ -14,7 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         servers = {
                 @Server(url = "https://www.terning-official.p-e.kr", description = "Default Server url"),
+                @Server(url = "https://www.terning-official.n-e.kr", description = "Default Server url (2025 ver.)"),
                 @Server(url = "http://15.165.242.132", description = "Staging Server URL"),
+                @Server(url = "http://54.180.215.35", description = "Staging Server URL (2025 ver.)"),
                 @Server(url = "http://localhost:8080", description = "Local Development Server URL")
         }
 )

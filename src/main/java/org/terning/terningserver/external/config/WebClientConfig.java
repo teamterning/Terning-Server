@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebClientConfig {
 
-    private static final int CONNECT_TIMEOUT_MILLIS = 2000;
+    private static final int CONNECT_TIMEOUT_MILLIS = 5000;
     private static final int READ_TIMEOUT_SECONDS = 2;
     private static final int WRITE_TIMEOUT_SECONDS = 2;
 
