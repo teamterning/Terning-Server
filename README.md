@@ -37,7 +37,7 @@
 
 ##  Back-end (Spring 🌱)
 
-| <img src="https://github.com/user-attachments/assets/8e71a4f2-70e7-4a80-b658-de0eea90b0e0" width=300px alt="서버/정정교"/>  | <img src="https://github.com/user-attachments/assets/7cdc140f-5281-45b5-88ac-a952cc327247" width=300px alt="서버/신정윤"/>  | <img src="https://github.com/user-attachments/assets/4f3006b2-4869-408e-b12b-d954a5b79d9d" width=300px alt="서버/권장순"/>
+| <img src="https://github.com/user-attachments/assets/8e71a4f2-70e7-4a80-b658-de0eea90b0e0" width=300px alt="서버/정정교"/>  | <img src="https://github.com/user-attachments/assets/7cdc140f-5281-45b5-88ac-a952cc327247" width=300px alt="서버/신정윤"/>  | <img src="https://github.com/user-attachments/assets/54c89379-08b8-4737-8da0-5bfad27e49fe" width=300px alt="서버/권장순"/>
 | :-----: | :-----: | :-----: |
 | [정정교/Junggyo1020](https://github.com/junggyo1020) | [신정윤/JungYoonShin](https://github.com/JungYoonShin) | [권장순/jsoonworld](https://github.com/jsoonworld) |
 
