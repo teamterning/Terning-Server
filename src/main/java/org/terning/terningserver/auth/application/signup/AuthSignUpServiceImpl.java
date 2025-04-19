@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.enums.Grade;
 import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.ProfileImage;
+import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.jwt.application.JwtTokenManager;
@@ -83,6 +84,7 @@ public class AuthSignUpServiceImpl implements AuthSignUpService {
                 .name(requestDto.name())
                 .authType(requestDto.authType())
                 .profileImage(ProfileImage.fromValue(requestDto.profileImage()))
+                .pushStatus(PushNotificationStatus.ENABLED)
                 .build();
         return userRepository.save(user);
     }
