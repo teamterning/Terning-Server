@@ -23,11 +23,12 @@
     <appender name="TERNING_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/terning-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <fileNamePattern>${LOG_PATH}/terning-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
+            <maxHistory>14</maxHistory> <!-- 14일간 보관 -->
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} [%X{traceId:-NoTraceID}] - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
