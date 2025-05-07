@@ -130,13 +130,11 @@ public class ScrapServiceImpl implements ScrapService {
         }
 
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
-
         scrapRepository.save(Scrap.create(
                 findUser(userId),
                 announcement,
                 findColor(request.color())
         ));
-
         updateScrapCount(announcement, 1);
     }
 
