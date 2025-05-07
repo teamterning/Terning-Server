@@ -207,6 +207,7 @@ class ScrapServiceTest {
             });
 
             InternshipAnnouncement savedAnnouncement = internshipRepository.findById(internshipAnnouncementId).orElseThrow();
+            assertThat(exception.getMessage()).isEqualTo("스크랩 정보가 존재하지 않습니다");
             assertThat(savedAnnouncement.getScrapCount()).isEqualTo(100L);
         }
     }
