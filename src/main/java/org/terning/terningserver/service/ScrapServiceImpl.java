@@ -144,8 +144,8 @@ public class ScrapServiceImpl implements ScrapService {
         Scrap scrap = findScrap(internshipAnnouncementId, userId);
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
         verifyScrapOwner(scrap, userId);
-        updateScrapCount(announcement, -1);
         scrapRepository.deleteByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId);
+        updateScrapCount(announcement, -1);
     }
 
     @Override
