@@ -18,6 +18,7 @@ import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.domain.enums.CompanyCategory;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
+import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
@@ -28,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -192,6 +194,20 @@ class ScrapServiceTest {
             InternshipAnnouncement savedAnnouncement = internshipRepository.findById(1L).orElseThrow();
             assertThat(savedAnnouncement.getScrapCount()).isEqualTo(0L);
             assertThat(scrapRepository.count()).isEqualTo(0L);
+        }
+
+        @Test
+        @DisplayName("스크랩 취소시에 Unchecked Exception 발생 시 트랜잭션 롤백이 정상적으로 처리된다.")
+        public void 트랜잭션_롤백_테스트() {
+            Long userId = 10000L;
+            Long internshipAnnouncementId = 1L;
+
+            RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                scrapService.deleteScrap(internshipAnnouncementId, userId);
+            });
+
+            InternshipAnnouncement savedAnnouncement = internshipRepository.findById(internshipAnnouncementId).orElseThrow();
+            assertThat(savedAnnouncement.getScrapCount()).isEqualTo(100L);
         }
     }
 }
