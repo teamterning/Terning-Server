@@ -2,6 +2,9 @@ package org.terning.terningserver.external.notification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.external.dto.request.CreateUserRequest;
 import org.springframework.stereotype.Component;
@@ -48,6 +51,28 @@ public class NotificationUserClient {
                 .block();
 
         log.info("User (id={}) created on notification server : ", userId);
+    }
+
+    /**
+     * 소셜로그인 시 알림서버와 운영서버간 유저 동기화를 진행합니다.
+     * @param user      유저 객체
+     * @param fcmToken  fcm 토큰
+     */
+    public void createOrUpdateUser(User user, String fcmToken) {
+        try {
+            updateFcmToken(user.getId(), fcmToken);
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                createUserOnNotificationServer(
+                        user.getId(),
+                        user.getName(),
+                        user.getAuthType(),
+                        fcmToken
+                );
+            } else {
+                throw e;
+            }
+        }
     }
 
     /**
