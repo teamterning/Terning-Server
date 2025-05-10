@@ -41,7 +41,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
 //        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
 
         if (request.fcmToken() != null && !request.fcmToken().trim().isEmpty()) {
-            notificationUserClient.updateFcmToken(user.getId(), request.fcmToken());
+            notificationUserClient.createOrUpdateUser(user, request.fcmToken());
         }
 
 //        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);

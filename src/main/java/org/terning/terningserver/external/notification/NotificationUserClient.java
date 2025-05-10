@@ -54,7 +54,9 @@ public class NotificationUserClient {
     }
 
     /**
-     * 소셜로그인 시에 알림서버와 운영서버의 유저를 동기화합니다.
+     * 소셜로그인 시 알림서버와 운영서버간 유저 동기화를 진행합니다.
+     * @param user      유저 객체
+     * @param fcmToken  fcm 토큰
      */
     public void createOrUpdateUser(User user, String fcmToken) {
         try {
