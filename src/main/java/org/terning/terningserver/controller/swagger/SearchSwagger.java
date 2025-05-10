@@ -9,7 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 @Tag(name = "Search", description = "탐색 관련 API")
 public interface SearchSwagger {

@@ -7,7 +7,7 @@ import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.domain.enums.State;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.exception.CustomException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
 @Entity
 @Getter

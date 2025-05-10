@@ -11,7 +11,7 @@ import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.external.notification.NotificationUserClient;
-import org.terning.terningserver.jwt.application.JwtTokenManager;
+import org.terning.terningserver.common.security.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Filter;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
@@ -20,11 +20,9 @@ import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpWithAuthIdRequestDto;
 import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
 import org.terning.terningserver.event.UserSignedUpEvent;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.exception.CustomException;
 import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
-
-import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor

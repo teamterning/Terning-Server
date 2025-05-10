@@ -13,7 +13,7 @@ import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
 import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.auth.dto.response.SignInResponse;
 import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 @Tag(name = "Auth", description = "소셜 로그인 및 회원가입 API")
 public interface AuthSwagger {

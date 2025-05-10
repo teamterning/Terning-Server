@@ -2,7 +2,7 @@ package org.terning.terningserver.dto.search.response;
 
 import lombok.Builder;
 import org.terning.terningserver.domain.InternshipAnnouncement;
-import org.terning.terningserver.util.DateUtil;
+import org.terning.terningserver.common.util.DateUtil;
 
 import java.util.List;
 

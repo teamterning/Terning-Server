@@ -2,8 +2,8 @@ package org.terning.terningserver.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
+import org.terning.terningserver.common.exception.enums.ErrorMessage;
 
 import java.util.Arrays;
 

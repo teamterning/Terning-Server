@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.FilterSwagger;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.FilterService;
-
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor

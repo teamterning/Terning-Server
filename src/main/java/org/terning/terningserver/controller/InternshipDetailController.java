@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.InternshipDetailSwagger;
 import org.terning.terningserver.dto.internship_detail.InternshipDetailResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.InternshipDetailService;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_INTERNSHIP_DETAIL;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_INTERNSHIP_DETAIL;
 
 @RestController
 @RequiredArgsConstructor

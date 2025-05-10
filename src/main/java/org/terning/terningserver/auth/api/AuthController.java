@@ -13,10 +13,9 @@ import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
 import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.auth.dto.response.SignInResponse;
 import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 import static org.terning.terningserver.auth.common.success.AuthSuccessCode.SUCCESS_SIGN_IN;
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 
 @RestController

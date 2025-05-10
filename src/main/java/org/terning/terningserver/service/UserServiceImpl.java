@@ -7,14 +7,14 @@ import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.ProfileImage;
 import org.terning.terningserver.domain.enums.PushNotificationStatus;
 import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
+import org.terning.terningserver.common.exception.enums.ErrorMessage;
 import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.external.user.application.UserSyncEventService;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.dto.user.response.ProfileResponseDto;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_WITHDRAW;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_WITHDRAW;
 
 @Service
 @RequiredArgsConstructor

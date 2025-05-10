@@ -8,13 +8,11 @@ import org.terning.terningserver.controller.swagger.CalendarSwagger;
 import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.ScrapService;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor

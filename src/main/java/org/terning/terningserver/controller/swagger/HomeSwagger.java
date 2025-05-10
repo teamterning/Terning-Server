@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 import java.util.List;
 

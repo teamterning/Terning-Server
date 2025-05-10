@@ -8,13 +8,13 @@ import org.terning.terningserver.controller.swagger.UserSwagger;
 import org.terning.terningserver.dto.user.request.ProfileUpdateRequestDto;
 import org.terning.terningserver.dto.user.request.PushStatusUpdateRequest;
 import org.terning.terningserver.dto.user.response.ProfileResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.exception.enums.SuccessMessage;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.enums.SuccessMessage;
 import org.terning.terningserver.external.notification.NotificationUserClient;
 import org.terning.terningserver.service.UserService;
 
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_GET_PROFILE;
-import static org.terning.terningserver.exception.enums.SuccessMessage.SUCCESS_UPDATE_PROFILE;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_PROFILE;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_PROFILE;
 
 @RestController
 @RequiredArgsConstructor

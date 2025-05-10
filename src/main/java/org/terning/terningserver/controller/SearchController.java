@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.terning.terningserver.controller.swagger.SearchSwagger;
 import org.terning.terningserver.dto.search.response.PopularAnnouncementListResponseDto;
 import org.terning.terningserver.dto.search.response.SearchResultResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.SearchService;
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 
 @RestController

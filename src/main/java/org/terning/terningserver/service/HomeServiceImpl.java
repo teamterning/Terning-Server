@@ -13,8 +13,8 @@ import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.HomeResponseDto;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
+import org.terning.terningserver.common.exception.enums.ErrorMessage;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 

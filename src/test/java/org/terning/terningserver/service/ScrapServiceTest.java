@@ -18,7 +18,6 @@ import org.terning.terningserver.domain.enums.AuthType;
 import org.terning.terningserver.domain.enums.Color;
 import org.terning.terningserver.domain.enums.CompanyCategory;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
-import org.terning.terningserver.exception.CustomException;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;

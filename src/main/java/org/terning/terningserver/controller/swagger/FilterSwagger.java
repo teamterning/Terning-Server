@@ -8,7 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 @Tag(name = "Filter", description = "사용자 필터링 관련 API")
 public interface FilterSwagger {

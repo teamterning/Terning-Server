@@ -11,11 +11,11 @@ import org.terning.terningserver.domain.enums.JobType;
 import org.terning.terningserver.domain.enums.WorkingPeriod;
 import org.terning.terningserver.dto.filter.request.UpdateUserFilterRequestDto;
 import org.terning.terningserver.dto.filter.response.UserFilterDetailResponseDto;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.exception.CustomException;
 import org.terning.terningserver.repository.filter.FilterRepository;
 import org.terning.terningserver.repository.user.UserRepository;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor

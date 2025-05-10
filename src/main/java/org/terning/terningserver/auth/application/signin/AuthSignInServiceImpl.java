@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.auth.application.social.SocialAuthProvider;
 import org.terning.terningserver.auth.application.social.SocialAuthServiceManager;
 import org.terning.terningserver.external.notification.NotificationUserClient;
-import org.terning.terningserver.jwt.application.JwtTokenManager;
+import org.terning.terningserver.common.security.jwt.application.JwtTokenManager;
 import org.terning.terningserver.domain.Token;
 import org.terning.terningserver.domain.User;
 import org.terning.terningserver.domain.enums.AuthType;

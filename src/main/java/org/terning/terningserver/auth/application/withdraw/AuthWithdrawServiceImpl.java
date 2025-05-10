@@ -5,11 +5,11 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.domain.User;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.exception.CustomException;
 import org.terning.terningserver.repository.user.UserRepository;
 import org.terning.terningserver.service.UserService;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_USER;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.INVALID_USER;
 
 @Service
 @RequiredArgsConstructor

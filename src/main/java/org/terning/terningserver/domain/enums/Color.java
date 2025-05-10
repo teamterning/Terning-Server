@@ -3,14 +3,13 @@ package org.terning.terningserver.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_SCRAP_COLOR;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.INVALID_SCRAP_COLOR;
 
 @RequiredArgsConstructor
 @Getter

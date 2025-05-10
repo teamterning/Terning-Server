@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
 import org.terning.terningserver.dto.Banner.BannerListResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 @Tag(name= "Banner", description = "탐색 > 배너 조회 관련 API")
 public interface BannerSwagger {

@@ -2,8 +2,8 @@ package org.terning.terningserver.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
+import org.terning.terningserver.common.exception.enums.ErrorMessage;
 
 @Getter
 @RequiredArgsConstructor

@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.ScrapSwagger;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.ScrapService;
-
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor

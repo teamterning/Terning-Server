@@ -13,21 +13,17 @@ import org.terning.terningserver.dto.calendar.response.DailyScrapResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.dto.calendar.response.MonthlyListResponseDto;
 import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.exception.enums.ErrorMessage;
+import org.terning.terningserver.common.exception.CustomException;
 import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
 import org.terning.terningserver.repository.scrap.ScrapRepository;
 import org.terning.terningserver.repository.user.UserRepository;
-import org.terning.terningserver.util.DateUtil;
-import org.terning.terningserver.util.LogExecutionTime;
+import org.terning.terningserver.common.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.terning.terningserver.exception.enums.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor

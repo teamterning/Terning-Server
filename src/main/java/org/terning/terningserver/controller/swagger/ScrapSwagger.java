@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.terning.terningserver.dto.scrap.request.CreateScrapRequestDto;
 import org.terning.terningserver.dto.scrap.request.UpdateScrapRequestDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 @Tag(name="Scrap", description = "스크랩 관련 API")
 public interface ScrapSwagger {

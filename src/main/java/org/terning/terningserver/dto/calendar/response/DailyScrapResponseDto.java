@@ -2,7 +2,7 @@ package org.terning.terningserver.dto.calendar.response;
 
 import lombok.Builder;
 import org.terning.terningserver.domain.Scrap;
-import org.terning.terningserver.util.DateUtil;
+import org.terning.terningserver.common.util.DateUtil;
 
 @Builder
 public record DailyScrapResponseDto(

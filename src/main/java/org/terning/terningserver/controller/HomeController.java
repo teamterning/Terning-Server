@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.controller.swagger.HomeSwagger;
 import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
 import org.terning.terningserver.dto.user.response.UpcomingScrapResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.service.HomeService;
 import org.terning.terningserver.service.ScrapService;
 
 import java.util.List;
-
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
 
 @RestController
 @RequiredArgsConstructor

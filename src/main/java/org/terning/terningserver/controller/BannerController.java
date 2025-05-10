@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.terning.terningserver.controller.swagger.BannerSwagger;
 import org.terning.terningserver.dto.Banner.BannerListResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
-import org.terning.terningserver.exception.enums.SuccessMessage;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.enums.SuccessMessage;
 import org.terning.terningserver.service.BannerService;
 
 @RestController
