@@ -125,20 +125,17 @@ public class ScrapServiceImpl implements ScrapService {
     @Transactional
     public void createScrap(Long internshipAnnouncementId, CreateScrapRequestDto request, Long userId) {
 
-        //이미 스크랩 했을 경우 예외처리
         if(scrapRepository.existsByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId)) {
             throw new CustomException(EXISTS_SCRAP_ALREADY);
         }
 
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
-
-        updateScrapCount(announcement, 1);
-
         scrapRepository.save(Scrap.create(
                 findUser(userId),
-                getInternshipAnnouncement(internshipAnnouncementId),
+                announcement,
                 findColor(request.color())
         ));
+        updateScrapCount(announcement, 1);
     }
 
     @Override
@@ -146,9 +143,9 @@ public class ScrapServiceImpl implements ScrapService {
     public void deleteScrap(Long internshipAnnouncementId, Long userId) {
         Scrap scrap = findScrap(internshipAnnouncementId, userId);
         InternshipAnnouncement announcement = getInternshipAnnouncement(internshipAnnouncementId);
-        updateScrapCount(announcement, -1);
         verifyScrapOwner(scrap, userId);
         scrapRepository.deleteByInternshipAnnouncementIdAndUserId(internshipAnnouncementId, userId);
+        updateScrapCount(announcement, -1);
     }
 
     @Override
