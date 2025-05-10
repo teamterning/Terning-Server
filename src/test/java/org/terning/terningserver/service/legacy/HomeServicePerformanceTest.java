@@ -11,16 +11,16 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.transaction.annotation.Transactional;
-//import org.terning.terningserver.domain.Company;
-//import org.terning.terningserver.domain.Filter;
-//import org.terning.terningserver.domain.InternshipAnnouncement;
-//import org.terning.terningserver.domain.User;
-//import org.terning.terningserver.domain.enums.Grade;
-//import org.terning.terningserver.domain.enums.WorkingPeriod;
-//import org.terning.terningserver.dto.user.response.HomeAnnouncementsResponseDto;
-//import org.terning.terningserver.repository.internship_announcement.InternshipRepository;
-//import org.terning.terningserver.repository.user.UserRepository;
-//import org.terning.terningserver.service.HomeServiceImpl;
+//import org.terning.terningserver.internshipAnnouncement.domain.Company;
+//import org.terning.terningserver.filter.domain.Filter;
+//import org.terning.terningserver.internshipAnnouncement.domain.InternshipAnnouncement;
+//import org.terning.terningserver.user.domain.User;
+//import org.terning.terningserver.filter.domain.Grade;
+//import org.terning.terningserver.filter.domain.WorkingPeriod;
+//import org.terning.terningserver.home.dto.response.HomeAnnouncementsResponseDto;
+//import org.terning.terningserver.internshipAnnouncement.repository.InternshipRepository;
+//import org.terning.terningserver.repository.UserRepository;
+//import org.terning.terningserver.home.application.HomeServiceImpl;
 //
 //import java.time.LocalDate;
 //import java.util.ArrayList;

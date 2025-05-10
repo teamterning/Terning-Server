@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.terning.terningserver.common.security.jwt.auth.UserAuthentication;
 import org.terning.terningserver.common.security.jwt.auth.AuthenticationTokenFactory;
 import org.terning.terningserver.common.config.ValueConfig;
-import org.terning.terningserver.domain.Token;
-import org.terning.terningserver.domain.User;
+import org.terning.terningserver.user.domain.Token;
+import org.terning.terningserver.user.domain.User;
 
 @Service
 @RequiredArgsConstructor

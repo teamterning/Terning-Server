@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.auth.application.AuthService;
-import org.terning.terningserver.controller.swagger.AuthSwagger;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
