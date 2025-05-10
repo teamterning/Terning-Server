@@ -1,5 +1,8 @@
 package org.terning.terningserver.controller;
 
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_USER_FILTER;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_USER_FILTER;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

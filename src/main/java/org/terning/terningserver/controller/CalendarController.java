@@ -1,5 +1,9 @@
 package org.terning.terningserver.controller;
 
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_DAILY_SCRAPS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

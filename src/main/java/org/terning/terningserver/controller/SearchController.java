@@ -1,6 +1,10 @@
 package org.terning.terningserver.controller;
 
 
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MOST_SCRAPPED_ANNOUNCEMENTS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MOST_VIEWED_ANNOUNCEMENTS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_SEARCH_ANNOUNCEMENTS;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

@@ -15,6 +15,7 @@ import java.util.List;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_REFRESH_TOKEN_RESET;
 
 @Entity
 @Getter

@@ -1,5 +1,11 @@
 package org.terning.terningserver.service;
 
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.EXISTS_SCRAP_ALREADY;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FORBIDDEN_DELETE_SCRAP;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.NOT_FOUND_INTERN_EXCEPTION;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.NOT_FOUND_SCRAP;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.NOT_FOUND_USER_EXCEPTION;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

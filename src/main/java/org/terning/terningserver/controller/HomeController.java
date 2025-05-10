@@ -1,5 +1,10 @@
 package org.terning.terningserver.controller;
 
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_ANNOUNCEMENTS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_UPCOMING_ANNOUNCEMENTS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_EMPTY_LIST;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_UPCOMING_ANNOUNCEMENTS_NO_SCRAP;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

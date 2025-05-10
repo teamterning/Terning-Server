@@ -1,5 +1,7 @@
 package org.terning.terningserver.auth.application.signup;
 
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_SIGN_UP_USER_FILTER_CREATION;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.ApplicationEventPublisher;
