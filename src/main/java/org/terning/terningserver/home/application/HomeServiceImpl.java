@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.filter.domain.Filter;
 import org.terning.terningserver.internshipAnnouncement.domain.InternshipAnnouncement;
+import org.terning.terningserver.scrap.domain.QScrap;
 import org.terning.terningserver.user.domain.User;
 import org.terning.terningserver.scrap.domain.Color;
 import org.terning.terningserver.filter.domain.JobType;
@@ -20,8 +21,8 @@ import org.terning.terningserver.user.repository.UserRepository;
 
 import java.util.List;
 
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
+import static org.terning.terningserver.internshipAnnouncement.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.scrap.domain.QScrap.scrap;
 
 @Service
 @RequiredArgsConstructor

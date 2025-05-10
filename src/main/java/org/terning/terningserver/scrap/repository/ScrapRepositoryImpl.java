@@ -8,7 +8,7 @@ import org.terning.terningserver.scrap.domain.Scrap;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.terning.terningserver.domain.QScrap.scrap;
+import static org.terning.terningserver.scrap.domain.QScrap.scrap;
 
 @RequiredArgsConstructor
 public class ScrapRepositoryImpl implements ScrapRepositoryCustom{

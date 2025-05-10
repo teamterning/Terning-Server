@@ -22,8 +22,8 @@ import org.terning.terningserver.user.domain.User;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.terning.terningserver.domain.QInternshipAnnouncement.internshipAnnouncement;
-import static org.terning.terningserver.domain.QScrap.scrap;
+import static org.terning.terningserver.internshipAnnouncement.domain.QInternshipAnnouncement.internshipAnnouncement;
+import static org.terning.terningserver.scrap.domain.QScrap.scrap;
 
 
 @RequiredArgsConstructor
