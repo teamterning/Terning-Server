@@ -37,6 +37,7 @@ dependencies {
 	// 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testRuntimeOnly 'com.h2database:h2'
 
 	// PostgreSQL
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
@@ -58,6 +59,17 @@ dependencies {
 
 	// Gson
 	implementation 'com.google.code.gson:gson:2.8.6'
+
+	// Spring WebFlux
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Resilience4j
+	implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+	implementation 'io.github.resilience4j:resilience4j-reactor:2.1.0'
+
+	// Spring Batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+
 }
 
 //QueryDSL 초기 설정

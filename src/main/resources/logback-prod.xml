@@ -1,0 +1,48 @@
+<configuration>
+    <springProperty name="LOG_HOME_PATH" source="logging.location"/>
+    <property name="LOG_PATH" value="${LOG_HOME_PATH}/prod-logs"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/terning.log"/>
+
+    <!-- stdout (정상 로그용) -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- stderr (에러 로그용) -->
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 파일 로그 -->
+    <appender name="TERNING_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/terning-%d{yyyy-MM-dd}.log</fileNamePattern> <!-- 매일 새로운 파일 생성 -->
+            <maxHistory>14</maxHistory> <!-- 14일간 보관 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Seoul} [%thread] %-5level %logger{36} [%X{traceId:-NoTraceID}] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.terning.terningserver" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERNING_LOG"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TERNING_LOG"/>
+    </root>
+
+    <logger name="ERROR_LOGGER" level="WARN" additivity="false">
+        <appender-ref ref="STDERR"/>
+    </logger>
+</configuration>
