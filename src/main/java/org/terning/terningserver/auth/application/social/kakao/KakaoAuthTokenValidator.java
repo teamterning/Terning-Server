@@ -9,12 +9,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.terning.terningserver.config.ValueConfig;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.config.ValueConfig;
+import org.terning.terningserver.common.exception.CustomException;
 
 import java.util.Map;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.FAILED_SOCIAL_LOGIN;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_SOCIAL_LOGIN;
 
 @Component
 @RequiredArgsConstructor

@@ -5,14 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terning.terningserver.auth.application.social.SocialAuthProvider;
 import org.terning.terningserver.auth.application.social.SocialAuthServiceManager;
-import org.terning.terningserver.external.notification.NotificationUserClient;
-import org.terning.terningserver.jwt.application.JwtTokenManager;
-import org.terning.terningserver.domain.Token;
-import org.terning.terningserver.domain.User;
-import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.external.pushNotification.notification.NotificationUserClient;
+import org.terning.terningserver.common.security.jwt.application.JwtTokenManager;
+import org.terning.terningserver.user.domain.Token;
+import org.terning.terningserver.user.domain.User;
+import org.terning.terningserver.user.domain.AuthType;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.response.SignInResponse;
-import org.terning.terningserver.repository.user.UserRepository;
+import org.terning.terningserver.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class AuthSignInServiceImpl implements AuthSignInService {
 //        boolean fcmReissueRequired = fcmTokenValidationClient.requestFcmTokenValidation(user.getId());
 
         if (request.fcmToken() != null && !request.fcmToken().trim().isEmpty()) {
-            notificationUserClient.updateFcmToken(user.getId(), request.fcmToken());
+            notificationUserClient.createOrUpdateUser(user, request.fcmToken());
         }
 
 //        return SignInResponse.of(token, authId, request.authType(), user.getId(), fcmReissueRequired);

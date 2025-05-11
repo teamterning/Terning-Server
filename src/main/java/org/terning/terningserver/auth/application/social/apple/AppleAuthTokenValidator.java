@@ -6,8 +6,8 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import org.terning.terningserver.config.ValueConfig;
-import org.terning.terningserver.exception.CustomException;
+import org.terning.terningserver.common.config.ValueConfig;
+import org.terning.terningserver.common.exception.CustomException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Objects;
 
-import static org.terning.terningserver.exception.enums.ErrorMessage.INVALID_KEY;
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.INVALID_KEY;
 
 @Component
 @RequiredArgsConstructor

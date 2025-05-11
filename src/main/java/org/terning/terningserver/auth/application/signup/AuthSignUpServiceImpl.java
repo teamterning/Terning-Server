@@ -1,30 +1,30 @@
 package org.terning.terningserver.auth.application.signup;
 
+import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_SIGN_UP_USER_FILTER_CREATION;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.terning.terningserver.domain.enums.Grade;
-import org.terning.terningserver.domain.enums.JobType;
-import org.terning.terningserver.domain.enums.ProfileImage;
-import org.terning.terningserver.domain.enums.PushNotificationStatus;
-import org.terning.terningserver.domain.enums.WorkingPeriod;
-import org.terning.terningserver.external.notification.NotificationUserClient;
-import org.terning.terningserver.jwt.application.JwtTokenManager;
-import org.terning.terningserver.domain.Filter;
-import org.terning.terningserver.domain.Token;
-import org.terning.terningserver.domain.User;
+import org.terning.terningserver.filter.domain.Grade;
+import org.terning.terningserver.filter.domain.JobType;
+import org.terning.terningserver.user.domain.ProfileImage;
+import org.terning.terningserver.user.domain.PushNotificationStatus;
+import org.terning.terningserver.filter.domain.WorkingPeriod;
+import org.terning.terningserver.external.pushNotification.notification.NotificationUserClient;
+import org.terning.terningserver.common.security.jwt.application.JwtTokenManager;
+import org.terning.terningserver.filter.domain.Filter;
+import org.terning.terningserver.user.domain.Token;
+import org.terning.terningserver.user.domain.User;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpWithAuthIdRequestDto;
 import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
-import org.terning.terningserver.event.UserSignedUpEvent;
-import org.terning.terningserver.exception.CustomException;
-import org.terning.terningserver.repository.filter.FilterRepository;
-import org.terning.terningserver.repository.user.UserRepository;
-
-import static org.terning.terningserver.exception.enums.ErrorMessage.*;
+import org.terning.terningserver.user.event.UserSignedUpEvent;
+import org.terning.terningserver.common.exception.CustomException;
+import org.terning.terningserver.filter.repository.FilterRepository;
+import org.terning.terningserver.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

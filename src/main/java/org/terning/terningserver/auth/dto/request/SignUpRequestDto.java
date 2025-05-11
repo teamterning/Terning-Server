@@ -2,7 +2,7 @@ package org.terning.terningserver.auth.dto.request;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.user.domain.AuthType;
 
 import static lombok.AccessLevel.PRIVATE;
 
