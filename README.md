@@ -121,31 +121,28 @@ ex) feat/#20
 <br/><br/>
 
 ## 📂 Structure
+
 ```text
-├── build.gradle
-├── 📂 src/main/java/org/terning/terningserver
-│     ├── 📂 config
-│     ├── 📂 controller
-│     │     └── 📂 swagger // Swagger 설정 파일 분리
-│     ├── 📂 repository
-│     ├── 📂 domain
-│     │     ├── 📂 common // ex) BaseEntity.java
-│     │     ├── 📂 enums 
-│     │     └── 📂 mapping // 매핑 테이블 구현
-│     ├── 📂 service // 인터페이스와 구현체(Impl) 구분
-│     ├── 📂 dto // 도메인 별로 dto 구분
-│     │   ├── 📂 user // 도메인(1)
-│     │   │       ├── 📂 request
-│     │   │       └── 📂 response
-│     │   │
-│     │   └── 📂 post // 도메인(2)
-│     │           ├── 📂 request
-│     │           └── 📂 response
-│     ├── 📂 exception
-│     │           ├── 📂 dto // ex) ErrorResponse, SuccessResponse 
-│     │           ├── 📂 enums // ex) ErrorMessage, SuccessMessage
-│     │           └── CustomException.java, GlobalExceptionHandler.java
-│     ├── 📂 jwt
-│     └── 📂 util
-└── ServerApplication.java
+- 📁 common
+    - 🛡️ security             // 보안 관련 설정 및 로직
+        - 🔐 jwt             // JWT 기반 인증/인가 처리 모듈
+    - ❗ exception            // 전역 공통 예외 처리 및 예외 클래스 정의
+    - 🧰 util                 // 프로젝트 전반에서 사용되는 유틸리티 함수 및 클래스 모음
+    - ⚙️ config               // Spring 설정 클래스 및 환경 설정 파일 관리
+    - 📝 logging              // 요청/응답, 예외 등의 로깅 처리를 위한 설정 및 도구
+
+- 🔐 auth                    // 로그인, 회원가입, 인증 관련 로직을 담당
+- 🖼️ banner                  // 배너 및 홈 상단에 표시되는 홍보 영역을 담당
+- 📆 calendar                // 유저가 스크랩한 일정(공고)을 캘린더 형태로 관리
+- 🧾 filter                  // 공고 필터링 기능 및 필터 조건 관리
+- 🏠 home                    // 홈 화면에서 보여지는 주요 콘텐츠 로직을 담당
+- 💼 internshipAnnouncement  // 인턴십 공고 등록, 조회, 관리 기능
+- 📌 scrap                   // 유저가 공고를 스크랩하고 관리하는 기능
+- 🔍 search                  // 공고 및 관련 항목에 대한 검색 기능
+
+- 🌐 external                // 외부 서비스 연동을 담당
+    - 📲 pushNotification    // FCM 기반 푸시 알림 전송 및 설정 로직
+    - 🧵 discord             // Discord Webhook 연동을 위한 기능을 담당
+
+- 👤 user                    // 유저 정보, 온보딩, 설정 등 사용자 도메인 전반을 관리
 ```
