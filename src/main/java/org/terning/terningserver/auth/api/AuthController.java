@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.auth.application.AuthService;
+import org.terning.terningserver.auth.dto.request.FcmTokenSyncRequest;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
@@ -19,6 +20,7 @@ import static org.terning.terningserver.common.exception.enums.SuccessMessage.SU
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_OUT;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_UP;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_UP_FILTER;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_USER_SYNC;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_WITHDRAW;
 
 
@@ -77,5 +79,14 @@ public class AuthController implements AuthSwagger {
         authService.withdraw(userId);
 
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_WITHDRAW));
+    }
+
+    @PostMapping("/sync-user")
+    public ResponseEntity<SuccessResponse> syncUser(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody FcmTokenSyncRequest request
+    ) {
+        authService.syncUser(userId, request);
+        return ResponseEntity.ok(SuccessResponse.of(SUCCESS_USER_SYNC));
     }
 }

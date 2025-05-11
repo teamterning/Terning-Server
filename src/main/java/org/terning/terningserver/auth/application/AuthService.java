@@ -7,7 +7,9 @@ import org.terning.terningserver.auth.application.reissue.AuthReissueService;
 import org.terning.terningserver.auth.application.signin.AuthSignInService;
 import org.terning.terningserver.auth.application.signout.AuthSignOutService;
 import org.terning.terningserver.auth.application.signup.AuthSignUpService;
+import org.terning.terningserver.auth.application.syncUser.AuthSyncUserService;
 import org.terning.terningserver.auth.application.withdraw.AuthWithdrawService;
+import org.terning.terningserver.auth.dto.request.FcmTokenSyncRequest;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
@@ -25,6 +27,7 @@ public class AuthService {
     private final AuthSignOutService authSignOutService;
     private final AuthWithdrawService authWithdrawService;
     private final AuthReissueService authReissueService;
+    private final AuthSyncUserService authSyncUserService;
 
     @Transactional
     public SignInResponse signIn(String authAccessToken, SignInRequest request) {
@@ -57,5 +60,10 @@ public class AuthService {
     public AccessTokenGetResponseDto reissueToken(String refreshToken) {
         AccessTokenGetResponseDto accessTokenGetResponseDto = authReissueService.reissueToken(refreshToken);
         return accessTokenGetResponseDto;
+    }
+
+    @Transactional
+    public void syncUser(long userId, FcmTokenSyncRequest request) {
+        authSyncUserService.syncUser(userId, request);
     }
 }
