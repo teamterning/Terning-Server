@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.terning.terningserver.auth.dto.request.FcmTokenSyncRequest;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
@@ -52,4 +53,10 @@ public interface AuthSwagger {
     @Operation(summary = "계정탈퇴", description = "계정탈퇴 API")
     ResponseEntity<SuccessResponse> withdraw(
             @AuthenticationPrincipal Long userId);
+
+    @Operation(summary = "유저동기화", description = "유저동기화 API")
+    ResponseEntity<SuccessResponse> syncUser(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody FcmTokenSyncRequest request
+    );
 }
