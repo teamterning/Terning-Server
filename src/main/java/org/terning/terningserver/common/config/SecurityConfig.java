@@ -16,7 +16,7 @@ import org.terning.terningserver.common.security.jwt.filter.JwtAuthenticationFil
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity(pre)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
