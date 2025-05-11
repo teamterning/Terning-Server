@@ -55,8 +55,10 @@ public enum SuccessMessage {
     // My page (마이페이지 화면)
     SUCCESS_GET_PROFILE(200, "마이페이지 > 프로필 정보 불러오기를 성공했습니다"),
     SUCCESS_UPDATE_PROFILE(200, "프로필 수정에 성공했습니다"),
-    PUSH_STATUS_UPDATED(200, "사용자 푸시알림 여부 변경을 완료했습니다.");
+    PUSH_STATUS_UPDATED(200, "사용자 푸시알림 여부 변경을 완료했습니다."),
 
+    // 유저 동기화
+    SUCCESS_USER_SYNC(201, "유저 동기화를 성공했습니다.");
 
     private final int status;
     private final String message;
