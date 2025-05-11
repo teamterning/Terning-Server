@@ -6,17 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.terning.terningserver.auth.application.AuthService;
-import org.terning.terningserver.controller.swagger.AuthSwagger;
 import org.terning.terningserver.auth.dto.request.SignInRequest;
 import org.terning.terningserver.auth.dto.request.SignUpFilterRequestDto;
 import org.terning.terningserver.auth.dto.request.SignUpRequestDto;
 import org.terning.terningserver.auth.dto.response.AccessTokenGetResponseDto;
 import org.terning.terningserver.auth.dto.response.SignInResponse;
 import org.terning.terningserver.auth.dto.response.SignUpResponseDto;
-import org.terning.terningserver.exception.dto.SuccessResponse;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
 
 import static org.terning.terningserver.auth.common.success.AuthSuccessCode.SUCCESS_SIGN_IN;
-import static org.terning.terningserver.exception.enums.SuccessMessage.*;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_REISSUE_TOKEN;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_OUT;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_UP;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_SIGN_UP_FILTER;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_WITHDRAW;
 
 
 @RestController

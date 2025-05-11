@@ -1,7 +1,7 @@
 package org.terning.terningserver.auth.dto.response;
 
-import org.terning.terningserver.domain.Token;
-import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.user.domain.Token;
+import org.terning.terningserver.user.domain.AuthType;
 
 import java.util.Optional;
 

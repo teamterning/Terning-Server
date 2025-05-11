@@ -3,7 +3,7 @@ package org.terning.terningserver.auth.common.success;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import org.terning.terningserver.exception.SuccessCode;
+import org.terning.terningserver.common.exception.SuccessCode;
 
 @Getter
 @AllArgsConstructor

@@ -3,7 +3,7 @@ package org.terning.terningserver.auth.application.social.kakao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.auth.application.social.SocialAuthProvider;
-import org.terning.terningserver.domain.enums.AuthType;
+import org.terning.terningserver.user.domain.AuthType;
 
 @Service
 @RequiredArgsConstructor

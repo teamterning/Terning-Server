@@ -2,7 +2,7 @@ package org.terning.terningserver.auth.dto.response;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.terning.terningserver.domain.Token;
+import org.terning.terningserver.user.domain.Token;
 
 import static lombok.AccessLevel.*;
 
