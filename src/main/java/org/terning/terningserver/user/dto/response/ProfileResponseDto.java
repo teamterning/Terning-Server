@@ -13,9 +13,9 @@ public record ProfileResponseDto(
     public static ProfileResponseDto of(final User user){
         return ProfileResponseDto.builder()
                 .name(user.getName())
-                .profileImage(user.getProfileImage().getValue()) // Enum to String
+                .profileImage(user.getProfileImage().getValue())
                 .authType(user.getAuthType().name().toUpperCase())
-                .pushStatus(user.getPushStatus().value())
+                .pushStatus(user.getPushStatus().value().toUpperCase())
                 .build();
     }
 }
