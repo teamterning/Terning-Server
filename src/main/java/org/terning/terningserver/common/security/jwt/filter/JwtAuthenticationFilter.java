@@ -28,7 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenVerifier jwtTokenVerifier;
-    private final RateLimitingService rateLimitingService; // RateLimitingService 주입
+    private final RateLimitingService rateLimitingService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -38,8 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token.isPresent()) {
             try {
-                Long userId = jwtTokenVerifier.validateAndExtractUserId(token.get())
-                        .orElseThrow(() -> new JwtException(null));
+                Long userId = jwtTokenVerifier.validateAndExtractUserId(token.get()).get();
                 authenticateUser(userId);
 
             } catch (JwtException e) {
