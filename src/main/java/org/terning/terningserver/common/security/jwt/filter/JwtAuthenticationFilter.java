@@ -49,6 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (probe.isConsumed()) {
                     log.error("[ERROR] 유효하지 않은 JWT 토큰 요청. IP: {}. 남은 시도 횟수: {}", clientIp, probe.getRemainingTokens());
                     SecurityContextHolder.clearContext();
+
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 토큰입니다.");
+                    return;
+
                 } else {
                     long waitForRefillSeconds = probe.getNanosToWaitForRefill() / 1_000_000_000L;
                     log.error("[ERROR] 과도한 JWT 토큰 요청. IP: {}. 요청을 차단합니다. 대기 시간: {}초", clientIp, waitForRefillSeconds);
