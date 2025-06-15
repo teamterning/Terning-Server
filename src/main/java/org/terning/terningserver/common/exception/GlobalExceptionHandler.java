@@ -3,7 +3,6 @@ package org.terning.terningserver.common.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -20,14 +19,6 @@ import org.terning.terningserver.common.security.jwt.exception.JwtException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(RateLimitException.class)
-    public ResponseEntity<ErrorResponse> handleRateLimitException(RateLimitException e) {
-        log.warn("[RateLimitException] Too Many Requests, message: {}", e.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.TOO_MANY_REQUESTS)
-                .body(ErrorResponse.of(HttpStatus.TOO_MANY_REQUESTS.value(), "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해주세요."));
-    }
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
