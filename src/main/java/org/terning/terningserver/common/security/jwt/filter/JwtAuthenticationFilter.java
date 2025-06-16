@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.terning.terningserver.common.security.jwt.application.JwtUserIdExtractor;
 import org.terning.terningserver.common.security.jwt.auth.UserAuthentication;
 import org.terning.terningserver.common.security.jwt.exception.JwtException;
 import org.terning.terningserver.common.security.ratelimit.RateLimitingService;
@@ -27,7 +28,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenVerifier jwtTokenVerifier;
+    private final JwtUserIdExtractor jwtUserIdExtractor;
     private final RateLimitingService rateLimitingService;
 
     @Override
@@ -38,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token.isPresent()) {
             try {
-                Long userId = jwtTokenVerifier.validateAndExtractUserId(token.get()).get();
+                Long userId = jwtUserIdExtractor.extractUserId(token.get());
                 authenticateUser(userId);
 
             } catch (JwtException e) {
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
                 if (probe.isConsumed()) {
-                    log.error("[ERROR] 유효하지 않은 JWT 토큰 요청. IP: {}. 남은 시도 횟수: {}", clientIp, probe.getRemainingTokens());
+                    log.warn("[WARN] 유효하지 않은 JWT 토큰 요청. IP: {}. 남은 시도 횟수: {}", clientIp, probe.getRemainingTokens());
                     SecurityContextHolder.clearContext();
 
                     response.sendError(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 토큰입니다.");
