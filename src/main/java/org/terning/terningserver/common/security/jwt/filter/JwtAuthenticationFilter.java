@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.terning.terningserver.common.config.SecurityConfig;
 import org.terning.terningserver.common.security.jwt.application.JwtUserIdExtractor;
 import org.terning.terningserver.common.security.jwt.auth.UserAuthentication;
 import org.terning.terningserver.common.security.jwt.exception.JwtException;
@@ -30,6 +32,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUserIdExtractor jwtUserIdExtractor;
     private final RateLimitingService rateLimitingService;
+    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String requestURI = request.getRequestURI();
+        for (String pattern : SecurityConfig.AUTH_WHITELIST) {
+            if (antPathMatcher.match(pattern, requestURI)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

@@ -21,7 +21,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
-    private static final String[] AUTH_WHITELIST = {
+
+    public static final String[] AUTH_WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui.html",
             "/api/v1/swagger-ui/index.html#/**",
@@ -46,9 +47,9 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(customJwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                            auth.anyRequest().authenticated();
-                        })
+                    auth.requestMatchers(AUTH_WHITELIST).permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
