@@ -6,14 +6,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.terning.terningserver.common.config.SecurityConfig;
 import org.terning.terningserver.common.security.jwt.application.JwtUserIdExtractor;
 import org.terning.terningserver.common.security.jwt.auth.UserAuthentication;
 import org.terning.terningserver.common.security.jwt.exception.JwtException;
@@ -21,23 +18,34 @@ import org.terning.terningserver.common.security.ratelimit.RateLimitingService;
 import org.terning.terningserver.common.util.IpAddressUtil;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@Component
-@RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtUserIdExtractor jwtUserIdExtractor;
-    private final RateLimitingService rateLimitingService;
     private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
+    private final JwtUserIdExtractor jwtUserIdExtractor;
+    private final RateLimitingService rateLimitingService;
+    private final List<String> authWhitelist;
+
+    public JwtAuthenticationFilter(
+            JwtUserIdExtractor jwtUserIdExtractor,
+            RateLimitingService rateLimitingService,
+            List<String> authWhitelist
+    ) {
+        this.jwtUserIdExtractor = jwtUserIdExtractor;
+        this.rateLimitingService = rateLimitingService;
+        this.authWhitelist = authWhitelist;
+    }
+
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        for (String pattern : SecurityConfig.AUTH_WHITELIST) {
+        for (String pattern : this.authWhitelist) {
             if (antPathMatcher.match(pattern, requestURI)) {
                 return true;
             }
