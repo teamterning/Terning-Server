@@ -10,8 +10,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.terning.terningserver.common.security.jwt.application.JwtUserIdExtractor;
 import org.terning.terningserver.common.security.jwt.filter.CustomJwtAuthenticationEntryPoint;
 import org.terning.terningserver.common.security.jwt.filter.JwtAuthenticationFilter;
+import org.terning.terningserver.common.security.ratelimit.RateLimitingService;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -19,9 +23,11 @@ import org.terning.terningserver.common.security.jwt.filter.JwtAuthenticationFil
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtUserIdExtractor jwtUserIdExtractor;
+    private final RateLimitingService rateLimitingService;
     private final CustomJwtAuthenticationEntryPoint customJwtAuthenticationEntryPoint;
-    private static final String[] AUTH_WHITELIST = {
+
+    private static final List<String> AUTH_WHITELIST = List.of(
             "/v3/api-docs/**",
             "/swagger-ui.html",
             "/api/v1/swagger-ui/index.html#/**",
@@ -33,10 +39,16 @@ public class SecurityConfig {
             "/api/v1/push-status",
             "/api/v1/external/scraps/unsynced",
             "/api/v1/external/scraps/sync/result"
-    };
+    );
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
+                jwtUserIdExtractor,
+                rateLimitingService,
+                AUTH_WHITELIST
+        );
+
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -46,9 +58,9 @@ public class SecurityConfig {
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(customJwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> {
-                            auth.requestMatchers(AUTH_WHITELIST).permitAll();
-                            auth.anyRequest().authenticated();
-                        })
+                    auth.requestMatchers(AUTH_WHITELIST.toArray(new String[0])).permitAll();
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
