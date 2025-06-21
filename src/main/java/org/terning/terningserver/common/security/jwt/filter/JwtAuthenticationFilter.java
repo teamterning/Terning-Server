@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUserIdExtractor jwtUserIdExtractor;
     private final RateLimitingService rateLimitingService;
-    private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private static final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
