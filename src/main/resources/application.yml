@@ -8,6 +8,8 @@ spring:
       - optional:application-staging.yml
       - optional:application-prod.yml
       - optional:application-test.yml
+  profiles:
+    active: dev
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -27,6 +29,7 @@ spring:
       hibernate:
         format_sql: true
         default_schema: ${SPRING_JPA_DEFAULT_SCHEMA:public}
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 # JWT 설정
 jwt:
@@ -37,9 +40,9 @@ jwt:
   apple-url: https://appleid.apple.com/auth/keys
   kakao-url: https://kapi.kakao.com/v2/user/me
 
-logging:
-  location: ${LOGGING_LOCATION:/home/ubuntu}
-  config: classpath:logback-${spring.profiles.active}.xml
+#logging:
+#  location: ${LOGGING_LOCATION:/home/ubuntu}
+#  config: classpath:logback-${spring.profiles.active}.xml
 
 operation:
   base-url: ${OPERATION_BASE_URL}
