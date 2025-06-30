@@ -1,0 +1,52 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  config:
+    import:
+      - optional:application-dev.yml
+      - optional:application-staging.yml
+      - optional:application-prod.yml
+      - optional:application-test.yml
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 10
+      connection-timeout: 30000
+      validation-timeout: 2000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: ${SPRING_JPA_DEFAULT_SCHEMA:public}
+
+# JWT 설정
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expired: ${JWT_ACCESS_TOKEN_EXPIRED}
+  refresh-token-expired: ${JWT_REFRESH_TOKEN_EXPIRED}
+
+  apple-url: https://appleid.apple.com/auth/keys
+  kakao-url: https://kapi.kakao.com/v2/user/me
+
+logging:
+  location: ${LOGGING_LOCATION:/home/ubuntu}
+  config: classpath:logback-${spring.profiles.active}.xml
+
+operation:
+  base-url: ${OPERATION_BASE_URL}
+
+discord:
+  webhook:
+    url: ${DISCORD_WEBHOOK_URL}
+
+firebase:
+  service-key: ${FIREBASE_SERVICE_KEY_JSON}
