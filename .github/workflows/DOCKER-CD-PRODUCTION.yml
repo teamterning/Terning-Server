@@ -1,26 +1,23 @@
-name: DOCKER-CD-STAGING
+name: DOCKER-CD-PRODUCTION
 
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "main" ]
 
 jobs:
   ci:
     runs-on: ubuntu-24.04
 
     steps:
-      # 1. 소스 코드 체크아웃
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2. JDK 21 설정
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      # 3. Gradle 캐싱 (빌드 속도 향상)
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
@@ -31,44 +28,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # 4. Gradle 빌드 및 테스트 실행
       - name: Build and Test with Gradle
         run: |
           chmod +x gradlew
           ./gradlew build
         shell: bash
 
-      # 5. Docker Hub 로그인 (Repository Secrets 사용)
       - name: Login to Docker Hub
         uses: docker/login-action@v2.2.0
         with:
           username: ${{ secrets.DOCKER_LOGIN_USERNAME }}
           password: ${{ secrets.DOCKER_LOGIN_ACCESSTOKEN }}
 
-      # 6. Docker 이미지 빌드 및 푸시
-      - name: Build and push Docker image for Staging
+      - name: Build and push Docker image for Production
         run: |
-          docker build -f Dockerfile-staging --platform linux/amd64 -t terningpoint/terning2025-staging .
-          docker push terningpoint/terning2025-staging
+          docker build --platform linux/amd64 -t terningpoint/terning2025 .
+          docker push terningpoint/terning2025
 
   cd:
     needs: ci
     runs-on: ubuntu-24.04
-    environment: staging
+    environment: production
 
     steps:
-      - name: Deploy to Staging Server
+      - name: Deploy to Production Server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.STAGING_SERVER_IP }}
-          username: ${{ secrets.STAGING_SERVER_USER }}
-          key: ${{ secrets.STAGING_SERVER_KEY }}
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
           script: |
             # -- 변수 설정 --
-            APP_NAME="terning2025-staging"
-            IMAGE_NAME="terningpoint/terning2025-staging"
+            APP_NAME="terning2025-prod"
+            IMAGE_NAME="terningpoint/terning2025"
             NGINX_CONFIG_PATH="/etc/nginx"
-            SERVICE_URL_INC_PATH="${NGINX_CONFIG_PATH}/conf.d/service-url-staging.inc"
+            SERVICE_URL_INC_PATH="${NGINX_CONFIG_PATH}/conf.d/service-url.inc"
 
             echo "### 1. 최신 Docker 이미지를 pull합니다."
             docker pull ${IMAGE_NAME}:latest
@@ -88,7 +82,7 @@ jobs:
             echo "### 3. 새로운 버전의 애플리케이션(Green)을 실행합니다."
             docker run -d --name ${APP_NAME}-${NEW_PORT} --restart always \
               -p ${NEW_PORT}:8080 \
-              -e SPRING_PROFILES_ACTIVE=staging \
+              -e SPRING_PROFILES_ACTIVE=prod \
               -e SPRING_DATASOURCE_URL='${{ secrets.DB_URL }}' \
               -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -101,7 +95,7 @@ jobs:
               -e FIREBASE_SERVICE_KEY_JSON='${{ secrets.FIREBASE_SERVICE_KEY_JSON }}' \
               -e LOGGING_LOCATION=${{ secrets.LOGGING_LOCATION }} \
               -e TZ=Asia/Seoul \
-              -v /home/ubuntu:/home/ubuntu/dev-logs \
+              -v /home/ubuntu:/home/ubuntu/prod-logs \
               ${IMAGE_NAME}:latest
 
             echo "### 4. 헬스 체크를 시작합니다."
@@ -135,4 +129,4 @@ jobs:
             echo "### 7. 사용하지 않는 Docker 이미지를 정리합니다."
             docker image prune -af
 
-            echo "✅ Staging 배포가 성공적으로 완료되었습니다. 현재 서비스 포트: ${NEW_PORT}"
+            echo "✅ Production 배포가 성공적으로 완료되었습니다. 현재 서비스 포트: ${NEW_PORT}"
