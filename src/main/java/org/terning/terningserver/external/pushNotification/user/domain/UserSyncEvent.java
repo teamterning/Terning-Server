@@ -1,6 +1,7 @@
 package org.terning.terningserver.external.pushNotification.user.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class UserSyncEvent {
 
     private Long userId;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserSyncEventType eventType;
 
     private String newValue;
