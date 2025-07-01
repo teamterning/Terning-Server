@@ -53,3 +53,12 @@ discord:
 
 firebase:
   service-key: ${FIREBASE_SERVICE_KEY_JSON}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      enabled: true
