@@ -32,7 +32,8 @@ public class SecurityConfig {
             "/api/v1/users/**",
             "/api/v1/push-status",
             "/api/v1/external/scraps/unsynced",
-            "/api/v1/external/scraps/sync/result"
+            "/api/v1/external/scraps/sync/result",
+            "/actuator/**",
     };
 
     @Bean
