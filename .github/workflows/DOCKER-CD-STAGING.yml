@@ -99,6 +99,7 @@ jobs:
             NEW_CONTAINER_NAME="${APP_NAME}-${NEW_PORT}"
             docker run -d --name ${NEW_CONTAINER_NAME} --restart always \
               -p ${NEW_PORT}:8080 \
+              -e JAVA_OPTS='-Xms256m -Xmx512m' \
               -e SPRING_PROFILES_ACTIVE=staging \
               -e SPRING_DATASOURCE_URL='${{ secrets.DB_URL }}' \
               -e SPRING_DATASOURCE_USERNAME='${{ secrets.DB_USERNAME }}' \
@@ -116,7 +117,7 @@ jobs:
               ${IMAGE_NAME}:latest
             
             echo "### 4. 헬스 체크를 시작합니다."
-            sleep 10
+            sleep 30
             for retry_count in {1..10}; do
                 echo "   > [${retry_count}/10] 서버 상태 체크 중..."
                 response=$(curl -s http://localhost:${NEW_PORT}/actuator/health)
