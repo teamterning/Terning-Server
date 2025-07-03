@@ -117,22 +117,24 @@ jobs:
               ${IMAGE_NAME}:latest
             
             echo "### 4. 헬스 체크를 시작합니다."
-            sleep 30
-            for retry_count in {1..10}; do
-                echo "   > [${retry_count}/10] 서버 상태 체크 중..."
-                response=$(curl -s http://localhost:${NEW_PORT}/actuator/health)
+            for retry_count in {1..12}; do
+                echo "   > [${retry_count}/12] 서버 상태 체크 중..."
+              
+                response=$(curl -s http://localhost:${NEW_PORT}/actuator/health || true)
                 up_count=$(echo "$response" | grep -c '"status":"UP"')
             
                 if [ $up_count -ge 1 ]; then
                     echo "   > ✅ 서버 실행 성공 (포트: ${NEW_PORT})"
-                    break
+                    break 
                 fi
-                if [ $retry_count -eq 10 ]; then
-                    echo "   > ❌ 서버 헬스체크 실패. 배포를 중단하고 새 컨테이너를 종료합니다."
+
+                if [ $retry_count -eq 12 ]; then
+                    echo "   > ❌ 1분 동안 헬스 체크에 실패했습니다. 배포를 중단하고 새 컨테이너를 종료합니다."
                     docker rm -f ${NEW_CONTAINER_NAME}
-                    exit 1
+                    exit 1 # 실패 상태로 종료
                 fi
-                sleep 5
+
+                sleep 5 
             done
             
             echo "### 5. Nginx 설정을 변경하여 트래픽을 새 포트(Green)로 전환합니다."
