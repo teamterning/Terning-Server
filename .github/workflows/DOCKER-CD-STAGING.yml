@@ -7,7 +7,6 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-24.04
-
     steps:
       # 1. 소스 코드 체크아웃
       - name: Checkout
@@ -55,7 +54,6 @@ jobs:
     needs: ci
     runs-on: ubuntu-24.04
     environment: staging
-
     steps:
       - name: Deploy to Staging Server
         uses: appleboy/ssh-action@master
@@ -64,13 +62,15 @@ jobs:
           username: ${{ secrets.STAGING_SERVER_USER }}
           key: ${{ secrets.STAGING_SERVER_KEY }}
           script: |
+            # 오류 발생 시 즉시 스크립트 중단
             set -e
             
+            # --- 변수 설정 ---
             APP_NAME="terning2025-staging"
             IMAGE_NAME="terningpoint/terning2025-staging"
             NGINX_CONFIG_PATH="/etc/nginx"
             SERVICE_URL_INC_PATH="${NGINX_CONFIG_PATH}/conf.d/service-url-staging.inc"
-            
+
             echo "### 1. 최신 Docker 이미지를 pull합니다."
             docker pull ${IMAGE_NAME}:latest
             
@@ -87,7 +87,6 @@ jobs:
               OLD_CONTAINER_NAME="${APP_NAME}-8081"
             fi
             
-            # 최초 배포인지 확인
             if [ -z "$IS_BLUE_RUNNING" ] && [ -z "$(docker ps -q --filter "name=${APP_NAME}" --filter "publish=8081")" ]; then
                 echo "   > 현재 실행중인 서비스가 없습니다. 최초 배포를 시작합니다."
                 echo "   > 새로 실행할 포트(Green): ${NEW_PORT}"
@@ -102,9 +101,9 @@ jobs:
               -p ${NEW_PORT}:8080 \
               -e SPRING_PROFILES_ACTIVE=staging \
               -e SPRING_DATASOURCE_URL='${{ secrets.DB_URL }}' \
-              -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
-              -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e SPRING_JPA_DEFAULT_SCHEMA=${{ secrets.SPRING_JPA_DEFAULT_SCHEMA }} \
+              -e SPRING_DATASOURCE_USERNAME='${{ secrets.DB_USERNAME }}' \
+              -e SPRING_DATASOURCE_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+              -e SPRING_JPA_DEFAULT_SCHEMA='${{ secrets.SPRING_JPA_DEFAULT_SCHEMA }}' \
               -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
               -e JWT_ACCESS_TOKEN_EXPIRED=${{ secrets.JWT_ACCESS_TOKEN_EXPIRED }} \
               -e JWT_REFRESH_TOKEN_EXPIRED=${{ secrets.JWT_REFRESH_TOKEN_EXPIRED }} \
