@@ -64,29 +64,41 @@ jobs:
           username: ${{ secrets.STAGING_SERVER_USER }}
           key: ${{ secrets.STAGING_SERVER_KEY }}
           script: |
-            # -- 변수 설정 --
+            set -e
+            
             APP_NAME="terning2025-staging"
             IMAGE_NAME="terningpoint/terning2025-staging"
             NGINX_CONFIG_PATH="/etc/nginx"
             SERVICE_URL_INC_PATH="${NGINX_CONFIG_PATH}/conf.d/service-url-staging.inc"
-
+            
             echo "### 1. 최신 Docker 이미지를 pull합니다."
             docker pull ${IMAGE_NAME}:latest
-
-            echo "### 2. 현재 실행 중인 포트(Blue)와 새로 실행할 포트(Green)를 결정합니다."
-            RUNNING_PORT=$(docker ps --filter "name=${APP_NAME}" --format "{{.Ports}}" | grep -o '[0-9]\{4\}->8080' | awk -F'->' '{print $1}')
             
-            if [ "${RUNNING_PORT}" == "8080" ]; then
+            echo "### 2. 현재 실행 중인 포트(Blue)와 새로 실행할 포트(Green)를 결정합니다."
+            IS_BLUE_RUNNING=$(docker ps -q --filter "name=${APP_NAME}" --filter "publish=8080")
+            
+            if [ -n "$IS_BLUE_RUNNING" ]; then
+              RUNNING_PORT=8080
               NEW_PORT=8081
+              OLD_CONTAINER_NAME="${APP_NAME}-8080"
             else
+              RUNNING_PORT=8081 
               NEW_PORT=8080
+              OLD_CONTAINER_NAME="${APP_NAME}-8081"
             fi
-
-            echo "   > 현재 서비스 포트(Blue): ${RUNNING_PORT:-없음}"
-            echo "   > 새로 실행할 포트(Green): ${NEW_PORT}"
-
+            
+            # 최초 배포인지 확인
+            if [ -z "$IS_BLUE_RUNNING" ] && [ -z "$(docker ps -q --filter "name=${APP_NAME}" --filter "publish=8081")" ]; then
+                echo "   > 현재 실행중인 서비스가 없습니다. 최초 배포를 시작합니다."
+                echo "   > 새로 실행할 포트(Green): ${NEW_PORT}"
+            else
+                echo "   > 현재 서비스 포트(Blue): ${RUNNING_PORT}"
+                echo "   > 새로 실행할 포트(Green): ${NEW_PORT}"
+            fi
+            
             echo "### 3. 새로운 버전의 애플리케이션(Green)을 실행합니다."
-            docker run -d --name ${APP_NAME}-${NEW_PORT} --restart always \
+            NEW_CONTAINER_NAME="${APP_NAME}-${NEW_PORT}"
+            docker run -d --name ${NEW_CONTAINER_NAME} --restart always \
               -p ${NEW_PORT}:8080 \
               -e SPRING_PROFILES_ACTIVE=staging \
               -e SPRING_DATASOURCE_URL='${{ secrets.DB_URL }}' \
@@ -103,36 +115,40 @@ jobs:
               -e TZ=Asia/Seoul \
               -v /home/ubuntu:/home/ubuntu/dev-logs \
               ${IMAGE_NAME}:latest
-
+            
             echo "### 4. 헬스 체크를 시작합니다."
             sleep 10
             for retry_count in {1..10}; do
                 echo "   > [${retry_count}/10] 서버 상태 체크 중..."
                 response=$(curl -s http://localhost:${NEW_PORT}/actuator/health)
-                up_count=$(echo "$response" | grep -c 'UP')
-
+                up_count=$(echo "$response" | grep -c '"status":"UP"')
+            
                 if [ $up_count -ge 1 ]; then
                     echo "   > ✅ 서버 실행 성공 (포트: ${NEW_PORT})"
                     break
                 fi
                 if [ $retry_count -eq 10 ]; then
                     echo "   > ❌ 서버 헬스체크 실패. 배포를 중단하고 새 컨테이너를 종료합니다."
-                    docker rm -f ${APP_NAME}-${NEW_PORT}
+                    docker rm -f ${NEW_CONTAINER_NAME}
                     exit 1
                 fi
                 sleep 5
             done
-
+            
             echo "### 5. Nginx 설정을 변경하여 트래픽을 새 포트(Green)로 전환합니다."
             echo "set \$service_url http://127.0.0.1:${NEW_PORT};" | sudo tee ${SERVICE_URL_INC_PATH}
             sudo nginx -s reload
-
+            
             echo "### 6. 이전 버전의 컨테이너(Blue)를 종료 및 삭제합니다."
-            if [ -n "${RUNNING_PORT}" ]; then
-                docker rm -f ${APP_NAME}-${RUNNING_PORT}
+            EXISTING_OLD_CONTAINER_ID=$(docker ps -aq --filter "name=${OLD_CONTAINER_NAME}")
+            if [ -n "$EXISTING_OLD_CONTAINER_ID" ]; then
+                echo "   > 이전 컨테이너(${OLD_CONTAINER_NAME})를 중지하고 삭제합니다."
+                docker rm -f ${OLD_CONTAINER_NAME}
+            else
+                echo "   > 이전에 실행되던 컨테이너가 없어 삭제를 건너뜁니다."
             fi
             
             echo "### 7. 사용하지 않는 Docker 이미지를 정리합니다."
             docker image prune -af
-
+            
             echo "✅ Staging 배포가 성공적으로 완료되었습니다. 현재 서비스 포트: ${NEW_PORT}"
