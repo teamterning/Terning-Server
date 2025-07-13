@@ -10,15 +10,19 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private static final String USER_ID_ATTRIBUTE_NAME = "userId";
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(Login.class)
-                && Long.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
+        boolean isLongType = Long.class.isAssignableFrom(parameter.getParameterType()) || parameter.getParameterType().equals(long.class);
+
+        return hasLoginAnnotation && isLongType;
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return webRequest.getAttribute("userId", NativeWebRequest.SCOPE_REQUEST);
+        return webRequest.getAttribute(USER_ID_ATTRIBUTE_NAME, NativeWebRequest.SCOPE_REQUEST);
     }
 }
