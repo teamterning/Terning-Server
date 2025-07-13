@@ -29,7 +29,7 @@ public class WebhookService {
 
     @EventListener
     public void handleUserSignedUpEvent(UserSignedUpEvent event) {
-        sendDiscordNotification(event.getUser());
+        sendDiscordNotification(event.user());
     }
 
 
