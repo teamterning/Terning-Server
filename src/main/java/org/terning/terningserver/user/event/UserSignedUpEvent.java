@@ -1,17 +1,10 @@
 package org.terning.terningserver.user.event;
 
-import lombok.Getter;
 import org.terning.terningserver.user.domain.User;
 
-@Getter
-public class UserSignedUpEvent {
-    private final User user;
+public record UserSignedUpEvent(User user, String fcmToken) {
 
-    private UserSignedUpEvent(User user) {
-        this.user = user;
-    }
-
-    public static UserSignedUpEvent of(User user) {
-        return new UserSignedUpEvent(user);
+    public static UserSignedUpEvent of(User user, String fcmToken) {
+        return new UserSignedUpEvent(user, fcmToken);
     }
 }
