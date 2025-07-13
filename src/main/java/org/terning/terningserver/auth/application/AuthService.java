@@ -65,24 +65,22 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.USER_ALREADY_EXIST);
         }
 
-        User newUser = User.from(authId, request);
+        User userToSave = User.from(authId, request);
+        userRepository.save(userToSave);
 
-        Token token = jwtProvider.generateTokens(newUser.getId());
+        Token token = jwtProvider.generateTokens(userToSave.getId());
+        userToSave.updateRefreshToken(token.refreshToken());
 
-        newUser.updateRefreshToken(token.refreshToken());
-
-        userRepository.save(newUser);
-
-        eventPublisher.publishEvent(UserSignedUpEvent.of(newUser));
+        eventPublisher.publishEvent(UserSignedUpEvent.of(userToSave, request.fcmToken()));
 
         notificationUserClient.createUserOnNotificationServer(
-                newUser.getId(),
-                newUser.getName(),
-                newUser.getAuthType(),
+                userToSave.getId(),
+                userToSave.getName(),
+                userToSave.getAuthType(),
                 request.fcmToken()
         );
 
-        return SignUpResponse.of(token, newUser);
+        return SignUpResponse.of(token, userToSave);
     }
 
     @Transactional
