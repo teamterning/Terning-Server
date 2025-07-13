@@ -3,8 +3,8 @@ package org.terning.terningserver.common.security.jwt.application;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.terning.terningserver.common.security.jwt.exception.JwtErrorCode;
-import org.terning.terningserver.common.security.jwt.exception.JwtException;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
 import org.terning.terningserver.common.security.jwt.auth.JwtClaimsParser;
 
 @Component

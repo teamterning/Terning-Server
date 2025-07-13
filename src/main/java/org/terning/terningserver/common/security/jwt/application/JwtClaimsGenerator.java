@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.terning.terningserver.common.security.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
 
 import java.util.Map;
 

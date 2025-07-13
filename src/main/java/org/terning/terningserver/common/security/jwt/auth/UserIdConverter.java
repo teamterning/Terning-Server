@@ -1,7 +1,7 @@
 package org.terning.terningserver.common.security.jwt.auth;
 
-import org.terning.terningserver.common.security.jwt.exception.JwtErrorCode;
-import org.terning.terningserver.common.security.jwt.exception.JwtException;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
 
 public class UserIdConverter {
 
