@@ -3,9 +3,10 @@ package org.terning.terningserver.user.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -29,23 +30,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_REFRESH_TOKEN_RESET;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Table(name = "Users")
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="filter_id")
     private Filter filter;
 
@@ -55,16 +54,6 @@ public class User extends BaseTimeEntity {
     @Column(length = 12)
     private String name;
 
-    @Enumerated(STRING)
-    private ProfileImage profileImage;
-
-    @Enumerated(STRING)
-    private AuthType authType;
-
-    @Setter
-    @Enumerated(EnumType.STRING)
-    private PushNotificationStatus pushStatus;
-
     @Column(length = 256)
     private String authId;
 
@@ -72,10 +61,21 @@ public class User extends BaseTimeEntity {
     private String refreshToken;
 
     @Enumerated(STRING)
+    private ProfileImage profileImage;
+
+    @Enumerated(STRING)
+    private AuthType authType;
+
+    @Setter
+    @Enumerated(STRING)
+    private PushNotificationStatus pushStatus;
+
+    @Enumerated(STRING)
     private State state;
 
-    public static User from(SignUpRequest request) {
+    public static User from(String authId, SignUpRequest request) {
         return User.builder()
+                .authId(authId)
                 .name(request.name())
                 .authType(request.authType())
                 .profileImage(ProfileImage.fromValue(request.profileImage()))

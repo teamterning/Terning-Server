@@ -65,7 +65,7 @@ public class AuthService {
             throw new AuthException(AuthErrorCode.USER_ALREADY_EXIST);
         }
 
-        User newUser = User.from(request);
+        User newUser = User.from(authId, request);
 
         Token token = jwtProvider.generateTokens(newUser.getId());
 
