@@ -1,15 +1,23 @@
 package org.terning.terningserver.auth.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.auth.dto.Token;
-import org.terning.terningserver.common.config.ValueConfig;
 import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
+import org.terning.terningserver.common.config.ValueConfig;
+
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -24,7 +32,7 @@ public class JwtProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes());
+        secretKey = Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes(StandardCharsets.UTF_8));
     }
 
     public Token generateTokens(Long userId) {
@@ -47,14 +55,14 @@ public class JwtProvider {
         if (userIdClaim instanceof Number) {
             return ((Number) userIdClaim).longValue();
         }
-        throw new JwtException(JwtErrorCode.INVALID_USER_ID_TYPE.getMessage());
+        throw new JwtException(JwtErrorCode.INVALID_USER_ID_TYPE);
     }
 
     public String resolveToken(String rawToken) {
         if (rawToken != null && rawToken.startsWith(TOKEN_PREFIX)) {
             return rawToken.substring(TOKEN_PREFIX.length());
         }
-        throw new JwtException(JwtErrorCode.TOKEN_NOT_FOUND.getMessage());
+        throw new JwtException(JwtErrorCode.TOKEN_NOT_FOUND);
     }
 
     private String generateToken(Long userId, long expiration) {
@@ -77,9 +85,9 @@ public class JwtProvider {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new JwtException(JwtErrorCode.EXPIRED_JWT_TOKEN.getMessage());
+            throw new JwtException(JwtErrorCode.EXPIRED_JWT_TOKEN);
         } catch (UnsupportedJwtException | MalformedJwtException | SecurityException | IllegalArgumentException e) {
-            throw new JwtException(JwtErrorCode.INVALID_JWT_TOKEN.getMessage());
+            throw new JwtException(JwtErrorCode.INVALID_JWT_TOKEN);
         }
     }
 }
