@@ -1,26 +1,34 @@
 package org.terning.terningserver.auth.dto.response;
 
-import org.terning.terningserver.user.domain.Token;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.terning.terningserver.auth.dto.Token;
 import org.terning.terningserver.user.domain.AuthType;
 
-import java.util.Optional;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record SignInResponse(
         String accessToken,
         String refreshToken,
-        Long userId,
         String authId,
-        AuthType authType
-//        boolean fcmTokenReissueRequired
+        AuthType authType,
+        Long userId
 ) {
-    public static SignInResponse of(Token token, String authId, AuthType authType, Long userId) {
+    public static SignInResponse ofExistingUser(Token token, String authId, AuthType authType, Long userId) {
         return new SignInResponse(
-                Optional.ofNullable(token).map(Token::getAccessToken).orElse(null),
-                Optional.ofNullable(token).map(Token::getRefreshToken).orElse(null),
-                userId,
+                token.accessToken(),
+                token.refreshToken(),
                 authId,
-                authType
-//                fcmTokenReissueRequired
+                authType,
+                userId
+        );
+    }
+
+    public static SignInResponse ofNewUser(String authId, AuthType authType) {
+        return new SignInResponse(
+                null,
+                null,
+                authId,
+                authType,
+                null
         );
     }
 }
