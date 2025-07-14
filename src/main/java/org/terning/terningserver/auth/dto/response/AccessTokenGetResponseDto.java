@@ -2,7 +2,7 @@ package org.terning.terningserver.auth.dto.response;
 
 import lombok.Builder;
 import lombok.NonNull;
-import org.terning.terningserver.user.domain.Token;
+import org.terning.terningserver.auth.dto.Token;
 
 import static lombok.AccessLevel.*;
 
@@ -13,7 +13,7 @@ public record AccessTokenGetResponseDto(
 
     public static AccessTokenGetResponseDto of(Token accessToken) {
         return AccessTokenGetResponseDto.builder()
-                .accessToken(accessToken.getAccessToken())
+                .accessToken(accessToken.accessToken())
                 .build();
     }
 }
