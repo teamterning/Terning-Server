@@ -1,4 +1,4 @@
-package org.terning.terningserver.common.security.jwt.exception;
+package org.terning.terningserver.auth.jwt.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,8 @@ public enum JwtErrorCode {
     INVALID_USER_ID(HttpStatus.BAD_REQUEST, "유효하지 않은 userId 값입니다."),
     INVALID_USER_ID_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 userId 타입입니다."),
     INVALID_USER_DETAILS_TYPE(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 UserDetail 타입입니다."),
+    TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "Authorization 헤더에 토큰이 없습니다."),
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 JWT 토큰입니다."),
     ;
 
     public static final String PREFIX = "[JWT ERROR]";

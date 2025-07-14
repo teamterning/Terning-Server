@@ -5,8 +5,8 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.terning.terningserver.common.config.ValueConfig;
-import org.terning.terningserver.common.security.jwt.exception.JwtErrorCode;
-import org.terning.terningserver.common.security.jwt.exception.JwtException;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
 import org.terning.terningserver.common.security.jwt.provider.JwtKeyProvider;
 
 @Service
