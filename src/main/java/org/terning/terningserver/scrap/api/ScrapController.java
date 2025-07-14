@@ -1,17 +1,23 @@
 package org.terning.terningserver.scrap.api;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.terning.terningserver.auth.config.Login;
+import org.terning.terningserver.common.exception.dto.SuccessResponse;
+import org.terning.terningserver.scrap.application.ScrapService;
+import org.terning.terningserver.scrap.dto.request.CreateScrapRequestDto;
+import org.terning.terningserver.scrap.dto.request.UpdateScrapRequestDto;
+
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_CREATE_SCRAP;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_DELETE_SCRAP;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_SCRAP;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.terning.terningserver.scrap.dto.request.CreateScrapRequestDto;
-import org.terning.terningserver.scrap.dto.request.UpdateScrapRequestDto;
-import org.terning.terningserver.common.exception.dto.SuccessResponse;
-import org.terning.terningserver.scrap.application.ScrapService;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +28,7 @@ public class ScrapController implements ScrapSwagger {
 
     @PostMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> createScrap(
-            @AuthenticationPrincipal long userId,
+            @Login long userId,
             @PathVariable long internshipAnnouncementId,
             @RequestBody CreateScrapRequestDto request) {
         scrapService.createScrap(internshipAnnouncementId, request, userId);
@@ -31,7 +37,7 @@ public class ScrapController implements ScrapSwagger {
 
     @DeleteMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> deleteScrap(
-            @AuthenticationPrincipal long userId,
+            @Login long userId,
             @PathVariable long internshipAnnouncementId) {
         scrapService.deleteScrap(internshipAnnouncementId, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_DELETE_SCRAP));
@@ -39,7 +45,7 @@ public class ScrapController implements ScrapSwagger {
 
     @PatchMapping("/scraps/{internshipAnnouncementId}")
     public ResponseEntity<SuccessResponse> updateScrapColor(
-            @AuthenticationPrincipal long userId,
+            @Login long userId,
             @PathVariable long internshipAnnouncementId,
             @RequestBody UpdateScrapRequestDto request) {
         scrapService.updateScrapColor(internshipAnnouncementId, request, userId);

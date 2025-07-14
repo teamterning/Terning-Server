@@ -8,11 +8,11 @@ import static org.terning.terningserver.common.exception.enums.SuccessMessage.SU
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.terning.terningserver.auth.config.Login;
 import org.terning.terningserver.search.dto.response.PopularAnnouncementListResponseDto;
 import org.terning.terningserver.search.dto.response.SearchResultResponseDto;
 import org.terning.terningserver.common.exception.dto.SuccessResponse;
@@ -44,7 +44,7 @@ public class SearchController implements SearchSwagger {
 
     @GetMapping("/search")
     public ResponseEntity<SuccessResponse<SearchResultResponseDto>> searchInternshipAnnouncement(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "sortBy", required = false) String sortBy, Pageable pageable) {
         return ResponseEntity.ok(SuccessResponse.of(

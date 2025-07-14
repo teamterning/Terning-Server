@@ -18,25 +18,27 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoginCheckInterceptor loginCheckInterceptor;
     private final LoginUserArgumentResolver loginUserArgumentResolver;
 
-//    private static final String[] AUTH_WHITELIST = {
-//            "/v3/api-docs/**",
-//            "/swagger-ui.html",
-//            "/swagger-resources/**",
-//            "/swagger-ui/**",
-//
-//            "/api/v1/auth/sign-in",
-//            "/api/v1/auth/sign-up",
-//            "/api/v1/auth/sign-up/filter",
-//            "/api/v1/auth/token-reissue",
-//
-//            "/api/v1/search/banners",
-//            "/api/v1/search/views",
-//            "/api/v1/search/scraps",
-//
-//            "/actuator/health",
-//            "/api/v1/external/scraps/unsynced",
-//            "/api/v1/external/scraps/sync/result"
-//    };
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+
+            "/api/v1/auth/sign-in",
+            "/api/v1/auth/sign-up",
+            "/api/v1/auth/sign-up/filter",
+            "/api/v1/auth/token-reissue",
+
+            "/api/v1/search/banners",
+            "/api/v1/search/views",
+            "/api/v1/search/scraps",
+
+            "/actuator/health",
+            "/api/v1/external/scraps/unsynced",
+            "/api/v1/external/scraps/sync/result",
+
+            "/api/v1/users"
+    };
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -52,16 +54,16 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(loginCheckInterceptor)
-//                .order(1)
-//                .addPathPatterns("/api/v1/**")
-//                .excludePathPatterns(AUTH_WHITELIST);
-//    }
-//
-//    @Override
-//    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-//        resolvers.add(loginUserArgumentResolver);
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginCheckInterceptor)
+                .order(1)
+                .addPathPatterns("/api/v1/**")
+                .excludePathPatterns(AUTH_WHITELIST);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(loginUserArgumentResolver);
+    }
 }
