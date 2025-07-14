@@ -1,16 +1,20 @@
 package org.terning.terningserver.filter.api;
 
-import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_USER_FILTER;
-import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_USER_FILTER;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.terning.terningserver.filter.dto.request.UpdateUserFilterRequestDto;
-import org.terning.terningserver.filter.dto.response.UserFilterDetailResponseDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.terning.terningserver.auth.config.Login;
 import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.filter.application.FilterService;
+import org.terning.terningserver.filter.dto.request.UpdateUserFilterRequestDto;
+import org.terning.terningserver.filter.dto.response.UserFilterDetailResponseDto;
+
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_USER_FILTER;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_USER_FILTER;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +25,7 @@ public class FilterController implements FilterSwagger {
 
     @GetMapping("/filters")
     public ResponseEntity<SuccessResponse<UserFilterDetailResponseDto>> getUserFilter(
-            @AuthenticationPrincipal long userId
+            @Login long userId
     ) {
         return ResponseEntity.ok(SuccessResponse.of(
                 SUCCESS_GET_USER_FILTER,
@@ -31,11 +35,10 @@ public class FilterController implements FilterSwagger {
 
     @PutMapping("/filters")
     public ResponseEntity<SuccessResponse> updateUserFilter(
-            @AuthenticationPrincipal long userId,
+            @Login long userId,
             @RequestBody UpdateUserFilterRequestDto requestDto
     ) {
         filterService.updateUserFilter(requestDto, userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_UPDATE_USER_FILTER));
     }
-
 }
