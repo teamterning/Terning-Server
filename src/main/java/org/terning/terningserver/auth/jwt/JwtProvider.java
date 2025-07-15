@@ -8,17 +8,15 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.terning.terningserver.auth.dto.Token;
 import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
 import org.terning.terningserver.auth.jwt.exception.JwtException;
 import org.terning.terningserver.common.config.ValueConfig;
-
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
@@ -28,11 +26,12 @@ public class JwtProvider {
     private static final String TOKEN_PREFIX = "Bearer ";
 
     private final ValueConfig valueConfig;
+
     private SecretKey secretKey;
 
     @PostConstruct
     protected void init() {
-        secretKey = Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes(StandardCharsets.UTF_8));
+        this.secretKey = Keys.hmacShaKeyFor(valueConfig.getSecretKey().getBytes(StandardCharsets.UTF_8));
     }
 
     public Token generateTokens(Long userId) {
@@ -48,10 +47,9 @@ public class JwtProvider {
 
     public Long getUserIdFrom(String authorizationHeader) {
         String token = resolveToken(authorizationHeader);
-
         Claims claims = parseClaims(token);
-
         Object userIdClaim = claims.get(USER_ID_CLAIM);
+
         if (userIdClaim instanceof Number) {
             return ((Number) userIdClaim).longValue();
         }
@@ -73,21 +71,39 @@ public class JwtProvider {
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(secretKey)
+                .signWith(this.secretKey)
                 .compact();
     }
 
     private Claims parseClaims(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(this.secretKey)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            throw new JwtException(JwtErrorCode.EXPIRED_JWT_TOKEN);
-        } catch (UnsupportedJwtException | MalformedJwtException | SecurityException | IllegalArgumentException e) {
-            throw new JwtException(JwtErrorCode.INVALID_JWT_TOKEN);
+        } catch (Exception e) {
+            handleJwtException(e);
+            throw new JwtException(JwtErrorCode.UNEXPECTED_ERROR);
         }
+    }
+
+    private void handleJwtException(Exception e) {
+        if (e instanceof ExpiredJwtException) {
+            throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
+        }
+        if (e instanceof SecurityException) {
+            throw new JwtException(JwtErrorCode.SIGNATURE_ERROR);
+        }
+        if (e instanceof MalformedJwtException) {
+            throw new JwtException(JwtErrorCode.MALFORMED_TOKEN);
+        }
+        if (e instanceof UnsupportedJwtException) {
+            throw new JwtException(JwtErrorCode.UNSUPPORTED_TOKEN);
+        }
+        if (e instanceof IllegalArgumentException) {
+            throw new JwtException(JwtErrorCode.EMPTY_TOKEN);
+        }
+        throw new JwtException(JwtErrorCode.INVALID_TOKEN);
     }
 }
