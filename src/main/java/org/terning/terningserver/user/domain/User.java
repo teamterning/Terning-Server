@@ -107,7 +107,7 @@ public class User extends BaseTimeEntity {
 
     public void validateRefreshToken(String providedToken) {
         if (this.refreshToken == null || !this.refreshToken.equals(providedToken)) {
-            throw new JwtException(JwtErrorCode.INVALID_JWT_TOKEN);
+            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
         }
     }
 }
