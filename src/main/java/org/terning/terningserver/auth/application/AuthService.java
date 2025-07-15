@@ -111,7 +111,7 @@ public class AuthService {
         Long userId = jwtProvider.getUserIdFrom(authorizationHeader);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new JwtException(JwtErrorCode.INVALID_JWT_TOKEN));
+                .orElseThrow(() -> new JwtException(JwtErrorCode.INVALID_TOKEN));
 
         String providedToken = jwtProvider.resolveToken(authorizationHeader);
         user.validateRefreshToken(providedToken);
