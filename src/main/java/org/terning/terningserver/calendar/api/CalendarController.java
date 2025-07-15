@@ -1,21 +1,25 @@
 package org.terning.terningserver.calendar.api;
 
-import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_DAILY_SCRAPS;
-import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS;
-import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.terning.terningserver.auth.config.Login;
 import org.terning.terningserver.calendar.dto.response.DailyScrapResponseDto;
 import org.terning.terningserver.calendar.dto.response.MonthlyDefaultResponseDto;
 import org.terning.terningserver.calendar.dto.response.MonthlyListResponseDto;
 import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.scrap.application.ScrapService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_DAILY_SCRAPS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS;
+import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_MONTHLY_SCRAPS_AS_LIST;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +30,7 @@ public class CalendarController implements CalendarSwagger {
 
     @GetMapping("/calendar/monthly-default")
     public ResponseEntity<SuccessResponse<List<MonthlyDefaultResponseDto>>> getMonthlyScraps(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestParam("year") int year,
             @RequestParam("month") int month
     ){
@@ -36,7 +40,7 @@ public class CalendarController implements CalendarSwagger {
 
     @GetMapping("/calendar/monthly-list")
     public ResponseEntity<SuccessResponse<List<MonthlyListResponseDto>>> getMonthlyScrapsAsList(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestParam("year") int year,
             @RequestParam("month") int month
     ){
@@ -46,7 +50,7 @@ public class CalendarController implements CalendarSwagger {
 
     @GetMapping("/calendar/daily")
     public ResponseEntity<SuccessResponse<List<DailyScrapResponseDto>>> getDailyScraps(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestParam("date") String date
     ){
         LocalDate localDate = LocalDate.parse(date);
