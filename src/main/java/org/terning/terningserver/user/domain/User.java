@@ -1,62 +1,88 @@
 package org.terning.terningserver.user.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.terning.terningserver.auth.dto.request.SignUpRequest;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
 import org.terning.terningserver.common.BaseTimeEntity;
 import org.terning.terningserver.common.exception.CustomException;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.terning.terningserver.filter.domain.Filter;
 import org.terning.terningserver.scrap.domain.Scrap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.terning.terningserver.common.exception.enums.ErrorMessage.FAILED_REFRESH_TOKEN_RESET;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Table(name = "Users")
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id; // 사용자 고유 ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="filter_id")
-    private Filter filter; // 사용자 필터 설정
-    
+    private Filter filter;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Scrap> scrapList = new ArrayList<>(); // 스크랩 공고
+    private List<Scrap> scrapList = new ArrayList<>();
 
-    // TODO: 특수문자, 첫글자 , 12자리 이내
     @Column(length = 12)
-    private String name; // 사용자 이름
+    private String name;
+
+    @Column(length = 256)
+    private String authId;
+
+    @Column(length = 256)
+    private String refreshToken;
 
     @Enumerated(STRING)
-    private ProfileImage profileImage; //유저 아이콘
+    private ProfileImage profileImage;
 
     @Enumerated(STRING)
-    private AuthType authType; // 인증 유형 (예: 카카오, 애플)
+    private AuthType authType;
 
     @Setter
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private PushNotificationStatus pushStatus;
 
-    @Column(length = 256)
-    private String authId; // 인증 서비스에서 제공하는 고유 ID
-
-    @Column(length = 256)
-    private String refreshToken; // 리프레시 토큰
-
-    // TODO: User가 생기면 active default로 바꾸기
     @Enumerated(STRING)
-    private State state; // 사용자 상태 (예: 활성, 비활성, 정지)
+    private State state;
+
+    public static User from(String authId, SignUpRequest request) {
+        return User.builder()
+                .authId(authId)
+                .name(request.name())
+                .authType(request.authType())
+                .profileImage(ProfileImage.fromValue(request.profileImage()))
+                .pushStatus(PushNotificationStatus.ENABLED)
+                .state(State.ACTIVE)
+                .build();
+    }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
@@ -74,9 +100,14 @@ public class User extends BaseTimeEntity {
         this.filter = filter;
     }
 
-    //프로필 수정 메서드
     public void updateProfile(String name, ProfileImage profileImage){
         this.name = name;
         this.profileImage = profileImage;
+    }
+
+    public void validateRefreshToken(String providedToken) {
+        if (this.refreshToken == null || !this.refreshToken.equals(providedToken)) {
+            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
+        }
     }
 }

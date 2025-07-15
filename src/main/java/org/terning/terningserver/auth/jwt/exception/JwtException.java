@@ -1,4 +1,4 @@
-package org.terning.terningserver.common.security.jwt.exception;
+package org.terning.terningserver.auth.jwt.exception;
 
 import lombok.Getter;
 
