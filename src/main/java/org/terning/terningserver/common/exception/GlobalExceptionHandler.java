@@ -13,8 +13,8 @@ import org.terning.terningserver.auth.common.exception.AuthErrorCode;
 import org.terning.terningserver.auth.common.exception.AuthException;
 import org.terning.terningserver.common.exception.dto.ErrorResponse;
 import org.terning.terningserver.common.exception.enums.ErrorMessage;
-import org.terning.terningserver.common.security.jwt.exception.JwtErrorCode;
-import org.terning.terningserver.common.security.jwt.exception.JwtException;
+import org.terning.terningserver.auth.jwt.exception.JwtErrorCode;
+import org.terning.terningserver.auth.jwt.exception.JwtException;
 
 @RestControllerAdvice
 @Slf4j

@@ -2,15 +2,19 @@ package org.terning.terningserver.user.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.terning.terningserver.user.dto.request.ProfileUpdateRequestDto;
-import org.terning.terningserver.user.dto.request.PushStatusUpdateRequest;
-import org.terning.terningserver.user.dto.response.ProfileResponseDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.terning.terningserver.auth.config.Login;
 import org.terning.terningserver.common.exception.dto.SuccessResponse;
 import org.terning.terningserver.common.exception.enums.SuccessMessage;
 import org.terning.terningserver.external.pushNotification.notification.NotificationUserClient;
 import org.terning.terningserver.user.application.UserService;
+import org.terning.terningserver.user.dto.request.ProfileUpdateRequestDto;
+import org.terning.terningserver.user.dto.request.PushStatusUpdateRequest;
+import org.terning.terningserver.user.dto.response.ProfileResponseDto;
 
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_GET_PROFILE;
 import static org.terning.terningserver.common.exception.enums.SuccessMessage.SUCCESS_UPDATE_PROFILE;
@@ -25,7 +29,7 @@ public class UserProfileController implements UserSwagger {
 
     @GetMapping("/mypage/profile")
     public ResponseEntity<SuccessResponse<ProfileResponseDto>> getProfile(
-            @AuthenticationPrincipal Long userId
+            @Login Long userId
     ){
         ProfileResponseDto profile = userService.getProfile(userId);
         return ResponseEntity.ok(SuccessResponse.of(SUCCESS_GET_PROFILE, profile));
@@ -33,7 +37,7 @@ public class UserProfileController implements UserSwagger {
 
     @PatchMapping("/mypage/profile")
     public ResponseEntity<SuccessResponse> updateProfile(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestBody ProfileUpdateRequestDto request
     ){
         userService.updateProfile(userId, request);
@@ -42,13 +46,11 @@ public class UserProfileController implements UserSwagger {
 
     @PatchMapping("/push-status")
     public ResponseEntity<SuccessResponse<Void>> updatePushStatus(
-            @AuthenticationPrincipal Long userId,
+            @Login Long userId,
             @RequestBody PushStatusUpdateRequest request
     ) {
-        // 운영서버에서 User 엔티티 업데이트
         userService.updatePushStatus(userId, request.newStatus());
 
-        // 알림서버에 변경사항 동기화
         notificationUserClient.updatePushStatus(userId, request.newStatus());
 
         return ResponseEntity.ok(SuccessResponse.of(SuccessMessage.PUSH_STATUS_UPDATED));
