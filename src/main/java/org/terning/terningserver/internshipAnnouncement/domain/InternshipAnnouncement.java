@@ -16,7 +16,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
 public class InternshipAnnouncement extends BaseTimeEntity {
 
     @Id

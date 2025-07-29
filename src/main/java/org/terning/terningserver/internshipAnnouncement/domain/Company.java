@@ -14,7 +14,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
 public class Company {
 
     @Column(nullable = false, length = 64)
