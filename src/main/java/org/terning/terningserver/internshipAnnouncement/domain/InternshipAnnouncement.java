@@ -1,7 +1,6 @@
 package org.terning.terningserver.internshipAnnouncement.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.terning.terningserver.common.BaseTimeEntity;
