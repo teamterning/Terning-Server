@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity handleException(Exception e){
+    public ResponseEntity<ErrorResponse> handleException(Exception e){
         log.warn("[Exception] cause: {} , message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
         ErrorMessage errorCode = ErrorMessage.INTERNAL_SERVER_ERROR;
         return ResponseEntity
@@ -55,9 +55,8 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(errorCode.getStatus(), errorCode.getMessage()));
     }
 
-    //메소드가 잘못되었거나 부적합한 인수를 전달했을 경우 -> 필수 파라미터 없을 때
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity handleIllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
         log.warn("[IlleagalArgumentException] cause: {} , message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
         ErrorMessage errorCode = ErrorMessage.ILLEGAL_ARGUMENT_ERROR;
         return ResponseEntity
@@ -65,7 +64,6 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(errorCode.getStatus(), errorCode.getMessage()));
     }
 
-    //@Valid 유효성 검사에서 예외가 발생했을 때 -> requestbody에 잘못 들어왔을 때
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         log.warn("[MethodArgumentNotValidException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
@@ -75,7 +73,6 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(errorCode.getStatus(), errorCode.getMessage()));
     }
 
-    //잘못된 포맷 요청 -> Json으로 안보내다던지
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
         log.warn("[HttpMessageNotReadableException] cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
@@ -84,6 +81,7 @@ public class GlobalExceptionHandler {
                 .status(errorCode.getStatus())
                 .body(ErrorResponse.of(errorCode.getStatus(), errorCode.getMessage()));
     }
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleHttpMethodException(
             HttpRequestMethodNotSupportedException e,
@@ -96,4 +94,3 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(errorCode.getStatus(), errorCode.getMessage()));
     }
 }
-
