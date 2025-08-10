@@ -1,10 +1,8 @@
 package org.terning.terningserver.auth.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.terning.terningserver.auth.dto.Token;
 import org.terning.terningserver.user.domain.AuthType;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public record SignInResponse(
         String accessToken,
         String refreshToken,
