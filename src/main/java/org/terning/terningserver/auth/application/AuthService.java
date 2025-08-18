@@ -39,6 +39,8 @@ public class AuthService {
     private final ApplicationEventPublisher eventPublisher;
     private final NotificationUserClient notificationUserClient;
     private final FilterRepository filterRepository;
+    private static final String TOKEN_PREFIX = "Bearer ";
+
 
     @Transactional
     public SignInResponse signIn(String socialAccessToken, SignInRequest request) {
@@ -61,11 +63,16 @@ public class AuthService {
 
     @Transactional
     public SignUpResponse signUp(String authId, SignUpRequest request) {
-        if (userRepository.existsByAuthIdAndAuthType(authId, request.authType())) {
+        String resolvedAuthId = authId;
+        if (resolvedAuthId != null && resolvedAuthId.startsWith(TOKEN_PREFIX)) {
+            resolvedAuthId = resolvedAuthId.substring(TOKEN_PREFIX.length());
+        }
+
+        if (userRepository.existsByAuthIdAndAuthType(resolvedAuthId, request.authType())) {
             throw new AuthException(AuthErrorCode.USER_ALREADY_EXIST);
         }
 
-        User userToSave = User.from(authId, request);
+        User userToSave = User.from(resolvedAuthId, request);
         userRepository.save(userToSave);
 
         Token token = jwtProvider.generateTokens(userToSave.getId());
