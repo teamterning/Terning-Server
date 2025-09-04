@@ -19,25 +19,29 @@ public class WebConfig implements WebMvcConfigurer {
     private final LoginUserArgumentResolver loginUserArgumentResolver;
 
     private static final String[] AUTH_WHITELIST = {
-            "/v3/api-docs/**",
-            "/swagger-ui.html",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/swagger-ui.html",
+        "/swagger-resources/**",
+        "/swagger-ui/**",
 
-            "/api/v1/auth/sign-in",
-            "/api/v1/auth/sign-up",
-            "/api/v1/auth/sign-up/filter",
-            "/api/v1/auth/token-reissue",
+        "/api/v1/auth/sign-in",
+        "/api/v1/auth/sign-up",
+        "/api/v1/auth/sign-up/filter",
+        "/api/v1/auth/token-reissue",
 
-            "/api/v1/search/banners",
-            "/api/v1/search/views",
-            "/api/v1/search/scraps",
+        "/api/v1/search/banners",
+        "/api/v1/search/views",
+        "/api/v1/search/scraps",
 
-            "/actuator/health",
-            "/api/v1/external/scraps/unsynced",
-            "/api/v1/external/scraps/sync/result",
+        "/actuator/health",
+        "/api/v1/external/scraps/unsynced",
+        "/api/v1/external/scraps/sync/result",
 
-            "/api/v1/users"
+        "/api/v1/users",
+
+        "/api/v1/notification/create",
+        "/api/v1/push-notifications/send-all",
+        "/api/v1/external/scraps/sync"
     };
 
     @Override
