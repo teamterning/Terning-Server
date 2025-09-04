@@ -49,7 +49,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://www.terning-official.p-e.kr/",
                         "https://www.terning-official.n-e.kr/",
                         "http://15.165.242.132",
-                        "http://54.180.215.35")
+                        "http://54.180.215.35",
+                        "http://52.78.114.66"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowCredentials(true);
     }
